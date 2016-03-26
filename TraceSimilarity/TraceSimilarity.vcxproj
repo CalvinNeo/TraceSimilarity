@@ -146,6 +146,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CoordSimilarity.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="TimeSimilarity.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="CoordSimilarity.h" />
+    <ClInclude Include="def.h" />
+    <ClInclude Include="TimeSimilarity.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
