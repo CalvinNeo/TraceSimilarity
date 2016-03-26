@@ -28,3 +28,7 @@
 *.app
 
 *.sdf
+Debug/
+Release/
+TraceSimilarity/Debug/
+TraceSimilarity/Release/
