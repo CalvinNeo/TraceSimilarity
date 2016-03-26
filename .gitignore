@@ -28,6 +28,7 @@
 *.app
 
 *.sdf
+*.opensdf
 Debug/
 Release/
 TraceSimilarity/Debug/

@@ -1,7 +1,8 @@
-#include <iostream>
+#include <windows.h>
+#include <string>
 
 using namespace std;
 
-int main() {
-	return 0;
+int _tmain(int argc, TCHAR* argv[], TCHAR env[]) {
+
 }
