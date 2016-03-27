@@ -29,8 +29,8 @@
 
 *.sdf
 *.opensdf
-Debug/
-Release/
-TraceSimilarity/Debug/
-TraceSimilarity/Release/
-1/
+C/Debug/
+C/Release/
+C/TraceSimilarity/Debug/
+C/TraceSimilarity/Release/
+C/1/
