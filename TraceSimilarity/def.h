@@ -6,7 +6,7 @@ struct Point {
 };
 
 struct TPoint {
-	double x;
-	double y;
-	double t;
+	double x; //longitude
+	double y; //latitude
+	double t; //timestamp
 };

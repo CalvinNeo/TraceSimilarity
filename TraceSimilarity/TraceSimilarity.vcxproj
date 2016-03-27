@@ -87,11 +87,11 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
@@ -148,7 +148,7 @@
   <ItemGroup>
     <ClCompile Include="CoordSimilarity.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="read.cpp" />
+    <ClCompile Include="read.h" />
     <ClCompile Include="TimeSimilarity.cpp" />
   </ItemGroup>
   <ItemGroup>

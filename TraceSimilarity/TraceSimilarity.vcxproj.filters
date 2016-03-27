@@ -3,8 +3,8 @@
   <ItemGroup>
     <ClCompile Include="CoordSimilarity.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="read.cpp" />
     <ClCompile Include="TimeSimilarity.cpp" />
+    <ClCompile Include="read.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CoordSimilarity.h" />
