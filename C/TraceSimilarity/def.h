@@ -9,10 +9,8 @@ struct Point {
 };
 
 struct TPoint : public Point{
-	double x; //longitude
-	double y; //latitude
 	double t; //timestamp
-	TPoint(double x, double y, unsigned long timestamp) : Point(x, y), t(timestamp) {
+	TPoint(double x, double y, unsigned long long timestamp) : Point(x, y), t(timestamp) {
 
 	};
 };
