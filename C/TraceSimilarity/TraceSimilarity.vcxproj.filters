@@ -5,10 +5,12 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="TimeSimilarity.cpp" />
     <ClCompile Include="read.h" />
+    <ClCompile Include="xNES.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CoordSimilarity.h" />
     <ClInclude Include="def.h" />
     <ClInclude Include="TimeSimilarity.h" />
+    <ClInclude Include="xNES.h" />
   </ItemGroup>
 </Project>

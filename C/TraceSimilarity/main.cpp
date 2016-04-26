@@ -5,6 +5,7 @@
 
 #include "def.h"
 #include "read.h"
+#include "xNES.h"
 
 using namespace std;
 
@@ -103,6 +104,8 @@ vector<TPoint> read_csv_time(wstring path) {
 }
 
 int wmain(int argc, TCHAR* argv[], TCHAR* env[]) {
-	read_csv_time(L"F:\\Codes\\C++\\TraceSimilarity\\1t.csv");
+	//read_csv_time(L"F:\\Codes\\C++\\TraceSimilarity\\case\\origin\\1t.csv");
+	xNES();
+	system("pause");
 	return 0;
 }

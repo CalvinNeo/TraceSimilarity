@@ -87,12 +87,15 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>F:\Softwares&amp;VMWares\boost_1_60_0\boost_1_60_0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>F:\Softwares&amp;VMWares\boost_1_60_0\boost_1_60_0\libs;F:\Softwares&amp;VMWares\boost_1_60_0\boost_1_60_0\stage\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -146,12 +149,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="xNES.cpp" />
     <ClCompile Include="CoordSimilarity.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="read.h" />
     <ClCompile Include="TimeSimilarity.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="xNES.h" />
     <ClInclude Include="CoordSimilarity.h" />
     <ClInclude Include="def.h" />
     <ClInclude Include="TimeSimilarity.h" />
