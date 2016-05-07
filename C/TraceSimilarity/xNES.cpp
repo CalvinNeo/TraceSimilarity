@@ -41,7 +41,7 @@ void qsort2(std::vector<double> & master, std::vector<double> & slave1, std::vec
 		std::swap(slave1[left], slave1[right]);
 		std::swap(slave2[left], slave2[right]);
 	}
-	if (master[left] <= master[end])
+	if (master[left] <= master[end])//防止本来就是有序的
 	{
 		std::swap(master[left], master[end]);
 		std::swap(slave1[left], slave1[end]);
