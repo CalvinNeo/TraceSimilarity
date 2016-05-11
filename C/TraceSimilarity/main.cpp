@@ -15,6 +15,9 @@ using namespace std;
 
 #define UNICODE
 
+
+vector<string> csvname;
+
 vector<Point> read_csv(wstring path) {
 	int record_count = 0;
 	HANDLE hfile = CreateFile(path.c_str(), GENERIC_READ, 0, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_READONLY, NULL);
@@ -119,7 +122,8 @@ void get_all_csv() {
 		try {
 			
 			if (fs::extension(*iter) == ".csv") {
-				std::cout << *iter << " is a file" << std::endl;
+				//std::cout << *iter << " is a file" << std::endl;
+				csvname.push_back(iter->path().string());
 			}
 		}
 		catch (const std::exception & ex) {
@@ -128,6 +132,7 @@ void get_all_csv() {
 		}
 	}
 }
+
 
 int wmain(int argc, TCHAR* argv[], TCHAR* env[]) {
 	//read_csv_time(L"F:\\Codes\\C++\\TraceSimilarity\\case\\origin\\1t.csv");
