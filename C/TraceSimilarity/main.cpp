@@ -7,6 +7,10 @@
 #include "read.h"
 #include "xNES.h"
 
+#include <boost/filesystem/operations.hpp>
+#include <boost/filesystem/path.hpp>
+#include <boost/filesystem.hpp> 
+
 using namespace std;
 
 #define UNICODE
@@ -103,61 +107,32 @@ vector<TPoint> read_csv_time(wstring path) {
 	return vp;
 }
 
-void q_par(int * arr, int start, int end) {
-	if (start >= end) return;
-	int i = start, j = end ;
-	while (i < j)
-	{
-		while (i < j && arr[i] > arr[end]) i++;
-		while (i < j && arr[j] <= arr[end]) j--;
-		swap(arr[i], arr[j]);
+void get_all_csv() {
+	namespace fs = boost::filesystem;
+	string fullpath = ".";
+	fs::path full_path(fullpath, fs::native);
+	if (!fs::exists(fullpath)) {
+		return; 
 	}
-	//if (arr[i] <= arr[end])//防止本来就是有序的
-	//{
-	//	swap(arr[i], arr[end]);
-	//}
-	//else
-	//	i++;
-	swap(arr[i], arr[end]);
-	q_par(arr, start, i - 1);
-	q_par(arr, i + 1, end);
-}
-void testqsort() {
-	//int arr[] = { 3,4,2,8,0,2,1 };
-	//int arr[] = { 1,2,3,4,5,6,7 };
-	int arr[] = { 7,6,5,4,3,2,1 };
-	q_par(arr, 0, 6);
-	for (int i = 0; i < 7; i++)
-	{
-		cout << arr[i] << " ";
+	fs::directory_iterator end_iter;
+	for (fs::directory_iterator iter(fullpath); iter != end_iter; iter++) {
+		try {
+			
+			if (fs::extension(*iter) == ".csv") {
+				std::cout << *iter << " is a file" << std::endl;
+			}
+		}
+		catch (const std::exception & ex) {
+			std::cerr << ex.what() << std::endl;
+			continue;
+		}
 	}
 }
-void m_par(int * arr, int * res, int start, int end) {
-	if (start >= end) return;
-	int len = end - start + 1;
-	int mid = start + len / 2;
-	m_par(arr, res, start, mid);
-	m_par(arr, res, mid + 1, end);
-	int i = start, j = mid + 1;
 
-
-}
-void testmsort() {
-	//int arr[] = { 3,4,2,8,0,2,1 };
-	//int arr[] = { 1,2,3,4,5,6,7 };
-	int arr[] = { 7,6,5,4,3,2,1 };
-	int res[7];
-	m_par(arr, res, 0, 6);
-	for (int i = 0; i < 7; i++)
-	{
-		cout << res[i] << " ";
-	}
-
-}
 int wmain(int argc, TCHAR* argv[], TCHAR* env[]) {
 	//read_csv_time(L"F:\\Codes\\C++\\TraceSimilarity\\case\\origin\\1t.csv");
 	//xNES();
-	testmsort();
+	get_all_csv();
 	system("pause");
 	return 0;
 }

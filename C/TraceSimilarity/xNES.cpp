@@ -142,3 +142,55 @@ int xNES() {
 	printf("\n");
 	return 0;
 }
+
+//void q_par(int * arr, int start, int end) {
+//	if (start >= end) return;
+//	int i = start, j = end;
+//	while (i < j)
+//	{
+//		while (i < j && arr[i] > arr[end]) i++;
+//		while (i < j && arr[j] <= arr[end]) j--;
+//		swap(arr[i], arr[j]);
+//	}
+//	//if (arr[i] <= arr[end])//防止本来就是有序的
+//	//{
+//	//	swap(arr[i], arr[end]);
+//	//}
+//	//else
+//	//	i++;
+//	swap(arr[i], arr[end]);
+//	q_par(arr, start, i - 1);
+//	q_par(arr, i + 1, end);
+//}
+//void testqsort() {
+//	//int arr[] = { 3,4,2,8,0,2,1 };
+//	//int arr[] = { 1,2,3,4,5,6,7 };
+//	int arr[] = { 7,6,5,4,3,2,1 };
+//	q_par(arr, 0, 6);
+//	for (int i = 0; i < 7; i++)
+//	{
+//		cout << arr[i] << " ";
+//	}
+//}
+//void m_par(int * arr, int * res, int start, int end) {
+//	if (start >= end) return;
+//	int len = end - start + 1;
+//	int mid = start + len / 2;
+//	m_par(arr, res, start, mid);
+//	m_par(arr, res, mid + 1, end);
+//	int i = start, j = mid + 1;
+//
+//
+//}
+//void testmsort() {
+//	//int arr[] = { 3,4,2,8,0,2,1 };
+//	//int arr[] = { 1,2,3,4,5,6,7 };
+//	int arr[] = { 7,6,5,4,3,2,1 };
+//	int res[7];
+//	m_par(arr, res, 0, 6);
+//	for (int i = 0; i < 7; i++)
+//	{
+//		cout << res[i] << " ";
+//	}
+//
+//}
