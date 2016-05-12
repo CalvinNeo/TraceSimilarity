@@ -134,14 +134,11 @@ void get_all_csv() {
 	}
 }
 
-
-
-
 int wmain(int argc, TCHAR* argv[], TCHAR* env[]) {
 	//read_csv_time(L"F:\\Codes\\C++\\TraceSimilarity\\case\\origin\\1t.csv");
 	vector<Point> trace_coord[4];
 	for (int i = 0;i < 4;i++) {
-		wstring path = L"D:\\Git\\TraceSimilarity\\case\\origin\\";
+		wstring path = L"../../case/origin/";
 		path += (i + '0');
 		path += L".csv";
 		trace_coord[i] = read_csv(path);
