@@ -1,9 +1,5 @@
 #include "CoordSimilarity.h"
 
-struct CoordSimilarity {
-	double similarity_2;
-};
-
 std::vector<Point> trace1, trace2;
 
 CoordSimilarity CoordCompare(std::vector<Point> t1, std::vector<Point> t2) {
