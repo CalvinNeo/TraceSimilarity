@@ -6,6 +6,7 @@
 #include "def.h"
 #include "read.h"
 #include "xNES.h"
+#include "CoordSimilarity.h"
 
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/path.hpp>
@@ -96,9 +97,9 @@ vector<TPoint> read_csv_time(wstring path) {
 			beheaded = true;
 		}
 		else if (beheaded && *abuf == ',') {
-			if(state == 0)
+			if (state == 0)
 				x = atof(string(cols, abuf).c_str());
-			else if(state == 1)
+			else if (state == 1)
 				y = atof(string(cols, abuf).c_str());
 			// renew cols
 			cols = abuf + 1;
@@ -115,12 +116,12 @@ void get_all_csv() {
 	string fullpath = ".";
 	fs::path full_path(fullpath, fs::native);
 	if (!fs::exists(fullpath)) {
-		return; 
+		return;
 	}
 	fs::directory_iterator end_iter;
 	for (fs::directory_iterator iter(fullpath); iter != end_iter; iter++) {
 		try {
-			
+
 			if (fs::extension(*iter) == ".csv") {
 				//std::cout << *iter << " is a file" << std::endl;
 				csvname.push_back(iter->path().string());
@@ -138,8 +139,21 @@ void get_all_csv() {
 
 int wmain(int argc, TCHAR* argv[], TCHAR* env[]) {
 	//read_csv_time(L"F:\\Codes\\C++\\TraceSimilarity\\case\\origin\\1t.csv");
+	vector<Point> trace_coord[4];
+	for (int i = 0;i < 4;i++) {
+		wstring path = L"D:\\Git\\TraceSimilarity\\case\\origin\\";
+		path += (i + '0');
+		path += L".csv";
+		trace_coord[i] = read_csv(path);
+	}
+	for (int i = 0;i < 4;i++) {
+		for (int j = 0;j < i;j++) {
+			CoordSimilarity coordsimilarity=CoordCompare(trace_coord[i],trace_coord[j]);
+			cout << i << " and " << j << " " << coordsimilarity.similarity_2 << endl;
+		}
+	}
 	//xNES();
-	get_all_csv();
+	//get_all_csv();
 	system("pause");
 	return 0;
 }
