@@ -30,9 +30,6 @@
 *.sdf
 *.opensdf
 *.suo
-.vcxproj
-.vcxproj.filter
-.vcxproj.user
 C/Debug/
 C/Release/
 C/TraceSimilarity/Debug/
