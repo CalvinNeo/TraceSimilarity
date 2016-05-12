@@ -1,6 +1,7 @@
 #pragma once
 
 #include "def.h"
+#include <windows.h>
 #include <vector>
 
 struct CoordSimilarity {
