@@ -7,6 +7,7 @@
 #include "read.h"
 #include "xNES.h"
 #include "CoordSimilarity.h"
+#include "TimeSimilarity.h"
 
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/path.hpp>
@@ -184,8 +185,8 @@ void find_coord(string tracename) {
 
 void find_time(string tracename) {
 	using namespace std;
-	vector<vector<Point>> tofind;
-	vector<Point> trace;
+	vector<vector<TPoint>> tofind;
+	vector<TPoint> trace;
 	if (csvname.empty())
 	{
 		get_all_csv();
@@ -200,7 +201,7 @@ void find_time(string tracename) {
 			tofind.push_back(read_csv_time(s2ws(csvname[i])));
 		}
 	}
-	CoordList(trace, tofind);
+	TimeList(trace, tofind);
 }
 
 int wmain(int argc, TCHAR* argv[], TCHAR* env[]) {
