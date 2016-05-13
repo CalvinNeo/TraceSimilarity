@@ -137,16 +137,20 @@ void get_all_csv() {
 int wmain(int argc, TCHAR* argv[], TCHAR* env[]) {
 	//read_csv_time(L"F:\\Codes\\C++\\TraceSimilarity\\case\\origin\\1t.csv");
 	vector<Point> trace_coord[4];
-	for (int i = 0;i < 4;i++) {
-		wstring path = L"../../case/origin/";
-		path += (i + '0');
-		path += L".csv";
-		trace_coord[i] = read_csv(path);
-	}
+	//for (int i = 0;i < 4;i++) {
+	//	wstring path = L"../../case/origin/";
+	//	path += (i + '0');
+	//	path += L".csv";
+	//	trace_coord[i] = read_csv(path);
+	//}
+	trace_coord[0] = read_csv(L"../../case/coord/1a.csv");
+	trace_coord[1] = read_csv(L"../../case/coord/1b.csv");
+	trace_coord[2] = read_csv(L"../../case/coord/2a.csv");
+	trace_coord[3] = read_csv(L"../../case/coord/2b.csv");
 	for (int i = 0;i < 4;i++) {
 		for (int j = 0;j < i;j++) {
-			CoordSimilarity coordsimilarity=CoordCompare(trace_coord[i],trace_coord[j]);
-			cout << i << " and " << j << " " << coordsimilarity.similarity_2 << endl;
+			CoordSimilarity coordsimilarity = CoordCompare(trace_coord[i], trace_coord[j]);
+			cout << i << " and " << j << " " << coordsimilarity.two_similarity << endl;
 		}
 	}
 	//xNES();
