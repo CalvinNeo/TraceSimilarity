@@ -16,8 +16,36 @@ using namespace std;
 
 #define UNICODE
 
-
 vector<string> csvname;
+
+std::string ws2s(const std::wstring& ws)
+{
+	std::string curLocale = setlocale(LC_ALL, NULL);        // curLocale = "C";
+	setlocale(LC_ALL, "chs");
+	const wchar_t* _Source = ws.c_str();
+	size_t _Dsize = 2 * ws.size() + 1;
+	char *_Dest = new char[_Dsize];
+	memset(_Dest, 0, _Dsize);
+	wcstombs(_Dest, _Source, _Dsize);
+	std::string result = _Dest;
+	delete[] _Dest;
+	setlocale(LC_ALL, curLocale.c_str());
+	return result;
+}
+
+std::wstring s2ws(const std::string& s)
+{
+	setlocale(LC_ALL, "chs");
+	const char* _Source = s.c_str();
+	size_t _Dsize = s.size() + 1;
+	wchar_t *_Dest = new wchar_t[_Dsize];
+	wmemset(_Dest, 0, _Dsize);
+	mbstowcs(_Dest, _Source, _Dsize);
+	std::wstring result = _Dest;
+	delete[] _Dest;
+	setlocale(LC_ALL, "C");
+	return result;
+}
 
 vector<Point> read_csv(wstring path) {
 	int record_count = 0;
@@ -111,9 +139,8 @@ vector<TPoint> read_csv_time(wstring path) {
 	return vp;
 }
 
-void get_all_csv() {
+void get_all_csv(string fullpath = "../../case/origin") {
 	namespace fs = boost::filesystem;
-	string fullpath = ".";
 	fs::path full_path(fullpath, fs::native);
 	if (!fs::exists(fullpath)) {
 		return;
@@ -123,8 +150,8 @@ void get_all_csv() {
 		try {
 
 			if (fs::extension(*iter) == ".csv") {
-				//std::cout << *iter << " is a file" << std::endl;
-				csvname.push_back(iter->path().string());
+				csvname.push_back(iter->path().filename().string());
+				//csvname.push_back(iter->path().string());
 			}
 		}
 		catch (const std::exception & ex) {
@@ -134,8 +161,51 @@ void get_all_csv() {
 	}
 }
 
+void find_coord(string tracename) {
+	using namespace std;
+	vector<vector<Point>> tofind;
+	vector<Point> trace;
+	if (csvname.empty())
+	{
+		get_all_csv();
+	}
+	for (int i = 0; i < csvname.size(); i++)
+	{
+		if (tracename == csvname[i])
+		{
+			trace = read_csv(s2ws(csvname[i]));
+		}
+		else {
+			tofind.push_back(read_csv(s2ws(csvname[i])));
+		}
+	}
+	CoordList(trace, tofind);
+}
+
+void find_time(string tracename) {
+	using namespace std;
+	vector<vector<Point>> tofind;
+	vector<Point> trace;
+	if (csvname.empty())
+	{
+		get_all_csv();
+	}
+	for (int i = 0; i < csvname.size(); i++)
+	{
+		if (tracename == csvname[i])
+		{
+			trace = read_csv_time(s2ws(csvname[i]));
+		}
+		else {
+			tofind.push_back(read_csv_time(s2ws(csvname[i])));
+		}
+	}
+	CoordList(trace, tofind);
+}
+
 int wmain(int argc, TCHAR* argv[], TCHAR* env[]) {
-	//read_csv_time(L"F:\\Codes\\C++\\TraceSimilarity\\case\\origin\\1t.csv");
+	read_csv_time(L"../../case/origin/1t.csv");
+
 	vector<Point> trace_coord[4];
 	//for (int i = 0;i < 4;i++) {
 	//	wstring path = L"../../case/origin/";
@@ -143,16 +213,16 @@ int wmain(int argc, TCHAR* argv[], TCHAR* env[]) {
 	//	path += L".csv";
 	//	trace_coord[i] = read_csv(path);
 	//}
-	trace_coord[0] = read_csv(L"../../case/coord/1a.csv");
-	trace_coord[1] = read_csv(L"../../case/coord/1b.csv");
-	trace_coord[2] = read_csv(L"../../case/coord/2a.csv");
-	trace_coord[3] = read_csv(L"../../case/coord/2b.csv");
-	for (int i = 0;i < 4;i++) {
-		for (int j = 0;j < i;j++) {
-			CoordSimilarity coordsimilarity = CoordCompare(trace_coord[i], trace_coord[j]);
-			cout << i << " and " << j << " " << coordsimilarity.two_similarity << endl;
-		}
-	}
+	//trace_coord[0] = read_csv(L"../../case/coord/1a.csv");
+	//trace_coord[1] = read_csv(L"../../case/coord/1b.csv");
+	//trace_coord[2] = read_csv(L"../../case/coord/2a.csv");
+	//trace_coord[3] = read_csv(L"../../case/coord/2b.csv");
+	//for (int i = 0;i < 4;i++) {
+	//	for (int j = 0;j < i;j++) {
+	//		CoordSimilarity coordsimilarity = CoordCompare(trace_coord[i], trace_coord[j]);
+	//		cout << i << " and " << j << " " << coordsimilarity.two_similarity << endl;
+	//	}
+	//}
 	//xNES();
 	//get_all_csv();
 	system("pause");

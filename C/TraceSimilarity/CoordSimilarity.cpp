@@ -1,4 +1,5 @@
 #include "CoordSimilarity.h"
+#include <windows.h>
 
 double dis(int i, int j);
 inline double min3(double f1, double f2, double f3);
@@ -8,7 +9,7 @@ std::vector<Point> trace1, trace2;
 const double UNTRAVELED = -10.0;
 const int maxn = 101;
 
-CoordSimilarity CoordCompare(std::vector<Point> t1, std::vector<Point> t2) {
+CoordSimilarity CoordCompare(std::vector<Point> t1, std::vector<Point> t2, bool timeissue) {
 
 	trace1 = t1;
 	trace2 = t2;
@@ -96,4 +97,4 @@ inline double min3(double f1, double f2, double f3) {
 	return min(f1, min(f2, f3));
 }
 
-CoordSimilarity CoordList(std::vector<Point> t1, std::vector< std::vector<Point> > tlist);
+CoordSimilarity CoordList(std::vector<Point> t1, std::vector< std::vector<Point> > tlist, bool timeissue);
