@@ -23,3 +23,9 @@ struct TwoTraceSection {
 	};
 };
 
+struct TwoTracePoint {
+	int i1, i2;
+	TwoTracePoint(int i1, int i2) : i1(i1), i2(i2) {
+
+	};
+};
