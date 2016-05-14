@@ -5,7 +5,8 @@
 
 struct CoordSimilarity {
 	double two_similarity;
-	std::vector<TwoTraceSection> trace_section;
+	std::vector<TwoTraceSection> trace_sections;
+	std::vector<TwoTracePoint> trace_points;
 };
 
 CoordSimilarity CoordCompare(std::vector<Point> t1, std::vector<Point> t2, bool timeissue = false);
