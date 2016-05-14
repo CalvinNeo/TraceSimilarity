@@ -16,6 +16,29 @@ void boost_return() {
 	ip::tcp::endpoint ep(addr, RESULTPORT);
 	ip::tcp::socket sock(ioservice);
 	sock.connect(ep);
+	int bytes = 0;
+	char SendBuffer[MAX_BUFFER];
+	char ReceiveBuffer[MAX_BUFFER];
+
+	while (true)
+	{
+		cin.getline(SendBuffer, sizeof(SendBuffer));
+		if (sock.send(buffer(SendBuffer)) == SOCKET_ERROR)
+		{
+			cout << "Send Info Error::" << GetLastError() << endl;
+			break;
+		}
+		if ((bytes = sock.receive(buffer(ReceiveBuffer))) == SOCKET_ERROR)
+		{
+			printf("recv error!\n");
+			exit(-1);
+		}
+		ReceiveBuffer[bytes] = '\0';
+		char IPdotdec[20];
+		inet_ntop(AF_INET,0, IPdotdec, 16);
+		printf("Message from %s:%s\n", IPdotdec, ReceiveBuffer);
+		// printf("Message from %s:%s\n", inet_ntoa(clientAddr.sin_addr), ReceiveBuffer); //deprecated
+	}
 }
 
 void return_by_socket() {
