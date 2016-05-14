@@ -9,13 +9,15 @@ using namespace std;
 
 #define UNICODE
 
-#define PORT 15777
+#define RESULTPORT 15777
+#define REQUESTPORT 15778
 #define IP "127.0.0.1"
+#define MAX_BUFFER 2048
 
 int wmain(int argc, TCHAR* argv[], TCHAR* env[]) {
 	WSADATA wsaData;
 	// init Winsock.dll
-	if (WSAStartup(MAKEWORD(1, 1), &wsaData) != 0)
+	if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0)
 	{
 		printf("fail to init winsock.dll!\n");
 		exit(-1);
@@ -32,13 +34,13 @@ int wmain(int argc, TCHAR* argv[], TCHAR* env[]) {
 	struct sockaddr_in servAddr;
 	memset(&servAddr, 0, sizeof(sockaddr_in));
 	servAddr.sin_family = AF_INET;
-	servAddr.sin_port = htons(PORT);
+	servAddr.sin_port = htons(RESULTPORT);
 	servAddr.sin_addr.S_un.S_addr = htonl(INADDR_ANY);
 
 	// bind addr
 	if (bind(servSoc, (sockaddr*)&servAddr, sizeof(servAddr)) == SOCKET_ERROR)
 	{
-		printf("bind error! port:%d\n", PORT);
+		printf("bind error! port:%d\n", RESULTPORT);
 		exit(-1);
 	}
 	// max connection = 2
@@ -47,7 +49,8 @@ int wmain(int argc, TCHAR* argv[], TCHAR* env[]) {
 		printf("listen error!\n");
 		exit(-1);
 	}
-	printf("Server %d is listening...\n", PORT);
+	printf("Server %d is listening...\n", RESULTPORT);
+
 	SOCKET clientSoc;
 	struct sockaddr_in clientAddr;
 	memset(&clientAddr, 0, sizeof(clientAddr));
@@ -59,18 +62,19 @@ int wmain(int argc, TCHAR* argv[], TCHAR* env[]) {
 		exit(-1);
 	}
 	printf("Accept connection from %s\n", inet_ntoa(clientAddr.sin_addr));
-	char buf[4096];
+	char SendBuffer[] = "HHHHHHHHH";
+	char ReceiveBuffer[MAX_BUFFER];
 	while (1)
 	{
 		int bytes;
-		if ((bytes = recv(clientSoc, buf, sizeof(buf), 0)) == SOCKET_ERROR)
+		if ((bytes = recv(clientSoc, ReceiveBuffer, sizeof(ReceiveBuffer), 0)) == SOCKET_ERROR)
 		{
 			printf("recv error!\n");
 			exit(-1);
 		}
-		buf[bytes] = '\0';
-		printf("Message from %s:%s\n", inet_ntoa(clientAddr.sin_addr), buf);
-		if (send(clientSoc, buf, bytes, 0) == SOCKET_ERROR)
+		ReceiveBuffer[bytes] = '\0';
+		printf("Message from %s:%s\n", inet_ntoa(clientAddr.sin_addr), ReceiveBuffer);
+		if (send(clientSoc, SendBuffer, bytes, 0) == SOCKET_ERROR)
 		{
 			printf("send error!\n");
 			exit(-1);
