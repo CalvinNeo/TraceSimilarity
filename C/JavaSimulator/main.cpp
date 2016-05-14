@@ -17,7 +17,7 @@ using namespace std;
 int wmain(int argc, TCHAR* argv[], TCHAR* env[]) {
 	WSADATA wsaData;
 	// init Winsock.dll
-	if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0)
+	if (WSAStartup(MAKEWORD(1, 1), &wsaData) != 0)
 	{
 		printf("fail to init winsock.dll!\n");
 		exit(-1);

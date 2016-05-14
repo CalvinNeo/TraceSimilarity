@@ -149,10 +149,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="interface.cpp" />
     <ClCompile Include="xNES.cpp" />
     <ClCompile Include="CoordSimilarity.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="read.h" />
+    <ClCompile Include="interface.h" />
     <ClCompile Include="TimeSimilarity.cpp" />
   </ItemGroup>
   <ItemGroup>

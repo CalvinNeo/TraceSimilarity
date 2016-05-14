@@ -8,6 +8,12 @@
 #include <boost/filesystem/path.hpp>
 #include <boost/filesystem.hpp> 
 
+using namespace std;
+
+void boost_return() {
+
+}
+
 void return_by_socket() {
 	WSADATA  Ws;
 	SOCKET clientSoc;
@@ -43,7 +49,7 @@ void return_by_socket() {
 	clientAddr.sin_family = AF_INET;
 	clientAddr.sin_port = htons(REQUESTPORT);
 	clientAddr.sin_addr.s_addr = inet_addr(IP);
-
+	
 	if (bytes == SOCKET_ERROR)
 	{
 		cout << "Connect Error::" << GetLastError() << endl;

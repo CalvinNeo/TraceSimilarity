@@ -4,8 +4,9 @@
     <ClCompile Include="CoordSimilarity.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="TimeSimilarity.cpp" />
-    <ClCompile Include="read.h" />
     <ClCompile Include="xNES.cpp" />
+    <ClCompile Include="interface.h" />
+    <ClCompile Include="interface.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CoordSimilarity.h" />
