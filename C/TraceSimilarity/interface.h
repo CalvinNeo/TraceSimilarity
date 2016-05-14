@@ -9,3 +9,4 @@
 
 void return_by_socket();
 void boost_return();
+void file_return();
