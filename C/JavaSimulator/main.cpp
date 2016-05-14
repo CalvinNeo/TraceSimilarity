@@ -3,6 +3,8 @@
 #include <time.h>
 #include <vector>
 
+#pragma comment(lib, "WS2_32")	
+
 using namespace std;
 
 #define UNICODE
@@ -12,15 +14,15 @@ using namespace std;
 
 int wmain(int argc, TCHAR* argv[], TCHAR* env[]) {
 	WSADATA wsaData;
-	//init Winsock.dll
+	// init Winsock.dll
 	if (WSAStartup(MAKEWORD(1, 1), &wsaData) != 0)
 	{
 		printf("fail to init winsock.dll!\n");
 		exit(-1);
 	}
-	//creat socket
+	// creat socket
 	SOCKET servSoc;
-	//SOCK_STREAM is TCP
+	// SOCK_STREAM is TCP
 	if ((servSoc = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP)) == INVALID_SOCKET)
 	{
 		printf("create socket error!\n");
@@ -50,7 +52,7 @@ int wmain(int argc, TCHAR* argv[], TCHAR* env[]) {
 	struct sockaddr_in clientAddr;
 	memset(&clientAddr, 0, sizeof(clientAddr));
 	int addrlen = sizeof(clientAddr);
-	//accept
+	// accept
 	if ((clientSoc = accept(servSoc, (sockaddr*)&clientAddr, &addrlen)) == INVALID_SOCKET)
 	{
 		printf("accept error!\n");
@@ -74,7 +76,7 @@ int wmain(int argc, TCHAR* argv[], TCHAR* env[]) {
 			exit(-1);
 		}
 	}
-	//clean socket
+	// clean socket
 	WSACleanup();
 	system("pause");
 	return 0;

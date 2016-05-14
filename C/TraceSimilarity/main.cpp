@@ -13,9 +13,14 @@
 #include <boost/filesystem/path.hpp>
 #include <boost/filesystem.hpp> 
 
+#pragma comment(lib, "WS2_32")	
+
 using namespace std;
 
 #define UNICODE
+#define PORT 15777
+#define IP "127.0.0.1"
+#define MAX_BUFFER 2048
 
 vector<string> csvname;
 
@@ -206,9 +211,64 @@ void find_time(string tracename) {
 	TimeList(trace, tofind);
 }
 
-int wmain(int argc, TCHAR* argv[], TCHAR* env[]) {
-	read_csv_time(L"../../case/origin/1t.csv");
+void return_by_socket() {
+	WSADATA  Ws;
+	SOCKET CientSocket;
+	struct sockaddr_in ServerAddr;
+	int Ret = 0;
+	int AddrLen = 0;
+	HANDLE hThread = NULL;
+	char SendBuffer[MAX_BUFFER];
+ 
+	//Init Windows Socket
+	if ( WSAStartup(MAKEWORD(1,1), &Ws) != 0 )
+	{
+		cout<<"Init Windows Socket Failed::"<<GetLastError()<<endl;
+		return;
+	}
+ 
+	//Create Socket
+	CientSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+	if ( CientSocket == INVALID_SOCKET )
+	{
+		cout<<"Create Socket Failed::"<<GetLastError()<<endl;
+		return;
+	}
+ 
+	ServerAddr.sin_family = AF_INET;
+	ServerAddr.sin_addr.s_addr = inet_addr(IP);
+	ServerAddr.sin_port = htons(PORT);
+	memset(ServerAddr.sin_zero, 0x00, 8);
+ 
+	Ret = connect(CientSocket,(struct sockaddr*)&ServerAddr, sizeof(ServerAddr));
+	if ( Ret == SOCKET_ERROR )
+	{
+		cout<<"Connect Error::"<< GetLastError() <<endl;
+		return;
+	}
+	else
+	{
+		cout<<"连接成功!"<<endl;
+	}
+ 
+	while ( true )
+	{
+		cin.getline(SendBuffer, sizeof(SendBuffer));
+		Ret = send(CientSocket, SendBuffer, (int)strlen(SendBuffer), 0);
+		if ( Ret == SOCKET_ERROR )
+		{
+			cout<<"Send Info Error::"<<GetLastError()<<endl;
+			break;
+		}
+	}
+     
+	closesocket(CientSocket);
+	WSACleanup(); 
+}
 
+int wmain(int argc, TCHAR* argv[], TCHAR* env[]) {
+	//read_csv_time(L"../../case/origin/1t.csv");
+	return_by_socket();
 	vector<Point> trace_coord[4];
 	//for (int i = 0;i < 4;i++) {
 	//	wstring path = L"../../case/origin/";
