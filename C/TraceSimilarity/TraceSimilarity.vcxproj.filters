@@ -5,7 +5,6 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="TimeSimilarity.cpp" />
     <ClCompile Include="xNES.cpp" />
-    <ClCompile Include="interface.h" />
     <ClCompile Include="interface.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -13,5 +12,6 @@
     <ClInclude Include="def.h" />
     <ClInclude Include="TimeSimilarity.h" />
     <ClInclude Include="xNES.h" />
+    <ClInclude Include="interface.h" />
   </ItemGroup>
 </Project>

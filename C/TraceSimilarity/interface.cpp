@@ -1,16 +1,21 @@
-#include "interface.h"
-
+#include <WinSock2.h>
 #include <windows.h>
 #include <string>
 #include <iostream>
-
 #include <boost/asio.hpp>
 
 using namespace std;
+#pragma message("CPP")
+
+#include "interface.h"
 
 void boost_return() {
 	using namespace boost::asio;
-
+	io_service ioservice;
+	ip::address addr = ip::address::from_string(IP);
+	ip::tcp::endpoint ep(addr, RESULTPORT);
+	ip::tcp::socket sock(ioservice);
+	sock.connect(ep);
 }
 
 void return_by_socket() {
@@ -37,7 +42,8 @@ void return_by_socket() {
 	}
 
 	servAddr.sin_family = AF_INET;
-	servAddr.sin_addr.s_addr = inet_addr(IP);
+	//servAddr.sin_addr.s_addr = inet_addr(IP); // deprecated
+	inet_pton(AF_INET, IP, (void *)&servAddr.sin_addr.s_addr);
 	servAddr.sin_port = htons(RESULTPORT);
 	memset(servAddr.sin_zero, 0x00, 8);
 
@@ -47,7 +53,8 @@ void return_by_socket() {
 	memset(&clientAddr, 0, sizeof(sockaddr_in));
 	clientAddr.sin_family = AF_INET;
 	clientAddr.sin_port = htons(REQUESTPORT);
-	clientAddr.sin_addr.s_addr = inet_addr(IP);
+	//clientAddr.sin_addr.s_addr = inet_addr(IP); // deprecated
+	inet_pton(AF_INET, IP, (void *)&clientAddr.sin_addr.s_addr);
 	
 	if (bytes == SOCKET_ERROR)
 	{
@@ -74,9 +81,24 @@ void return_by_socket() {
 			exit(-1);
 		}
 		ReceiveBuffer[bytes] = '\0';
-		printf("Message from %s:%s\n", inet_ntoa(clientAddr.sin_addr), ReceiveBuffer);
+		char IPdotdec[20];
+		inet_ntop(AF_INET, (void *)&clientAddr.sin_addr, IPdotdec, 16);
+		printf("Message from %s:%s\n", IPdotdec, ReceiveBuffer);
+		// printf("Message from %s:%s\n", inet_ntoa(clientAddr.sin_addr), ReceiveBuffer); //deprecated
 	}
 
 	closesocket(clientSoc);
 	WSACleanup();
+}
+
+void file_return() {
+
+}
+
+char * result_encode() {
+	return NULL;
+}
+
+void fuckme() {
+	cout << "fuckme" << endl;
 }

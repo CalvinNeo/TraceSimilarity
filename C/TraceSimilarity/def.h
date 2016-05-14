@@ -10,7 +10,7 @@ struct Point {
 };
 
 struct TPoint : public Point{
-	double t; //timestamp
+	unsigned long long t; //timestamp
 	TPoint(double x, double y, unsigned long long timestamp) : Point(x, y), t(timestamp) {
 
 	};

@@ -7,10 +7,10 @@
 
 using namespace std;
 
-#define UNICODE
+//#define UNICODE
 
 #define RESULTPORT 15777
-#define REQUESTPORT 15778
+#define REQUESTPORT 15777
 #define IP "127.0.0.1"
 #define MAX_BUFFER 2048
 

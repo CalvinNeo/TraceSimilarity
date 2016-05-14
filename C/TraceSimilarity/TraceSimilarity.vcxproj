@@ -91,6 +91,7 @@
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>%BOOST_HOME%;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -153,10 +154,10 @@
     <ClCompile Include="xNES.cpp" />
     <ClCompile Include="CoordSimilarity.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="interface.h" />
     <ClCompile Include="TimeSimilarity.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="interface.h" />
     <ClInclude Include="xNES.h" />
     <ClInclude Include="CoordSimilarity.h" />
     <ClInclude Include="def.h" />

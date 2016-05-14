@@ -77,69 +77,69 @@ int test() {
 }
 
 int xNES() {
-#ifdef CHECKED_ALL
-	boost::random::mt19937 seed;
-#else
-	std::ranlux64_base_01 seed;
-	seed.seed(time(NULL));
-#endif
-	int d = 1;
-	int miu = 0.0;
-	int A = 1.0;
-	double sigma = pow(A, 1.0 / d);
-	double B = A / sigma;
-	int itertimes = 0, maxitertimes = 200;
-	int n = 4 + (double)ceil(3 * log10(d));
-	double ita_sigma = 0.6 * (3 + log10(d)) / d / sqrt(d), ita_B = ita_sigma;
-	double ita_miu = 1.0;
-
-	std::vector<double> z(n), x(n), u(n), fx(n);
-	std::vector<std::pair<double, double>> p(n);
-
-	while (itertimes < maxitertimes) {
-		itertimes++;
-		double denominator = 0.0;
-		for (int i = 0; i < n; i++)
-		{
-			denominator += std::max(0.0, log(n / 2.0 + 1) - log(i + 1.0));
-		}
-		for (int i = 0; i < n; i++)
-		{
-			u[i] = std::max(0.0, log(n / 2.0 + 1) - log(i + 1.0)) / denominator - 1.0 / n;
-		}
-		for (int i = 0; i < n; i++)
-		{
-#ifdef CHECKED_ALL
-			boost::uniform_01<boost::mt19937&> u01(seed);
-			boost::normal_distribution<> nd(0, 1.0);
-#else
-			std::normal_distribution<double> nd(0, 1.0);
-#endif
-			z[i] = nd(seed);
-			x[i] = miu + sigma * B * z[i];
-			fx[i] = costfunc(x[i]);
-		}
-		// sort
-		qsort2(fx, z, x, 0, fx.size()-1);
-		std::transform(u.begin(), u.end(), z.begin(), p.begin(), [=](double a, double b) {return std::pair<double, double>(a, b); });
-		double G_delta = std::accumulate(p.begin(), p.end(), 0, [=](double a, std::pair<double, double> uizi) {return a + uizi.first * uizi.second; });
-		double G_M = std::accumulate(p.begin(), p.end(), 0, [=](double a, std::pair<double, double> uizi) {return a + uizi.first * (uizi.second * uizi.second - 1); });
-		double G_sigma = G_M / d;
-		double G_B = G_M - G_sigma * 1;
-		miu += ita_miu * sigma * B * G_delta;
-		sigma = sigma * exp(ita_sigma / 2.0 * G_sigma);
-		B = B * exp(ita_B / 2.0 * G_B);
-	}
-	for (int i = 0; i < n; i++)
-	{
-		printf("%f ", z[i]);
-	}
-	printf("\n");
-	for (int i = 0; i < n; i++)
-	{
-		printf("%f ", x[i]);
-	}
-	printf("\n");
+//#ifdef CHECKED_ALL
+//	boost::random::mt19937 seed;
+//#else
+//	std::ranlux64_base_01 seed;
+//	seed.seed(time(NULL));
+//#endif
+//	int d = 1;
+//	int miu = 0.0;
+//	int A = 1.0;
+//	double sigma = pow(A, 1.0 / d);
+//	double B = A / sigma;
+//	int itertimes = 0, maxitertimes = 200;
+//	int n = 4 + (double)ceil(3 * log10(d));
+//	double ita_sigma = 0.6 * (3 + log10(d)) / d / sqrt(d), ita_B = ita_sigma;
+//	double ita_miu = 1.0;
+//
+//	std::vector<double> z(n), x(n), u(n), fx(n);
+//	std::vector<std::pair<double, double>> p(n);
+//
+//	while (itertimes < maxitertimes) {
+//		itertimes++;
+//		double denominator = 0.0;
+//		for (int i = 0; i < n; i++)
+//		{
+//			denominator += std::max(0.0, log(n / 2.0 + 1) - log(i + 1.0));
+//		}
+//		for (int i = 0; i < n; i++)
+//		{
+//			u[i] = std::max(0.0, log(n / 2.0 + 1) - log(i + 1.0)) / denominator - 1.0 / n;
+//		}
+//		for (int i = 0; i < n; i++)
+//		{
+//#ifdef CHECKED_ALL
+//			boost::uniform_01<boost::mt19937&> u01(seed);
+//			boost::normal_distribution<> nd(0, 1.0);
+//#else
+//			std::normal_distribution<double> nd(0, 1.0);
+//#endif
+//			z[i] = nd(seed);
+//			x[i] = miu + sigma * B * z[i];
+//			fx[i] = costfunc(x[i]);
+//		}
+//		// sort
+//		qsort2(fx, z, x, 0, fx.size()-1);
+//		std::transform(u.begin(), u.end(), z.begin(), p.begin(), [=](double a, double b) {return std::pair<double, double>(a, b); });
+//		double G_delta = std::accumulate(p.begin(), p.end(), 0, [=](double a, std::pair<double, double> uizi) {return a + uizi.first * uizi.second; });
+//		double G_M = std::accumulate(p.begin(), p.end(), 0, [=](double a, std::pair<double, double> uizi) {return a + uizi.first * (uizi.second * uizi.second - 1); });
+//		double G_sigma = G_M / d;
+//		double G_B = G_M - G_sigma * 1;
+//		miu += ita_miu * sigma * B * G_delta;
+//		sigma = sigma * exp(ita_sigma / 2.0 * G_sigma);
+//		B = B * exp(ita_B / 2.0 * G_B);
+//	}
+//	for (int i = 0; i < n; i++)
+//	{
+//		printf("%f ", z[i]);
+//	}
+//	printf("\n");
+//	for (int i = 0; i < n; i++)
+//	{
+//		printf("%f ", x[i]);
+//	}
+//	printf("\n");
 	return 0;
 }
 
