@@ -41,10 +41,7 @@ public class TopLeftPanel extends JPanel {
 		sourceLabel.setBorder(BorderFactory.createEmptyBorder(5, 50, 10, 0));
 		leftUpperPanel.add(sourceLabel);
 
-		JComboBox choice = new JComboBox();
-		for (String string : TraceManager.name) {
-			choice.addItem(string);
-		}
+		JComboBox<String> choice = new JComboBox<>(TraceManager.name);
 		// choice.addItemListener(this);
 		// choice.select(0);
 		choice.setFont(new java.awt.Font("Dialog", 0, 11));
