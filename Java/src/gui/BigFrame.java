@@ -4,8 +4,9 @@ import java.awt.*;
 
 import javax.swing.*;
 
-public class BigFrame extends JFrame {
+import net.CInterface;
 
+public class BigFrame extends JFrame {
 	public BigFrame() throws HeadlessException {
 		initComponents();
 	}
@@ -52,7 +53,6 @@ public class BigFrame extends JFrame {
 	}
 
 	public void createBottomPanel() {
-
 		bottomPanel = new JPanel();
 		bottomPanel.setBackground(Color.blue);
 
@@ -89,14 +89,13 @@ public class BigFrame extends JFrame {
 	}
 
 	public static void main(String[] args) {
-
 		BigFrame frame = new BigFrame("以经纬度和时间定义的不同轨迹的相似度计算");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		double width = Toolkit.getDefaultToolkit().getScreenSize().getWidth();
 		double height = Toolkit.getDefaultToolkit().getScreenSize().getHeight();
-		frame.setSize(1000, 800);
+		frame.setSize(800, 600);
 		frame.setLocation((int) (width - frame.getWidth()) / 2 - 50, (int) (height - frame.getHeight()) / 2);
 		frame.setVisible(true);
-
+		CInterface.socketmain();
 	}
 }
