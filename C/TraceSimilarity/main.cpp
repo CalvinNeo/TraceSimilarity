@@ -165,7 +165,7 @@ void get_all_csv(string fullpath = "../../case/origin") {
 	}
 }
 
-void find_coord(string tracename) {
+CoordSimilarityList find_coord(string tracename) {
 	using namespace std;
 	vector<vector<Point>> tofind;
 	vector<Point> trace;
@@ -183,10 +183,10 @@ void find_coord(string tracename) {
 			tofind.push_back(read_csv(s2ws(csvname[i])));
 		}
 	}
-	CoordList(trace, tofind);
+	return CoordSort(trace, tofind);
 }
 
-void find_time(string tracename) {
+TimeSimilarityList find_time(string tracename) {
 	using namespace std;
 	vector<vector<TPoint>> tofind;
 	vector<TPoint> trace;
@@ -204,9 +204,32 @@ void find_time(string tracename) {
 			tofind.push_back(read_csv_time(s2ws(csvname[i])));
 		}
 	}
-	TimeList(trace, tofind);
+	return TimeSort(trace, tofind);
 }
 
+CoordSimilarity cmp_coord(string tracename1, string tracename2) {
+	using namespace std;
+	vector<Point> trace1, trace2;
+	trace1 = read_csv(s2ws(tracename1));
+	trace2 = read_csv(s2ws(tracename1));
+	return CoordCompare(trace1, trace2);
+}
+
+TimeSimilarity cmp_time(string tracename1, string tracename2) {
+	using namespace std;
+	vector<TPoint> trace1, trace2;
+	trace1 = read_csv_time(s2ws(tracename1));
+	trace2 = read_csv_time(s2ws(tracename1));
+	return TimeCompare(trace1, trace2);
+}
+
+/*
+	Flow Line
+	* get_all_csv
+	find_coord/find_time
+	result_encode(+4)
+	xxx_return
+*/
 
 int wmain(int argc, TCHAR* argv[], TCHAR* env[]) {
 	//read_csv_time(L"../../case/origin/1t.csv");

@@ -150,6 +150,6 @@ inline double min3(double f1, double f2, double f3) {
 	return min(f1, min(f2, f3));
 }
 
-CoordSimilarity CoordList(std::vector<Point> t1, std::vector< std::vector<Point> > tlist, bool timeissue) {
-	return CoordSimilarity();
+CoordSimilarityList CoordSort(std::vector<Point> t1, std::vector< std::vector<Point> > tlist, bool timeissue) {
+	return CoordSimilarityList();
 }

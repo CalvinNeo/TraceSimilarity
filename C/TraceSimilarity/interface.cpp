@@ -8,6 +8,8 @@ using namespace std;
 #pragma message("CPP")
 
 #include "interface.h"
+#include "CoordSimilarity.h"
+#include "TimeSimilarity.h"
 
 void boost_return() {
 	using namespace boost::asio;
@@ -118,7 +120,16 @@ void file_return() {
 
 }
 
-char * result_encode() {
+char * result_encode(TimeSimilarity dat) {
+	return NULL;
+}
+char * result_encode(TimeSimilarityList dat) {
+	return NULL;
+}
+char * result_encode(CoordSimilarity dat) {
+	return NULL;
+}
+char * result_encode(CoordSimilarityList dat) {
 	return NULL;
 }
 

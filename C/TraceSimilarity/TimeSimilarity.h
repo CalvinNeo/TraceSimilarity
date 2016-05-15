@@ -9,5 +9,9 @@ struct TimeSimilarity {
 	std::vector<TwoTracePoint> trace_points;
 };
 
+struct TimeSimilarityList {
+
+};
+
 TimeSimilarity TimeCompare(std::vector<TPoint> t1, std::vector<TPoint> t2);
-TimeSimilarity TimeList(std::vector<TPoint> t1, std::vector< std::vector<TPoint> > tlist);
+TimeSimilarityList TimeSort(std::vector<TPoint> t1, std::vector< std::vector<TPoint> > tlist);

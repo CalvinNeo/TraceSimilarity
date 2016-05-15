@@ -14,7 +14,10 @@ void boost_return();
 void file_return();
 void return_by_socket();
 
-char * result_encode();
+char * result_encode(struct TimeSimilarity);
+char * result_encode(struct TimeSimilarityList);
+char * result_encode(struct CoordSimilarity);
+char * result_encode(struct CoordSimilarityList);
 
 void fuckme();
 
