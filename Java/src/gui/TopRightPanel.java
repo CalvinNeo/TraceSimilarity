@@ -113,7 +113,6 @@ public class TopRightPanel extends JPanel implements ActionListener {
 
 	}
 
-	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getID() == ActionEvent.ACTION_PERFORMED) {
 			JButton tmp = (JButton) e.getSource();

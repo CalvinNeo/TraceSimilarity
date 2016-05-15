@@ -8,14 +8,9 @@ inline double simpleDistance(Point a, Point b);
 doubletable frechetDistance(std::vector<Point> t1, std::vector<Point> t2, doubletable dis);
 inline double min3(double f1, double f2, double f3);
 
-//std::vector<Point> trace1, trace2;
-
 const int maxn = 101;
 
 CoordSimilarity CoordCompare(std::vector<Point> t1, std::vector<Point> t2, bool timeissue) {
-
-	//trace1 = t1;
-	//trace2 = t2;
 	int p = t1.size();
 	int q = t2.size();
 	double len1 = totalLen(t1);

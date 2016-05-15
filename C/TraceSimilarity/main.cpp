@@ -18,7 +18,6 @@ using namespace std;
 
 //#define UNICODE
 
-
 vector<string> csvname;
 
 std::string ws2s(const std::wstring& ws)
@@ -49,7 +48,6 @@ std::wstring s2ws(const std::string& s)
 	setlocale(LC_ALL, "C");
 	return result;
 }
-
 
 vector<Point> read_csv(wstring path) {
 	int record_count = 0;
@@ -90,7 +88,6 @@ vector<Point> read_csv(wstring path) {
 	}
 	return vp;
 }
-
 
 vector<TPoint> read_csv_time(wstring path) {
 	int record_count = 0;

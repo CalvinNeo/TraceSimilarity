@@ -38,3 +38,7 @@ C/JavaSimulator/Debug/
 C/JavaSimulator/Release/
 C/1/
 C/.vs/
+Java/.classpath
+Java/.project
+*.prefs
+*.class
