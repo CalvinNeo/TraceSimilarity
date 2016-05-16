@@ -19,6 +19,5 @@ char * result_encode(struct TimeSimilarityList);
 char * result_encode(struct CoordSimilarity);
 char * result_encode(struct CoordSimilarityList);
 
-void fuckme();
 
 #endif

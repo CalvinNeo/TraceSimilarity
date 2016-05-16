@@ -1,16 +1,19 @@
 #include "CoordSimilarity.h"
 #include <windows.h>
+#include <type_traits>
 
 typedef std::vector<std::vector<double>> doubletable;
 
-double totalLen(std::vector<Point> t);
+double totalLen(std::vector<Point> & t);
 inline double simpleDistance(Point a, Point b);
-doubletable frechetDistance(std::vector<Point> t1, std::vector<Point> t2, doubletable dis);
+doubletable frechetDistance(std::vector<Point> & t1, std::vector<Point> & t2, doubletable dis);
 inline double min3(double f1, double f2, double f3);
 
 const int maxn = 101;
 
-CoordSimilarity CoordCompare(std::vector<Point> t1, std::vector<Point> t2, bool timeissue) {
+CoordSimilarity CoordCompare(std::vector<Point> & t1, std::vector<Point> & t2, bool timeissue) {
+	//static_assert(std::is_base_of<Point, T>::value);
+
 	int p = t1.size();
 	int q = t2.size();
 	double len1 = totalLen(t1);
@@ -87,7 +90,7 @@ CoordSimilarity CoordCompare(std::vector<Point> t1, std::vector<Point> t2, bool 
 
 }
 
-doubletable frechetDistance(std::vector<Point> t1, std::vector<Point> t2, doubletable dis) {
+doubletable frechetDistance(std::vector<Point> & t1, std::vector<Point> & t2, doubletable dis) {
 
 	int p = t1.size();
 	int q = t2.size();
@@ -131,7 +134,7 @@ inline double simpleDistance(Point a, Point b) {
 	return sqrt(pow(a.x * 1000 - b.x * 1000, 2) + pow(a.y * 1000 - b.y * 1000, 2));
 }
 
-double totalLen(std::vector<Point> t) {
+double totalLen(std::vector<Point> & t) {
 
 	double res = 0;
 	for (int i = 1;i < t.size();i++) {
@@ -145,6 +148,6 @@ inline double min3(double f1, double f2, double f3) {
 	return min(f1, min(f2, f3));
 }
 
-CoordSimilarityList CoordSort(std::vector<Point> t1, std::vector< std::vector<Point> > tlist, bool timeissue) {
+CoordSimilarityList CoordSort(std::vector<Point> & t1, std::vector< std::vector<Point> > & tlist, bool timeissue) {
 	return CoordSimilarityList();
 }

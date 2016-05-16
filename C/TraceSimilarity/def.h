@@ -1,9 +1,9 @@
 #pragma once
 
-
 struct Point {
 	double x; //longitude
 	double y; //latitude
+	Point() = default;
 	Point(double x, double y) : x(x), y(y) {
 
 	};
@@ -11,10 +11,12 @@ struct Point {
 
 struct TPoint : public Point{
 	unsigned long long t; //timestamp
+	TPoint() = default;
 	TPoint(double x, double y, unsigned long long timestamp) : Point(x, y), t(timestamp) {
 
 	};
 };
+
 
 struct TwoTraceSection {
 	int t1_begin, t1_end, t2_begin, t2_end;

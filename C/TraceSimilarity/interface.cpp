@@ -133,6 +133,3 @@ char * result_encode(CoordSimilarityList dat) {
 	return NULL;
 }
 
-void fuckme() {
-	cout << "fuckme" << endl;
-}
