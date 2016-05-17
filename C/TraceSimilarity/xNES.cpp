@@ -53,28 +53,28 @@ void qsort2(std::vector<double> & master, std::vector<double> & slave1, std::vec
 	qsort2(master, slave1, slave2 ,left + 1, end);
 }
 
-int test() {
-	std::vector<double> master(5);
-	std::vector<double> slave1(5);
-	std::vector<double> slave2(5);
-	for (int i = 0; i < 5; i++)
-	{
-		master[i] = 5 - i;
-		slave1[i] = i;
-		slave2[i] = i;
-	}
-	for (int i = 0; i < 5; i++)
-	{
-		cout << master[i] << " " << slave1[i] << slave2[i] << endl;
-	}
-	cout << "---------------------------------" << endl;
-	qsort2(master, slave1, slave2, 0, 4);
-	for (int i = 0; i < 5; i++)
-	{
-		cout << master[i] << " " << slave1[i] << slave2[i] << endl;
-	}
-	return 0;
-}
+//int test() {
+//	std::vector<double> master(5);
+//	std::vector<double> slave1(5);
+//	std::vector<double> slave2(5);
+//	for (int i = 0; i < 5; i++)
+//	{
+//		master[i] = 5 - i;
+//		slave1[i] = i;
+//		slave2[i] = i;
+//	}
+//	for (int i = 0; i < 5; i++)
+//	{
+//		cout << master[i] << " " << slave1[i] << slave2[i] << endl;
+//	}
+//	cout << "---------------------------------" << endl;
+//	qsort2(master, slave1, slave2, 0, 4);
+//	for (int i = 0; i < 5; i++)
+//	{
+//		cout << master[i] << " " << slave1[i] << slave2[i] << endl;
+//	}
+//	return 0;
+//}
 
 int xNES() {
 //#ifdef CHECKED_ALL

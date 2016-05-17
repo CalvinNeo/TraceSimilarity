@@ -6,6 +6,7 @@
     <ClCompile Include="TimeSimilarity.cpp" />
     <ClCompile Include="xNES.cpp" />
     <ClCompile Include="interface.cpp" />
+    <ClCompile Include="def.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CoordSimilarity.h" />

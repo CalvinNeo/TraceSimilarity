@@ -150,6 +150,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="def.cpp" />
     <ClCompile Include="interface.cpp" />
     <ClCompile Include="xNES.cpp" />
     <ClCompile Include="CoordSimilarity.cpp" />
