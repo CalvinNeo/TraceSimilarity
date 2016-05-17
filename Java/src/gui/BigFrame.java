@@ -4,7 +4,7 @@ import java.awt.*;
 
 import javax.swing.*;
 
-import net.CInterface;
+//import net.CInterface;
 
 public class BigFrame extends JFrame {
 	public BigFrame() throws HeadlessException {
@@ -96,6 +96,6 @@ public class BigFrame extends JFrame {
 		frame.setSize(800, 600);
 		frame.setLocation((int) (width - frame.getWidth()) / 2 - 50, (int) (height - frame.getHeight()) / 2);
 		frame.setVisible(true);
-		CInterface.socketmain();
+//		CInterface.socketmain();
 	}
 }
