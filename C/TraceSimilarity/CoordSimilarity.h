@@ -6,7 +6,7 @@
 struct CoordSimilarity {
 	double two_similarity;
 	std::vector<TwoTraceSection> trace_sections;
-	std::vector<TwoTracePoint> trace_points;
+
 };
 
 struct CoordSimilarityList {
