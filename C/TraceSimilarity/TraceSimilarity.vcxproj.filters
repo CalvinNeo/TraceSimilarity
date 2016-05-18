@@ -4,7 +4,6 @@
     <ClCompile Include="CoordSimilarity.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="TimeSimilarity.cpp" />
-    <ClCompile Include="xNES.cpp" />
     <ClCompile Include="interface.cpp" />
     <ClCompile Include="def.cpp" />
   </ItemGroup>
@@ -12,7 +11,6 @@
     <ClInclude Include="CoordSimilarity.h" />
     <ClInclude Include="def.h" />
     <ClInclude Include="TimeSimilarity.h" />
-    <ClInclude Include="xNES.h" />
     <ClInclude Include="interface.h" />
   </ItemGroup>
 </Project>

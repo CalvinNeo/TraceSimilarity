@@ -11,6 +11,10 @@ using namespace std;
 #include "CoordSimilarity.h"
 #include "TimeSimilarity.h"
 
+void paramop_return() {
+
+}
+
 void boost_return() {
 	using namespace boost::asio;
 	io_service ioservice;

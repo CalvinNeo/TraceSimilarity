@@ -5,7 +5,7 @@ VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TraceSimilarity", "TraceSimilarity\TraceSimilarity.vcxproj", "{46B78663-0716-43EB-A11F-D49ECE1BC65E}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "JavaSimulator", "JavaSimulator\JavaSimulator.vcxproj", "{E3990620-F4E0-45AF-8FBF-41BAF49A96CA}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ParamOptimizer", "ParamOptimizer\ParamOptimizer.vcxproj", "{E3990620-F4E0-45AF-8FBF-41BAF49A96CA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

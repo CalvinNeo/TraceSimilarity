@@ -11,10 +11,11 @@ using namespace std;
 
 #define RESULTPORT 15777
 #define REQUESTPORT 15777
+#define PARAMPORT 15778
 #define IP "127.0.0.1"
 #define MAX_BUFFER 2048
 
-int wmain(int argc, TCHAR* argv[], TCHAR* env[]) {
+void return_server() {
 	WSADATA wsaData;
 	// init Winsock.dll
 	if (WSAStartup(MAKEWORD(1, 1), &wsaData) != 0)
@@ -62,7 +63,7 @@ int wmain(int argc, TCHAR* argv[], TCHAR* env[]) {
 		exit(-1);
 	}
 	printf("Accept connection from %s\n", inet_ntoa(clientAddr.sin_addr));
-	char SendBuffer[] = "HHHHHHHHH";
+	char SendBuffer[] = "Message Received.";
 	char ReceiveBuffer[MAX_BUFFER];
 	while (1)
 	{
@@ -82,6 +83,13 @@ int wmain(int argc, TCHAR* argv[], TCHAR* env[]) {
 	}
 	// clean socket
 	WSACleanup();
+}
+
+void param_server() {
+
+}
+
+int wmain(int argc, TCHAR* argv[], TCHAR* env[]) {
 	system("pause");
 	return 0;
 }
