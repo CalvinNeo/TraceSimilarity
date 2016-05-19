@@ -28,13 +28,12 @@ TimeSimilarity TimeCompare(std::vector<TPoint> & t1, std::vector<TPoint> & t2) {
 	std::vector<Point> pl1 = AsPointList(t1), pl2 = AsPointList(t2);
 	CoordSimilarity coorsim = CoordCompare(pl1, pl2, true);
 	std::vector<double> p_diff;
+	double total_xy_diff = 0.0, total_time_dif = 0.0;
 	for (int i = 0; i < coorsim.trace_sections.size(); i++)
 	{
 		// assume [b1, e1) NOT [b1, e1]
-		int b1 = coorsim.trace_sections[i].t1_begin;
-		int e1 = coorsim.trace_sections[i].t1_end;
-		int b2 = coorsim.trace_sections[i].t2_begin;
-		int e2 = coorsim.trace_sections[i].t2_end;
+		int b1 = coorsim.trace_sections[i].t1_begin, e1 = coorsim.trace_sections[i].t1_end;
+		int b2 = coorsim.trace_sections[i].t2_begin, e2 = coorsim.trace_sections[i].t2_end;
 		int len1 = e1 - b1, len2 = e2 - b2;
 		int maxlen = len1 > len2 ? len1 : len2;
 		int pi2 = b2;
@@ -42,12 +41,21 @@ TimeSimilarity TimeCompare(std::vector<TPoint> & t1, std::vector<TPoint> & t2) {
 		{
 			const Point & p1 = t1[pi1];
 			//bool next_time_closer = (pi2 + 1 >= e2 || abs((long long)(t1[pi1].t - t2[pi2].t)) < abs((long long)(t1[pi1].t - t2[pi2 + 1].t)) ) ? false : true;
-			bool next_xy_closer = (pi2 + 1 >= e2 || distance(t1[pi1], t2[pi2]) < distance(t1[pi1], t2[pi2 + 1])) ? false : true;
+			// 是否下面一个点更接近
+			//bool next_xy_closer = (pi2 + 1 >= e2 || distance(t1[pi1], t2[pi2]) < distance(t1[pi1], t2[pi2 + 1])) ? false : true;
+			while (!(pi2 + 1 >= e2 || distance(t1[pi1], t2[pi2]) < distance(t1[pi1], t2[pi2 + 1]))) {
+				pi2++;
+			}
+			total_xy_diff += distance(t1[pi1], t2[pi2]);
+			total_time_dif += abs((double)t1[pi1].t - t2[pi2].t);
 		}
 	}
 	TimeSimilarity timesim;
 	// typedef CoordSimilarity TimeSimilarity
-	return TimeSimilarity();
+	timesim.trace_sections = coorsim.trace_sections;
+	// 可能为负，这边要注意一下
+	timesim.two_similarity = 1 - (total_xy_diff + total_time_dif);
+	return timesim;
 }
 
 TimeSimilarityList TimeSort(std::vector<TPoint> & t1, std::vector< std::vector<TPoint> > & tlist) {

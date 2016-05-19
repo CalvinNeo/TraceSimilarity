@@ -124,16 +124,16 @@ void file_return() {
 
 }
 
-char * result_encode(TimeSimilarity dat) {
+char * result_encode(const TimeSimilarity & dat) {
 	return NULL;
 }
-char * result_encode(TimeSimilarityList dat) {
+char * result_encode(const TimeSimilarityList & dat) {
 	return NULL;
 }
-char * result_encode(CoordSimilarity dat) {
+char * result_encode(CoordSimilarity & dat) {
 	return NULL;
 }
-char * result_encode(CoordSimilarityList dat) {
+char * result_encode(CoordSimilarityList & dat) {
 	return NULL;
 }
 

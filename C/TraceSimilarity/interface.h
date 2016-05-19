@@ -16,10 +16,10 @@ void file_return();
 void return_by_socket();
 void paramop_return();
 
-char * result_encode(struct TimeSimilarity);
-char * result_encode(struct TimeSimilarityList);
-char * result_encode(struct CoordSimilarity);
-char * result_encode(struct CoordSimilarityList);
+char * result_encode(const struct TimeSimilarity & );
+char * result_encode(const struct TimeSimilarityList &);
+char * result_encode(const struct CoordSimilarity &);
+char * result_encode(const struct CoordSimilarityList &);
 
 
 #endif

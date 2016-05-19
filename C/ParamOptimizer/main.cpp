@@ -3,6 +3,8 @@
 #include <time.h>
 #include <vector>
 
+#include "xNES.h"
+
 #pragma comment(lib, "WS2_32")	
 
 using namespace std;

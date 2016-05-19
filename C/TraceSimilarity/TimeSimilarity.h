@@ -7,9 +7,7 @@
 struct TimeSimilarity {
 	double two_similarity;
 	std::vector<TwoTraceSection> trace_sections;
-	std::vector<TwoTracePoint> trace_points;
 };
-//typedef CoordSimilarity TimeSimilarity;
 
 struct TimeSimilarityList {
 

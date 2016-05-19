@@ -5,7 +5,6 @@
 #include <iostream>
 
 #include "def.h"
-#include "xNES.h"
 #include "CoordSimilarity.h"
 #include "TimeSimilarity.h"
 #include "interface.h"
@@ -86,6 +85,9 @@ vector<Point> read_csv(wstring path) {
 		}
 		abuf++;
 	}
+	UnmapViewOfFile(buffer_void);
+	CloseHandle(hmapping);
+	CloseHandle(hfile);
 	return vp;
 }
 
@@ -137,6 +139,9 @@ vector<TPoint> read_csv_time(wstring path) {
 		}
 		abuf++;
 	}
+	UnmapViewOfFile(buffer_void);
+	CloseHandle(hmapping);
+	CloseHandle(hfile);
 	return vp;
 }
 
@@ -257,10 +262,16 @@ int wmain(int argc, TCHAR* argv[], TCHAR* env[]) {
 	//test_derive(d);
 
 	vector<Point> trace_coord[4];
+	vector<TPoint> trace_time[4];
 	trace_coord[0] = read_csv(L"../../case/coord/1a.csv");
 	trace_coord[1] = read_csv(L"../../case/coord/1b.csv");
 	trace_coord[2] = read_csv(L"../../case/coord/2a.csv");
 	trace_coord[3] = read_csv(L"../../case/coord/2b.csv");
+
+	trace_time[0] = read_csv_time(L"../../case/coord/1a.csv");
+	trace_time[1] = read_csv_time(L"../../case/coord/1b.csv");
+	trace_time[2] = read_csv_time(L"../../case/coord/2a.csv");
+	trace_time[3] = read_csv_time(L"../../case/coord/2b.csv");
 	//for (int i = 0;i < 4;i++) {
 	//	wstring path = L"../../case/origin/";
 	//	path += (i + '0');
@@ -270,6 +281,7 @@ int wmain(int argc, TCHAR* argv[], TCHAR* env[]) {
 	for (int i = 0;i < 4;i++) {
 		for (int j = 0;j < i;j++) {
 			CoordSimilarity coordsimilarity = CoordCompare(trace_coord[i], trace_coord[j]);
+			TimeSimilarity timesim = TimeCompare(trace_time[i], trace_time[j]);
 			for (unsigned int k = 0;k < coordsimilarity.trace_sections.size();k++) {
 				//cout << coordsimilarity.trace_sections[k].t1_begin << " ";
 				//cout << coordsimilarity.trace_sections[k].t1_end << " ";
@@ -277,7 +289,8 @@ int wmain(int argc, TCHAR* argv[], TCHAR* env[]) {
 				//cout << coordsimilarity.trace_sections[k].t2_end << endl;
 			}
 			cout << i << " and " << j << " ";
-			printf("%.2f%%\n", coordsimilarity.two_similarity * 100);
+			printf("Coord %.2f%%\n", coordsimilarity.two_similarity * 100);
+			printf("Time %.2f%%\n", timesim.two_similarity * 100);
 		}
 	}
 	system("pause");
