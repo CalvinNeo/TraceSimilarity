@@ -12,7 +12,32 @@ using namespace std;
 #include "TimeSimilarity.h"
 
 void paramop_return() {
+	using namespace boost::asio;
+	io_service ioservice;
+	ip::address addr = ip::address::from_string(IP);
+	ip::tcp::endpoint ep(addr, PARAMPORT);
+	ip::tcp::socket sock(ioservice);
+	sock.connect(ep);
+	int bytes = 0;
+	char SendBuffer[MAX_BUFFER];
+	char ReceiveBuffer[MAX_BUFFER];
 
+	while (true)
+	{
+		cin.getline(SendBuffer, sizeof(SendBuffer));
+		if (sock.write_some(buffer(SendBuffer)) == SOCKET_ERROR)
+		{
+			cout << "Send Info Error::" << GetLastError() << endl;
+			break;
+		}
+		if ((bytes = read(sock, buffer(ReceiveBuffer))) == SOCKET_ERROR)
+		{
+			printf("recv error!\n");
+			exit(-1);
+		}
+		//char IPdotdec[20]; inet_ntop(AF_INET, 0, IPdotdec, 16); //inet_ntoa(clientAddr.sin_addr) is deprecated
+		printf("%s\n", ReceiveBuffer);
+	}
 }
 
 void boost_return() {
