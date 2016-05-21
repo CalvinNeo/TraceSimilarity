@@ -11,32 +11,44 @@ using namespace std;
 #include "CoordSimilarity.h"
 #include "TimeSimilarity.h"
 
+struct paramop_msg {
+	char op[6];
+	paramop_msg() {
+		memset(op, '\0', 6);
+	}
+};
+
 void paramop_return() {
 	using namespace boost::asio;
 	io_service ioservice;
 	ip::address addr = ip::address::from_string(IP);
 	ip::tcp::endpoint ep(addr, PARAMPORT);
 	ip::tcp::socket sock(ioservice);
-	sock.connect(ep);
 	int bytes = 0;
+	boost::system::error_code error;
+	sock.connect(ep, error);
+	if (error == boost::asio::error::connection_refused) {
+		cout << "Leave Optimizer Mode!" << endl;
+		return;
+	}
 	char SendBuffer[MAX_BUFFER];
 	char ReceiveBuffer[MAX_BUFFER];
-
+	paramop_msg * ppm;
 	while (true)
 	{
-		cin.getline(SendBuffer, sizeof(SendBuffer));
-		if (sock.write_some(buffer(SendBuffer)) == SOCKET_ERROR)
-		{
-			cout << "Send Info Error::" << GetLastError() << endl;
-			break;
-		}
-		if ((bytes = read(sock, buffer(ReceiveBuffer))) == SOCKET_ERROR)
-		{
-			printf("recv error!\n");
-			exit(-1);
-		}
+		//cin.getline(SendBuffer, sizeof(SendBuffer));
+		//if (sock.write_some(buffer(SendBuffer)) == SOCKET_ERROR)
+		//{
+		//	cout << "Send Info Error::" << GetLastError() << endl;
+		//	break;
+		//}
+		//bytes = sock.read_some(buffer(ReceiveBuffer), error);
+		bytes = sock.read_some(buffer(ReceiveBuffer), error);
+		if (error == boost::asio::error::eof)
+			return; // Connection closed cleanly by peer.
 		//char IPdotdec[20]; inet_ntop(AF_INET, 0, IPdotdec, 16); //inet_ntoa(clientAddr.sin_addr) is deprecated
-		printf("%s\n", ReceiveBuffer);
+		ppm = reinterpret_cast<paramop_msg*>(ReceiveBuffer);
+		printf("%s\n", ppm->op);
 	}
 }
 
@@ -72,79 +84,6 @@ void boost_return() {
 	}
 }
 
-void return_by_socket() {
-	WSADATA  Ws;
-	SOCKET clientSoc;
-	struct sockaddr_in servAddr;
-	int bytes = 0;
-	char SendBuffer[MAX_BUFFER];
-	char ReceiveBuffer[MAX_BUFFER];
-
-	//Init Windows Socket
-	if (WSAStartup(MAKEWORD(1, 1), &Ws) != 0)
-	{
-		cout << "Init Windows Socket Failed::" << GetLastError() << endl;
-		return;
-	}
-
-	//Create Socket
-	clientSoc = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-	if (clientSoc == INVALID_SOCKET)
-	{
-		cout << "Create Socket Failed::" << GetLastError() << endl;
-		return;
-	}
-
-	servAddr.sin_family = AF_INET;
-	//servAddr.sin_addr.s_addr = inet_addr(IP); // deprecated
-	inet_pton(AF_INET, IP, (void *)&servAddr.sin_addr.s_addr);
-	servAddr.sin_port = htons(RESULTPORT);
-	memset(servAddr.sin_zero, 0x00, 8);
-
-	bytes = connect(clientSoc, (struct sockaddr*)&servAddr, sizeof(servAddr));
-
-	struct sockaddr_in clientAddr;
-	memset(&clientAddr, 0, sizeof(sockaddr_in));
-	clientAddr.sin_family = AF_INET;
-	clientAddr.sin_port = htons(REQUESTPORT);
-	//clientAddr.sin_addr.s_addr = inet_addr(IP); // deprecated
-	inet_pton(AF_INET, IP, (void *)&clientAddr.sin_addr.s_addr);
-	
-	if (bytes == SOCKET_ERROR)
-	{
-		cout << "Connect Error::" << GetLastError() << endl;
-		return;
-	}
-	else
-	{
-		cout << "Connection Success!" << endl;
-	}
-
-	while (true)
-	{
-		cin.getline(SendBuffer, sizeof(SendBuffer));
-
-		if (send(clientSoc, SendBuffer, (int)strlen(SendBuffer), 0) == SOCKET_ERROR)
-		{
-			cout << "Send Info Error::" << GetLastError() << endl;
-			break;
-		}
-		if ((bytes = recv(clientSoc, ReceiveBuffer, sizeof(ReceiveBuffer), 0)) == SOCKET_ERROR)
-		{
-			printf("recv error!\n");
-			exit(-1);
-		}
-		ReceiveBuffer[bytes] = '\0';
-		char IPdotdec[20];
-		inet_ntop(AF_INET, (void *)&clientAddr.sin_addr, IPdotdec, 16);
-		printf("Message from %s:%s\n", IPdotdec, ReceiveBuffer);
-		// printf("Message from %s:%s\n", inet_ntoa(clientAddr.sin_addr), ReceiveBuffer); //deprecated
-	}
-
-	closesocket(clientSoc);
-	WSACleanup();
-}
-
 void file_return() {
 
 }
@@ -160,5 +99,79 @@ char * result_encode(CoordSimilarity & dat) {
 }
 char * result_encode(CoordSimilarityList & dat) {
 	return NULL;
+}
+
+
+void return_by_socket() {
+	//WSADATA  Ws;
+	//SOCKET clientSoc;
+	//struct sockaddr_in servAddr;
+	//int bytes = 0;
+	//char SendBuffer[MAX_BUFFER];
+	//char ReceiveBuffer[MAX_BUFFER];
+
+	////Init Windows Socket
+	//if (WSAStartup(MAKEWORD(1, 1), &Ws) != 0)
+	//{
+	//	cout << "Init Windows Socket Failed::" << GetLastError() << endl;
+	//	return;
+	//}
+
+	////Create Socket
+	//clientSoc = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+	//if (clientSoc == INVALID_SOCKET)
+	//{
+	//	cout << "Create Socket Failed::" << GetLastError() << endl;
+	//	return;
+	//}
+
+	//servAddr.sin_family = AF_INET;
+	////servAddr.sin_addr.s_addr = inet_addr(IP); // deprecated
+	//inet_pton(AF_INET, IP, (void *)&servAddr.sin_addr.s_addr);
+	//servAddr.sin_port = htons(RESULTPORT);
+	//memset(servAddr.sin_zero, 0x00, 8);
+
+	//bytes = connect(clientSoc, (struct sockaddr*)&servAddr, sizeof(servAddr));
+
+	//struct sockaddr_in clientAddr;
+	//memset(&clientAddr, 0, sizeof(sockaddr_in));
+	//clientAddr.sin_family = AF_INET;
+	//clientAddr.sin_port = htons(REQUESTPORT);
+	////clientAddr.sin_addr.s_addr = inet_addr(IP); // deprecated
+	//inet_pton(AF_INET, IP, (void *)&clientAddr.sin_addr.s_addr);
+	//
+	//if (bytes == SOCKET_ERROR)
+	//{
+	//	cout << "Connect Error::" << GetLastError() << endl;
+	//	return;
+	//}
+	//else
+	//{
+	//	cout << "Connection Success!" << endl;
+	//}
+
+	//while (true)
+	//{
+	//	cin.getline(SendBuffer, sizeof(SendBuffer));
+
+	//	if (send(clientSoc, SendBuffer, (int)strlen(SendBuffer), 0) == SOCKET_ERROR)
+	//	{
+	//		cout << "Send Info Error::" << GetLastError() << endl;
+	//		break;
+	//	}
+	//	if ((bytes = recv(clientSoc, ReceiveBuffer, sizeof(ReceiveBuffer), 0)) == SOCKET_ERROR)
+	//	{
+	//		printf("recv error!\n");
+	//		exit(-1);
+	//	}
+	//	ReceiveBuffer[bytes] = '\0';
+	//	char IPdotdec[20];
+	//	inet_ntop(AF_INET, (void *)&clientAddr.sin_addr, IPdotdec, 16);
+	//	printf("Message from %s:%s\n", IPdotdec, ReceiveBuffer);
+	//	// printf("Message from %s:%s\n", inet_ntoa(clientAddr.sin_addr), ReceiveBuffer); //deprecated
+	//}
+
+	//closesocket(clientSoc);
+	//WSACleanup();
 }
 

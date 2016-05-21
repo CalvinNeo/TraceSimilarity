@@ -6,9 +6,7 @@
 #include <boost/asio.hpp>
 #include <boost/bind.hpp> 
 #include <iostream>
-
 #include "xNES.h"
-
 #pragma comment(lib, "WS2_32")	
 
 using namespace std;
@@ -27,21 +25,27 @@ char SendBuffer[MAX_BUFFER];
 char ReceiveBuffer[MAX_BUFFER];
 io_service ioservice;
 ip::tcp::acceptor acceptor(ioservice, ip::tcp::endpoint(ip::tcp::v4(), PARAMPORT));
-ip::tcp::socket sock(ioservice);
+ip::tcp::socket sock(ioservice); 
 
-void send_param_message(string msg) {
+struct paramop_msg {
+	char op[6];
+	paramop_msg(){
+		memset(op, '\0', 6);
+	}
+};
+
+void send_param_message(const paramop_msg & msg) {
 	int bytes = 0;
-
+	boost::system::error_code error;
 	//strncpy(SendBuffer, msg.c_str(), msg.size());
-	if (sock.write_some(buffer(msg)) == SOCKET_ERROR)
+	strncpy(SendBuffer, (char*)&msg, sizeof(msg));
+	if (sock.write_some(buffer(SendBuffer)) == SOCKET_ERROR)
 	{
 		cout << "Send Info Error::" << GetLastError() << endl;
 	}
-	if ((bytes = read(sock, buffer(ReceiveBuffer))) == SOCKET_ERROR)
-	{
-		printf("recv error!\n");
-		return;
-	}
+	bytes = sock.read_some(buffer(ReceiveBuffer), error);
+	if (error == boost::asio::error::eof)
+		return; // Connection closed cleanly by peer.
 	//char IPdotdec[20]; inet_ntop(AF_INET, 0, IPdotdec, 16); //inet_ntoa(clientAddr.sin_addr) is deprecated
 	printf("%s\n", ReceiveBuffer);
 }
@@ -58,7 +62,10 @@ void init_param_server(int port = PARAMPORT) {
 
 int wmain(int argc, TCHAR* argv[], TCHAR* env[]) {
 	init_param_server();
-	send_param_message("C");
+	paramop_msg pm; 
+	strcpy(pm.op, "opn");
+	send_param_message(pm);
+	cout << "Connection End" << endl;
 	system("pause");
 	return 0;
 }
