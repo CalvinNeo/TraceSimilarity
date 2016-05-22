@@ -4,11 +4,12 @@
 #include <time.h>
 #include <vector>
 #include <cmath>
-
+#include <map>
+#include <algorithm>
 #include "def.h"
 #include "TimeSimilarity.h"
 
-std::vector<Point> AsPointList(std::vector<TPoint> t) {
+std::vector<Point> AsPointList(std::vector<TPoint> & t) {
 	// This function convert vector<TPoint> to vector<Point> 
 	// This is deprecated for "typedef Point TPoint" is on TODO list
 	std::vector<Point> c;
@@ -59,5 +60,13 @@ TimeSimilarity TimeCompare(std::vector<TPoint> & t1, std::vector<TPoint> & t2) {
 }
 
 TimeSimilarityList TimeSort(std::vector<TPoint> & t1, std::vector< std::vector<TPoint> > & tlist) {
-	return TimeSimilarityList();
+	using namespace std;
+	vector<pair<int, double>> s;
+	for (int i = 0; i < tlist.size(); i++)
+	{
+		TimeSimilarity ts = TimeCompare(t1, tlist[i]);
+		s.push_back(make_pair(i, ts.two_similarity));
+	}
+	sort(s.begin(), s.end(), [](const pair<int, double> & x, const pair<int, double> & y) -> bool {return x.first < y.first; });
+	//sort(s.begin, s.end(), [&](auto x, auto y) {return x.first < y.first; });
 }
