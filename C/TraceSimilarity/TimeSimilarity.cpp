@@ -28,7 +28,9 @@ inline double distance(const Point & p1, const Point & p2) {
 TimeSimilarity TimeCompare(std::vector<TPoint> & t1, std::vector<TPoint> & t2) {
 	std::vector<Point> pl1 = AsPointList(t1), pl2 = AsPointList(t2);
 	CoordSimilarity coorsim = CoordCompare(pl1, pl2, true);
-	std::vector<double> p_diff;
+	// TODO total_xy_diff， diffs_xy 以后直接从郑涌获得
+	std::vector<double> diffs_t; // 每一段的时间相似度
+	std::vector<double> diffs_xy; // 每一段的距离相似度
 	double total_xy_diff = 0.0, total_time_dif = 0.0;
 	for (int i = 0; i < coorsim.trace_sections.size(); i++)
 	{
@@ -38,6 +40,8 @@ TimeSimilarity TimeCompare(std::vector<TPoint> & t1, std::vector<TPoint> & t2) {
 		int len1 = e1 - b1, len2 = e2 - b2;
 		int maxlen = len1 > len2 ? len1 : len2;
 		int pi2 = b2;
+		diffs_t.push_back(0.0);
+		diffs_xy.push_back(0.0);
 		for (int pi1 = b1; pi1 < e1; pi1++)
 		{
 			const Point & p1 = t1[pi1];
@@ -47,9 +51,11 @@ TimeSimilarity TimeCompare(std::vector<TPoint> & t1, std::vector<TPoint> & t2) {
 			while (!(pi2 + 1 >= e2 || distance(t1[pi1], t2[pi2]) < distance(t1[pi1], t2[pi2 + 1]))) {
 				pi2++;
 			}
-			total_xy_diff += distance(t1[pi1], t2[pi2]);
-			total_time_dif += abs((double)t1[pi1].t - t2[pi2].t);
+			diffs_xy[diffs_xy.size()-1] += distance(t1[pi1], t2[pi2]);
+			diffs_t[diffs_t.size()-1] += abs((double)t1[pi1].t - t2[pi2].t);
 		}
+		total_xy_diff += diffs_xy[diffs_xy.size() - 1];
+		total_time_dif += diffs_t[diffs_t.size() - 1];
 	}
 	TimeSimilarity timesim;
 	// typedef CoordSimilarity TimeSimilarity
