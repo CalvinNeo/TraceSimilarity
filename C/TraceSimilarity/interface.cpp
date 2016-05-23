@@ -10,6 +10,7 @@ using namespace std;
 #include "interface.h"
 #include "CoordSimilarity.h"
 #include "TimeSimilarity.h"
+#include "param.h"
 
 struct paramop_msg {
 	char op[6];
@@ -94,10 +95,10 @@ char * result_encode(const TimeSimilarity & dat) {
 char * result_encode(const TimeSimilarityList & dat) {
 	return NULL;
 }
-char * result_encode(CoordSimilarity & dat) {
+char * result_encode(const CoordSimilarity & dat) {
 	return NULL;
 }
-char * result_encode(CoordSimilarityList & dat) {
+char * result_encode(const CoordSimilarityList & dat) {
 	return NULL;
 }
 
