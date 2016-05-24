@@ -2,6 +2,8 @@
 #include <windows.h>
 #include <string>
 #include <iostream>
+#include <chrono>
+#include <functional>
 #include <boost/asio.hpp>
 
 using namespace std;
@@ -100,6 +102,14 @@ char * result_encode(const CoordSimilarity & dat) {
 }
 char * result_encode(const CoordSimilarityList & dat) {
 	return NULL;
+}
+
+template<typename _Func, typename... _Argv>
+uint64_t elapse_time(_Func && f, _Argv&&... argv) {
+	auto s = chrono::steady_clock::now();
+	f(forward<_Argv>(argv)...);
+	auto interval = chrono::steady_clock::now() - s;
+	return static_cast<uint64_t>(chrono::duration_cast<chrono::milliseconds>(interval).count());
 }
 
 

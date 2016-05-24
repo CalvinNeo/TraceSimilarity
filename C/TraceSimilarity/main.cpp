@@ -3,6 +3,8 @@
 #include <time.h>
 #include <vector>
 #include <iostream>
+#include <chrono>
+#include <functional>
 
 #include "def.h"
 #include "CoordSimilarity.h"
@@ -251,6 +253,13 @@ void test_derive(B b) {
 	cout << b.a << endl;
 }
 
+//template<typename _Func, typename... _Argv>
+//uint64_t elapse_time(_Func && f, _Argv&&... argv) {
+//	auto s = chrono::steady_clock::now();
+//	f(forward<_Argv>(argv)...);
+//	auto interval = chrono::steady_clock::now() - s;
+//	return static_cast<uint64_t>(chrono::duration_cast<chrono::milliseconds>(interval).count());
+//}
 
 int wmain(int argc, TCHAR* argv[], TCHAR* env[]) {
 
@@ -280,43 +289,31 @@ int wmain(int argc, TCHAR* argv[], TCHAR* env[]) {
 		path += L".csv";
 		patht += (i + '0');
 		patht += L"t.csv";
+		//cout << elapse_time(read_csv, path) << endl;
 		trace_coord[i] = read_csv(path);
 		trace_time[i] = read_csv_time(patht);
 	}
-	//for (int i = 1;i < 4;i++) {
-		//cout << trace_coord[i][0].x << " " << trace_coord[i][0].y << endl;
-	//	for (int j = 1;j < i;j++) {
-	//		CoordSimilarity coordsim = CoordCompare(trace_coord[i], trace_coord[j]);
-	//		TimeSimilarity timesim = TimeCompare(trace_time[i], trace_time[j]);
-	//		for (unsigned int k = 0;k < coordsim.trace_sections.size();k++) {
-	//			cout << coordsim.trace_sections[k].t1_begin << " ";
-	//			cout << coordsim.trace_sections[k].t1_end << " ";
-	//			cout << coordsim.trace_sections[k].t2_begin << " ";
-	//			cout << coordsim.trace_sections[k].t2_end << " ";
-	//			cout << coordsim.trace_sections[k].coord_sim << endl;
-	//		}
-	//		cout << i << " and " << j << " ";
-	//		printf("Coord %.2f%%\n", coordsim.two_similarity * 100);
-	//		printf("Time %.2f%%\n", timesim.two_similarity * 100);
-	//	}
+
+	printf("Two Sim Test\n");
+	for (int i = 1; i < 4; i++) {
+		cout << trace_coord[i][0].x << " " << trace_coord[i][0].y << endl;
+		for (int j = 1; j < i; j++) {
+			CoordSimilarity coordsim = CoordCompare(trace_coord[i], trace_coord[j]);
+			TimeSimilarity timesim = TimeCompare(trace_time[i], trace_time[j]);
+			for (unsigned int k = 0; k < coordsim.trace_sections.size(); k++) {
+				cout << coordsim.trace_sections[k].t1_begin << " ";
+				cout << coordsim.trace_sections[k].t1_end << " ";
+				cout << coordsim.trace_sections[k].t2_begin << " ";
+				cout << coordsim.trace_sections[k].t2_end << " ";
+				cout << coordsim.trace_sections[k].coord_sim << endl;
+			}
+			cout << i << " and " << j << " ";
+			printf("Coord %.2f%%\n", coordsim.two_similarity * 100);
+			printf("Time %.2f%%\n", timesim.two_similarity * 100);
+		}
+	}
 	
-	//for (int i = 0;i < 4;i++) {
-	//	//cout << trace_coord[i][0].x << " " << trace_coord[i][0].y << endl;
-	//	for (int j = 0;j < i;j++) {
-	//		CoordSimilarity coordsim = CoordCompare(trace_coord[i], trace_coord[j]);
-	//		TimeSimilarity timesim = TimeCompare(trace_time[i], trace_time[j]);
-	//		for (unsigned int k = 0;k < coordsim.trace_sections.size();k++) {
-	//			cout << coordsim.trace_sections[k].t1_begin << " ";
-	//			cout << coordsim.trace_sections[k].t1_end << " ";
-	//			cout << coordsim.trace_sections[k].t2_begin << " ";
-	//			cout << coordsim.trace_sections[k].t2_end << " ";
-	//			cout << coordsim.trace_sections[k].coord_sim << endl;
-	//		}
-	//		cout << i << " and " << j << " ";
-	//		printf("Coord %.2f%%\n", coordsim.two_similarity * 100);
-	//		printf("Time %.2f%%\n", timesim.two_similarity * 100);
-	//	}
-	//}
+	printf("Sort Test");
 	std::vector< std::vector<Point> > traces;
 	for (int i = 0;i < 3;i++) traces.push_back(trace_coord[i]);
 	CoordSimilarityList coordlist = CoordSort(trace_coord[3], traces);
@@ -334,6 +331,8 @@ int wmain(int argc, TCHAR* argv[], TCHAR* env[]) {
 		cout << coordlist.trace_sections[i].t2_end << " ";
 		printf("%.2f%%\n", coordlist.trace_sections[i].coord_sim * 100);
 	}
+	puts("");
+
 	system("pause");
 	return 0;
 }

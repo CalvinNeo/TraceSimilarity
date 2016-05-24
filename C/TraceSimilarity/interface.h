@@ -21,5 +21,7 @@ char * result_encode(const struct TimeSimilarityList &);
 char * result_encode(const struct CoordSimilarity &);
 char * result_encode(const struct CoordSimilarityList &);
 
+template<typename _Func, typename... _Argv>
+uint64_t elapse_time(_Func && f, _Argv&&... argv);
 
 #endif
