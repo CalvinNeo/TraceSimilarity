@@ -33,6 +33,15 @@ struct TwoTraceSection {
 	};
 };
 
+struct TraceSection {
+	int index;
+	int t1_begin, t1_end, t2_begin, t2_end;
+	double coord_sim, time_sim;
+	TraceSection(int index, TwoTraceSection tt) :index(index), t1_begin(tt.t1_begin), t1_end(tt.t1_end), t2_begin(tt.t2_begin), t2_end(tt.t2_end), coord_sim(tt.coord_sim), time_sim(tt.time_sim) {
+
+	}
+};
+
 // 这个结构可以直接使用pair<int, int> 代替
 typedef std::pair<int, int> TwoTracePoint;
 //struct TwoTracePoint {
@@ -41,3 +50,5 @@ typedef std::pair<int, int> TwoTracePoint;
 //
 //	};
 //};
+
+typedef std::pair<int, double> kth_similarity;
