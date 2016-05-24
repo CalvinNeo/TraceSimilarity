@@ -25,6 +25,9 @@ struct TwoTraceSection {
 	TwoTraceSection(int l1, int r1, int l2, int r2) : t1_begin(l1), t1_end(r1), t2_begin(l2), t2_end(r2), coord_sim(0.0), time_sim(0.0) {
 
 	};
+	TwoTraceSection(int l1, int r1, int l2, int r2, double c_sim) : t1_begin(l1), t1_end(r1), t2_begin(l2), t2_end(r2), coord_sim(c_sim), time_sim(0.0) {
+
+	};
 	TwoTraceSection(int l1, int r1, int l2, int r2, double c_sim, double t_sim) : t1_begin(l1), t1_end(r1), t2_begin(l2), t2_end(r2), coord_sim(c_sim), time_sim(t_sim) {
 
 	};
