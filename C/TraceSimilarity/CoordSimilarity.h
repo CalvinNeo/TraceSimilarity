@@ -9,7 +9,8 @@ struct CoordSimilarity {
 };
 
 struct CoordSimilarityList {
-
+	std::vector<kth_similarity> similarities;
+	std::vector<TraceSection> trace_sections;
 };
 
 CoordSimilarity CoordCompare(std::vector<Point> & t1, std::vector<Point> & t2, bool timeissue = false);

@@ -6,13 +6,16 @@
 #include <boost/numeric/ublas/io.hpp>
 
 typedef boost::numeric::ublas::matrix<double> doubletable;
+typedef boost::numeric::ublas::matrix<int> inttable;
 
 double totalLen(std::vector<Point> & t, int l = 0, int r = 0);
 inline double simpleDistance(Point a, Point b);
 double frechetSimilar(std::vector<Point> & t1, int l1, int r1, std::vector<Point> & t2, int l2, int r2);
 doubletable frechetDistance(std::vector<Point> & t1, std::vector<Point> & t2, doubletable & dis);
 inline double min3(double f1, double f2, double f3);
-bool cmpSim(TwoTraceSection a, TwoTraceSection b);
+bool cmpKthSim(kth_similarity a, kth_similarity b);
+bool cmpTwoSim(TwoTraceSection a, TwoTraceSection b);
+bool cmpSim(TraceSection a, TraceSection b);
 
 //const int maxn = 101;
 
@@ -41,21 +44,20 @@ CoordSimilarity CoordCompare(std::vector<Point> & t1, std::vector<Point> & t2, b
 	coord_res.two_similarity = 1 - frechet(p - 1, q - 1) / length;
 	coord_res.trace_sections.clear();
 
-	std::vector<std::vector<int>> level;
 	const double eps = 1e-6;
 	double rate = 1.0;
 	double lim_dis = length * 2 / (p + q);
 
+	inttable level(p, q);
+
 	for (int i = 0;i < p;i++) {
-		std::vector<int> tmp;
 		for (int j = 0;j < q;j++) {
-			if (dis(i, j) <= rate*lim_dis + eps) {
-				if (i > 0 && j > 0) tmp.push_back(level[i - 1][j - 1] + 1);
-				else tmp.push_back(1);
+			if (dis(i, j) <= rate * lim_dis + eps) {
+				if (i > 0 && j > 0) level(i, j) = level(i - 1, j - 1) + 1;
+				else level(i, j) = 1;
 			}
-			else tmp.push_back(0);
+			else level(i, j) = 0;
 		}
-		level.push_back(tmp);
 	}
 
 	//int b1[maxn], b2[maxn];
@@ -66,16 +68,16 @@ CoordSimilarity CoordCompare(std::vector<Point> & t1, std::vector<Point> & t2, b
 		int x = -1, y = -1;
 		for (int i = 0;i < p;i++) {
 			for (int j = 0;j < q;j++) {
-				if (x == -1 || level[i][j]>level[x][y]) {
+				if (x == -1 || level(i, j)>level(x, y)) {
 					x = i;
 					y = j;
 				}
 			}
 		}
-		if (level[x][y] < 3) break;
+		if (level(x, y) < 3) break;
 		int l1, l2, k;
-		for (k = 0;x > k && y > k && level[x - k][y - k] > 0;k++) {
-			level[x - k][y - k] = 0;
+		for (k = 0;x > k && y > k && level(x - k, y - k) > 0;k++) {
+			level(x - k, y - k) = 0;
 		}
 		double c_sim = frechetSimilar(t1, x - k, x + 1, t2, y - k, y + 1);
 		if (c_sim > 0.5 - eps) {
@@ -83,16 +85,41 @@ CoordSimilarity CoordCompare(std::vector<Point> & t1, std::vector<Point> & t2, b
 			coord_res.trace_sections.push_back(tt);
 		}
 	}
-	sort(coord_res.trace_sections.begin(), coord_res.trace_sections.end(), cmpSim);
+	sort(coord_res.trace_sections.begin(), coord_res.trace_sections.end(), cmpTwoSim);
 	return coord_res;
 }
 
-bool cmpSim(TwoTraceSection a, TwoTraceSection b) {
+CoordSimilarityList CoordSort(std::vector<Point> & t1, std::vector< std::vector<Point> > & tlist, bool timeissue) {
+	CoordSimilarityList coord_list;
+	const double limit_sim = 0.7;
+	for (int i = 0;i < tlist.size();i++) {
+		CoordSimilarity coordsim = CoordCompare(t1, tlist[i]);
+		if (coordsim.two_similarity > limit_sim) {
+			coord_list.similarities.push_back(std::make_pair(i, coordsim.two_similarity));
+
+		}
+		for (int j = 0;j < coordsim.trace_sections.size();j++) {
+			coord_list.trace_sections.push_back(TraceSection(i, coordsim.trace_sections[j]));
+		}
+	}
+	sort(coord_list.similarities.begin(), coord_list.similarities.end(), cmpKthSim);
+	sort(coord_list.trace_sections.begin(), coord_list.trace_sections.end(), cmpSim);
+	return coord_list;
+}
+
+bool cmpKthSim(kth_similarity a, kth_similarity b) {
+	return a.second > b.second;
+}
+
+bool cmpTwoSim(TwoTraceSection a, TwoTraceSection b) {
+	return a.coord_sim > b.coord_sim;
+}
+
+bool cmpSim(TraceSection a, TraceSection b) {
 	return a.coord_sim > b.coord_sim;
 }
 
 double frechetSimilar(std::vector<Point> & t1, int l1, int r1, std::vector<Point> & t2, int l2, int r2) {
-
 	int p = r1 - l1;
 	int q = r2 - l2;
 
@@ -135,7 +162,6 @@ double frechetSimilar(std::vector<Point> & t1, int l1, int r1, std::vector<Point
 }
 
 doubletable frechetDistance(std::vector<Point> & t1, std::vector<Point> & t2, doubletable & dis) {
-
 	int p = t1.size();
 	int q = t2.size();
 
@@ -167,12 +193,13 @@ doubletable frechetDistance(std::vector<Point> & t1, std::vector<Point> & t2, do
 	return frechet;
 }
 
+//求扩大1000倍后的欧几里得距离
 inline double simpleDistance(Point a, Point b) {
-
 	return sqrt(pow(a.x * 1000 - b.x * 1000, 2) + pow(a.y * 1000 - b.y * 1000, 2));
 }
 
-double totalLen(std::vector<Point> & t, int l , int r ) {
+//求某段轨迹的折线长度
+double totalLen(std::vector<Point> & t, int l, int r) {
 	if (r == 0) r = t.size();
 	double res = 0;
 	for (int i = l + 1;i < r;i++) {
@@ -182,10 +209,5 @@ double totalLen(std::vector<Point> & t, int l , int r ) {
 }
 
 inline double min3(double f1, double f2, double f3) {
-
 	return min(f1, min(f2, f3));
-}
-
-CoordSimilarityList CoordSort(std::vector<Point> & t1, std::vector< std::vector<Point> > & tlist, bool timeissue) {
-	return CoordSimilarityList();
 }
