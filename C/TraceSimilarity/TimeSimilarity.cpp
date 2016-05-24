@@ -75,4 +75,5 @@ TimeSimilarityList TimeSort(std::vector<TPoint> & t1, std::vector< std::vector<T
 	}
 	sort(s.begin(), s.end(), [](const pair<int, double> & x, const pair<int, double> & y) -> bool {return x.first < y.first; });
 	//sort(s.begin, s.end(), [&](auto x, auto y) {return x.first < y.first; });
+	return TimeSimilarityList();
 }
