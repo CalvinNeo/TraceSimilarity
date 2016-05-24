@@ -6,11 +6,13 @@
     <ClCompile Include="TimeSimilarity.cpp" />
     <ClCompile Include="interface.cpp" />
     <ClCompile Include="def.cpp" />
+    <ClCompile Include="param.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CoordSimilarity.h" />
     <ClInclude Include="def.h" />
     <ClInclude Include="TimeSimilarity.h" />
     <ClInclude Include="interface.h" />
+    <ClInclude Include="param.h" />
   </ItemGroup>
 </Project>
