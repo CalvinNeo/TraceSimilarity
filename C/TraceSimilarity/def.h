@@ -2,22 +2,36 @@
 
 #include <map>
 
+//struct Point {
+//	double x; //longitude
+//	double y; //latitude
+//	Point() = default;
+//	Point(double x, double y) : x(x), y(y) {
+//
+//	};
+//};
+//
+//struct TPoint : public Point{
+//	unsigned long long t; //timestamp
+//	TPoint() = default;
+//	TPoint(double x, double y, unsigned long long timestamp) : Point(x, y), t(timestamp) {
+//
+//	};
+//};
+
 struct Point {
 	double x; //longitude
 	double y; //latitude
-	Point() = default;
-	Point(double x, double y) : x(x), y(y) {
-
-	};
-};
-
-struct TPoint : public Point{
 	unsigned long long t; //timestamp
-	TPoint() = default;
-	TPoint(double x, double y, unsigned long long timestamp) : Point(x, y), t(timestamp) {
+	Point() = default;
+	Point(double x, double y) : x(x), y(y), t(0) {
+
+	};
+	Point(double x, double y, unsigned long long t) : x(x), y(y), t(t) {
 
 	};
 };
+typedef Point TPoint;
 
 struct TwoTraceSection {
 	int t1_begin, t1_end, t2_begin, t2_end;

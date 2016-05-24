@@ -30,8 +30,12 @@ TimeSimilarity TimeCompare(std::vector<TPoint> & t1, std::vector<TPoint> & t2) {
 	CoordSimilarity coorsim = CoordCompare(pl1, pl2, true);
 	// TODO total_xy_diff， diffs_xy 以后直接从郑涌获得
 	std::vector<double> diffs_t; // 每一段的时间相似度
-	std::vector<double> diffs_xy; // 每一段的距离相似度
-	double total_xy_diff = 0.0, total_time_dif = 0.0;
+	//std::vector<double> diffs_xy; // 每一段的距离相似度
+	double total_time_dif = 0.0; 
+	double total_xy_diff = 0.0;
+	double elapse1 = t1[t1.size() - 1].t - t1[0].t;
+	double elapse2 = t2[t2.size() - 1].t - t2[0].t;
+	double maxelapse = elapse1 > elapse2 ? elapse1 : elapse2;
 	for (int i = 0; i < coorsim.trace_sections.size(); i++)
 	{
 		// assume [b1, e1) NOT [b1, e1]
@@ -41,7 +45,7 @@ TimeSimilarity TimeCompare(std::vector<TPoint> & t1, std::vector<TPoint> & t2) {
 		int maxlen = len1 > len2 ? len1 : len2;
 		int pi2 = b2;
 		diffs_t.push_back(0.0);
-		diffs_xy.push_back(0.0);
+		//diffs_xy.push_back(0.0);
 		for (int pi1 = b1; pi1 < e1; pi1++)
 		{
 			const Point & p1 = t1[pi1];
@@ -51,17 +55,17 @@ TimeSimilarity TimeCompare(std::vector<TPoint> & t1, std::vector<TPoint> & t2) {
 			while (!(pi2 + 1 >= e2 || distance(t1[pi1], t2[pi2]) < distance(t1[pi1], t2[pi2 + 1]))) {
 				pi2++;
 			}
-			diffs_xy[diffs_xy.size()-1] += distance(t1[pi1], t2[pi2]);
-			diffs_t[diffs_t.size()-1] += abs((double)t1[pi1].t - t2[pi2].t);
+			//diffs_xy[diffs_xy.size()-1] += distance(t1[pi1], t2[pi2]);
+			diffs_t[diffs_t.size()-1] += abs(((long double)t1[pi1].t - (long double)t2[pi2].t) / maxelapse);
 		}
-		total_xy_diff += diffs_xy[diffs_xy.size() - 1];
+		total_xy_diff += coorsim.trace_sections[i].coord_sim;
 		total_time_dif += diffs_t[diffs_t.size() - 1];
 	}
 	TimeSimilarity timesim;
 	// typedef CoordSimilarity TimeSimilarity
 	timesim.trace_sections = coorsim.trace_sections;
 	// 可能为负，这边要注意一下
-	timesim.two_similarity = 1 - (total_xy_diff + total_time_dif);
+	timesim.two_similarity = (total_xy_diff * total_time_dif);
 	return timesim;
 }
 

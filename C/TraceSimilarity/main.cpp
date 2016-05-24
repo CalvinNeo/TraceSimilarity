@@ -267,21 +267,25 @@ int wmain(int argc, TCHAR* argv[], TCHAR* env[]) {
 	//trace_coord[0] = read_csv(L"../../case/coord/1a.csv");
 	//trace_coord[1] = read_csv(L"../../case/coord/1b.csv");
 	//trace_coord[2] = read_csv(L"../../case/coord/2a.csv");
-	//trace_coord[3] = read_csv(L"../../case/coord/2b.csv");
+	////trace_coord[3] = read_csv(L"../../case/coord/2b.csv");
+	//trace_time[0] = read_csv_time(L"../../case/coord/1a.csv");
+	//trace_time[1] = read_csv_time(L"../../case/coord/1b.csv");
+	//trace_time[2] = read_csv_time(L"../../case/coord/2a.csv");
+	//trace_time[3] = read_csv_time(L"../../case/coord/2b.csv");
 
-	trace_time[0] = read_csv_time(L"../../case/coord/1a.csv");
-	trace_time[1] = read_csv_time(L"../../case/coord/1b.csv");
-	trace_time[2] = read_csv_time(L"../../case/coord/2a.csv");
-	trace_time[3] = read_csv_time(L"../../case/coord/2b.csv");
 	for (int i = 0;i < 4;i++) {
 		wstring path = L"../../case/origin/";
+		wstring patht = L"../../case/origin/";
 		path += (i + '0');
 		path += L".csv";
+		patht += (i + '0');
+		patht += L"t.csv";
 		trace_coord[i] = read_csv(path);
+		trace_time[i] = read_csv_time(patht);
 	}
-	for (int i = 0;i < 4;i++) {
+	for (int i = 1;i < 4;i++) {
 		//cout << trace_coord[i][0].x << " " << trace_coord[i][0].y << endl;
-		for (int j = 0;j < i;j++) {
+		for (int j = 1;j < i;j++) {
 			CoordSimilarity coordsim = CoordCompare(trace_coord[i], trace_coord[j]);
 			TimeSimilarity timesim = TimeCompare(trace_time[i], trace_time[j]);
 			for (unsigned int k = 0;k < coordsim.trace_sections.size();k++) {
