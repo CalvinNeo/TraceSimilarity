@@ -1,3 +1,8 @@
+#include "def.h"
+#include "CoordSimilarity.h"
+#include "TimeSimilarity.h"
+#include "interface.h"
+
 #include <windows.h>
 #include <string>
 #include <time.h>
@@ -5,11 +10,6 @@
 #include <iostream>
 #include <chrono>
 #include <functional>
-
-#include "def.h"
-#include "CoordSimilarity.h"
-#include "TimeSimilarity.h"
-#include "interface.h"
 
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/path.hpp>
@@ -270,6 +270,8 @@ int wmain(int argc, TCHAR* argv[], TCHAR* env[]) {
 	//get_all_csv();
 	//D d(1, 2);
 	//test_derive(d);
+
+	Boost_Sock bm;
 
 	vector<Point> trace_coord[4];
 	vector<TPoint> trace_time[4];

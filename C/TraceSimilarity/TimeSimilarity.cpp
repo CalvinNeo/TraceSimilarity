@@ -31,8 +31,8 @@ TimeSimilarity TimeCompare(std::vector<TPoint> & t1, std::vector<TPoint> & t2) {
 	// TODO total_xy_diff， diffs_xy 以后直接从郑涌获得
 	std::vector<double> diffs_t; // 每一段的时间相似度
 	//std::vector<double> diffs_xy; // 每一段的距离相似度
-	double total_time_dif = 0.0; 
-	double total_xy_diff = 0.0;
+	double total_time_dif = { 0.0 };
+	double total_xy_diff = { 0.0 };
 	double elapse1 = t1[t1.size() - 1].t - t1[0].t;
 	double elapse2 = t2[t2.size() - 1].t - t2[0].t;
 	double maxelapse = elapse1 > elapse2 ? elapse1 : elapse2;
