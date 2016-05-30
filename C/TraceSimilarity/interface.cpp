@@ -1,10 +1,14 @@
-using namespace std;
-#pragma message("CPP")
-
 #include "interface.h"
 #include "CoordSimilarity.h"
 #include "TimeSimilarity.h"
 #include "param.h"
+
+#include <string>
+#include <iostream>
+#include <chrono>
+#include <functional>
+using namespace std;
+#pragma message("CPP")
 
 struct paramop_msg {
 	char op[6];
@@ -49,7 +53,17 @@ void paramop_return() {
 
 void Boost_Sock::msg_loop() {
 	using namespace boost::asio;
-	sock.connect(ep);
+	try {
+		boost::system::error_code error;
+		sock.connect(ep, error);
+		if (error == boost::asio::error::connection_refused) {
+			cout << "No Remote Server" << endl;
+			return;
+		}
+	}
+	catch(...){
+
+	}
 	int bytes = 0;
 	char ReceiveBuffer[MAX_BUFFER];
 	while (true)
@@ -64,6 +78,7 @@ void Boost_Sock::msg_loop() {
 		//char IPdotdec[20];inet_ntop(AF_INET, 0, IPdotdec, 16); printf("Message from %s:%s\n", inet_ntoa(clientAddr.sin_addr), ReceiveBuffer); //deprecated
 	}
 }
+
 void Boost_Sock::send_str(const char * str, size_t len) {
 	using namespace boost::asio;
 	char SendBuffer[MAX_BUFFER];
@@ -74,9 +89,10 @@ void Boost_Sock::send_str(const char * str, size_t len) {
 	}
 }
 
+
 void file_return() {
 
-}
+};
 
 //char * result_encode(const TimeSimilarity & dat) {
 //	return NULL;
@@ -91,14 +107,7 @@ void file_return() {
 //	return NULL;
 //}
 
-template<typename _Func, typename... _Argv>
-uint64_t elapse_time(_Func && f, _Argv&&... argv) {
-	auto s = chrono::steady_clock::now();
-	f(forward<_Argv>(argv)...);
-	//f(argv...);
-	auto interval = chrono::steady_clock::now() - s;
-	return static_cast<uint64_t>(chrono::duration_cast<chrono::milliseconds>(interval).count());
-}
+
 
 
 void return_by_socket() {

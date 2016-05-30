@@ -6,6 +6,7 @@
 
 #include <string>
 #include <time.h>
+#include <windows.h>
 #include <vector>
 #include <iostream>
 #include <chrono>
@@ -217,6 +218,7 @@ CoordSimilarity cmp_coord(string tracename1, string tracename2) {
 	vector<Point> trace1, trace2;
 	trace1 = read_csv(s2ws(tracename1));
 	trace2 = read_csv(s2ws(tracename1));
+
 	return CoordCompare(trace1, trace2);
 }
 
@@ -236,31 +238,6 @@ TimeSimilarity cmp_time(string tracename1, string tracename2) {
 	xxx_return
 */
 
-struct B {
-	int a;
-	B(int a) : a(a) {
-
-	}
-};
-
-struct D : public B {
-	int b;
-	D(int a, int b) : B(a), b(b) {
-
-	}
-};
-
-void test_derive(B b) {
-	cout << b.a << endl;
-}
-
-//template<typename _Func, typename... _Argv>
-//uint64_t elapse_time(_Func && f, _Argv&&... argv) {
-//	auto s = chrono::steady_clock::now();
-//	f(forward<_Argv>(argv)...);
-//	auto interval = chrono::steady_clock::now() - s;
-//	return static_cast<uint64_t>(chrono::duration_cast<chrono::milliseconds>(interval).count());
-//}
 
 int wmain(int argc, TCHAR* argv[], TCHAR* env[]) {
 
