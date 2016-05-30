@@ -1,14 +1,6 @@
 using namespace std;
 #pragma message("CPP")
 
-#include <WinSock2.h>
-#include <windows.h>
-#include <string>
-#include <iostream>
-#include <chrono>
-#include <functional>
-#include <boost/asio.hpp>
-
 #include "interface.h"
 #include "CoordSimilarity.h"
 #include "TimeSimilarity.h"
@@ -72,9 +64,11 @@ void Boost_Sock::msg_loop() {
 		//char IPdotdec[20];inet_ntop(AF_INET, 0, IPdotdec, 16); printf("Message from %s:%s\n", inet_ntoa(clientAddr.sin_addr), ReceiveBuffer); //deprecated
 	}
 }
-void Boost_Sock::send_str(const char * str) {
+void Boost_Sock::send_str(const char * str, size_t len) {
 	using namespace boost::asio;
-	if (sock.send(str) == SOCKET_ERROR)
+	char SendBuffer[MAX_BUFFER];
+	memcpy(SendBuffer, str, len);
+	if (sock.send(buffer(SendBuffer)) == SOCKET_ERROR)
 	{
 		cout << "Send Info Error::" << GetLastError() << endl;
 	}

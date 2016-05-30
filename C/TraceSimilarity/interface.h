@@ -1,7 +1,12 @@
 #pragma once
 #ifndef __INTERFACE_H__
-#define __INTERFACE_H__
+//#define __INTERFACE_H__
 #include <WinSock2.h>
+#include <windows.h>
+#include <string>
+#include <iostream>
+#include <chrono>
+#include <functional>
 #include <boost/asio.hpp>
 #pragma message("H")
 #pragma comment(lib, "WS2_32")
@@ -19,10 +24,9 @@ struct Boost_Sock {
 	std::string ip;
 	unsigned short port;
 	Boost_Sock(std::string ip, unsigned short port):ip(ip), port(port), sock(ioservice), ep(boost::asio::ip::address::from_string(ip), port) {
-		msg_loop();
 	}
 	void msg_loop();
-	void send_str(const char *);
+	void send_str(const char *, size_t len);
 };
 
 void boost_return();

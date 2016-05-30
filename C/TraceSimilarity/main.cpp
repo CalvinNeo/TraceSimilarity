@@ -1,9 +1,9 @@
+
+#include "interface.h"
 #include "def.h"
 #include "CoordSimilarity.h"
 #include "TimeSimilarity.h"
-#include "interface.h"
 
-#include <windows.h>
 #include <string>
 #include <time.h>
 #include <vector>
@@ -20,6 +20,7 @@ using namespace std;
 //#define UNICODE
 
 vector<string> csvname;
+Boost_Sock bm(IP, REQUESTPORT);
 
 std::string ws2s(const std::wstring& ws)
 {
@@ -270,9 +271,6 @@ int wmain(int argc, TCHAR* argv[], TCHAR* env[]) {
 	//get_all_csv();
 	//D d(1, 2);
 	//test_derive(d);
-
-	Boost_Sock bm;
-
 	vector<Point> trace_coord[4];
 	vector<TPoint> trace_time[4];
 	//trace_coord[0] = read_csv(L"../../case/coord/1a.csv");
@@ -334,6 +332,9 @@ int wmain(int argc, TCHAR* argv[], TCHAR* env[]) {
 		printf("%.2f%%\n", coordlist.trace_sections[i].coord_sim * 100);
 	}
 	puts("");
+
+	cout << "×¼±¸¾ÍÐ÷" << endl;
+	bm.msg_loop();
 
 	system("pause");
 	return 0;
