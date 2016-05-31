@@ -240,24 +240,11 @@ TimeSimilarity cmp_time(string tracename1, string tracename2) {
 
 
 int wmain(int argc, TCHAR* argv[], TCHAR* env[]) {
-
-	//read_csv_time(L"../../case/origin/1t.csv");
 	//return_by_socket();
 	//paramop_return();
-	//xNES();
 	//get_all_csv();
-	//D d(1, 2);
-	//test_derive(d);
 	vector<Point> trace_coord[4];
 	vector<TPoint> trace_time[4];
-	//trace_coord[0] = read_csv(L"../../case/coord/1a.csv");
-	//trace_coord[1] = read_csv(L"../../case/coord/1b.csv");
-	//trace_coord[2] = read_csv(L"../../case/coord/2a.csv");
-	////trace_coord[3] = read_csv(L"../../case/coord/2b.csv");
-	//trace_time[0] = read_csv_time(L"../../case/coord/1a.csv");
-	//trace_time[1] = read_csv_time(L"../../case/coord/1b.csv");
-	//trace_time[2] = read_csv_time(L"../../case/coord/2a.csv");
-	//trace_time[3] = read_csv_time(L"../../case/coord/2b.csv");
 
 	for (int i = 0;i < 4;i++) {
 		wstring path = L"../../case/origin/";

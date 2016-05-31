@@ -10,7 +10,8 @@ struct TimeSimilarity {
 };
 
 struct TimeSimilarityList {
-
+	std::vector<kth_similarity> similarities;
+	std::vector<TraceSection> trace_sections;
 };
 
 TimeSimilarity TimeCompare(std::vector<TPoint> & t1, std::vector<TPoint> & t2);

@@ -29,7 +29,6 @@ TimeSimilarity TimeCompare(std::vector<TPoint> & t1, std::vector<TPoint> & t2) {
 	std::vector<Point> pl1 = AsPointList(t1), pl2 = AsPointList(t2);
 	CoordSimilarity coorsim = CoordCompare(pl1, pl2, true);
 	// TODO total_xy_diff， diffs_xy 以后直接从郑涌获得
-	std::vector<double> diffs_t; // 每一段的时间相似度
 	//std::vector<double> diffs_xy; // 每一段的距离相似度
 	double total_time_dif = { 0.0 };
 	double total_xy_diff = { 0.0 };
@@ -44,8 +43,7 @@ TimeSimilarity TimeCompare(std::vector<TPoint> & t1, std::vector<TPoint> & t2) {
 		int len1 = e1 - b1, len2 = e2 - b2;
 		int maxlen = len1 > len2 ? len1 : len2;
 		int pi2 = b2;
-		diffs_t.push_back(0.0);
-		//diffs_xy.push_back(0.0);
+		coorsim.trace_sections[i].time_sim = 0.0;
 		for (int pi1 = b1; pi1 < e1; pi1++)
 		{
 			const Point & p1 = t1[pi1];
@@ -56,14 +54,14 @@ TimeSimilarity TimeCompare(std::vector<TPoint> & t1, std::vector<TPoint> & t2) {
 				pi2++;
 			}
 			//diffs_xy[diffs_xy.size()-1] += distance(t1[pi1], t2[pi2]);
-			diffs_t[diffs_t.size()-1] += abs(((long double)t1[pi1].t - (long double)t2[pi2].t) / maxelapse);
+			coorsim.trace_sections[i].time_sim += abs(((long double)t1[pi1].t - (long double)t2[pi2].t) / maxelapse);
 		}
 		total_xy_diff += coorsim.trace_sections[i].coord_sim;
-		total_time_dif += diffs_t[diffs_t.size() - 1];
+		total_time_dif += coorsim.trace_sections[i].time_sim;
 	}
 	TimeSimilarity timesim;
 	// typedef CoordSimilarity TimeSimilarity
-	timesim.trace_sections = coorsim.trace_sections;
+	timesim.trace_sections = move(coorsim.trace_sections);
 	// 可能为负，这边要注意一下
 	timesim.two_similarity = (total_xy_diff * total_time_dif);
 	return timesim;
@@ -71,13 +69,14 @@ TimeSimilarity TimeCompare(std::vector<TPoint> & t1, std::vector<TPoint> & t2) {
 
 TimeSimilarityList TimeSort(std::vector<TPoint> & t1, std::vector< std::vector<TPoint> > & tlist) {
 	using namespace std;
-	vector<pair<int, double>> s;
+	TimeSimilarityList tl;
 	for (int i = 0; i < tlist.size(); i++)
 	{
 		TimeSimilarity ts = TimeCompare(t1, tlist[i]);
-		s.push_back(make_pair(i, ts.two_similarity));
+		tl.similarities.push_back(make_pair(i, ts.two_similarity));
+		tl.trace_sections.push_back(TraceSection(i, ts.trace_sections[i]));
 	}
-	sort(s.begin(), s.end(), [](const pair<int, double> & x, const pair<int, double> & y) -> bool {return x.first < y.first; });
-	//sort(s.begin, s.end(), [&](auto x, auto y) {return x.first < y.first; });
-	return TimeSimilarityList();
+	sort(tl.similarities.begin(), tl.similarities.end(), [](const pair<int, double> & x, const pair<int, double> & y) -> bool {return x.second < y.second; });
+	sort(tl.trace_sections.begin(), tl.trace_sections.end(), [](const TraceSection & x, const TraceSection & y) -> bool {return x.time_sim < y.time_sim; });
+	return tl;
 }
