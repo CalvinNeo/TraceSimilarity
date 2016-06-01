@@ -24,7 +24,6 @@ using namespace boost::asio;
 char SendBuffer[MAX_BUFFER];
 char ReceiveBuffer[MAX_BUFFER];
 io_service ioservice;
-ip::tcp::acceptor acceptor(ioservice, ip::tcp::endpoint(ip::tcp::v4(), PARAMPORT));
 ip::tcp::socket sock(ioservice); 
 
 struct paramop_msg {
@@ -39,18 +38,21 @@ void send_param_message(const paramop_msg & msg) {
 	boost::system::error_code error;
 	//strncpy(SendBuffer, msg.c_str(), msg.size());
 	strncpy(SendBuffer, (char*)&msg, sizeof(msg));
-	if (sock.write_some(buffer(SendBuffer)) == SOCKET_ERROR)
+	if (sock.write_some(buffer(SendBuffer, sizeof(msg))) == SOCKET_ERROR)
 	{
 		cout << "Param Optimizer Error: " << GetLastError() << endl;
 	}
 	bytes = sock.read_some(buffer(ReceiveBuffer), error);
-	if (error == boost::asio::error::eof)
+	if (error == boost::asio::error::eof || boost::asio::error::shut_down || boost::asio::error::connection_aborted) {
+		sock.close();
 		return; // Connection closed cleanly by peer.
+	}
 	printf("Param Optimizer Finished: %s\n", ReceiveBuffer);
 }
 
 void init_param_server(int port = PARAMPORT) {
 	using namespace std;
+	ip::tcp::acceptor acceptor(ioservice, ip::tcp::endpoint(ip::tcp::v4(), PARAMPORT));
 	acceptor.accept(sock);
 	//int bytes = read(sock, buffer(ReceiveBuffer), boost::bind(send_param_message, ReceiveBuffer, _1, _2));
 	//std::string msg(buff, bytes);
@@ -59,11 +61,14 @@ void init_param_server(int port = PARAMPORT) {
 }
 
 int wmain(int argc, TCHAR* argv[], TCHAR* env[]) {
-	init_param_server();
-	paramop_msg pm; 
-	strcpy(pm.op, "opn");
-	send_param_message(pm);
-	cout << "Connection End" << endl;
+	while (true) {
+		cout << "Listening" << endl;
+		init_param_server();
+		paramop_msg pm;
+		strcpy(pm.op, "rate, 0.55, 0.9");
+		send_param_message(pm);
+		cout << "Connection End" << endl;
+	}
 	system("pause");
 	return 0;
 }
