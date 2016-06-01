@@ -10,46 +10,7 @@
 using namespace std;
 #pragma message("CPP")
 
-struct paramop_msg {
-	char op[6];
-	paramop_msg() {
-		memset(op, '\0', 6);
-	}
-};
-
-void paramop_return() {
-	using namespace boost::asio;
-	io_service ioservice;
-	ip::address addr = ip::address::from_string(IP);
-	ip::tcp::endpoint ep(addr, PARAMPORT);
-	ip::tcp::socket sock(ioservice);
-	int bytes = 0;
-	boost::system::error_code error;
-	sock.connect(ep, error);
-	if (error == boost::asio::error::connection_refused) {
-		cout << "Leave Optimizer Mode!" << endl;
-		return;
-	}
-	char SendBuffer[MAX_BUFFER];
-	char ReceiveBuffer[MAX_BUFFER];
-	paramop_msg * ppm;
-	while (true)
-	{
-		//cin.getline(SendBuffer, sizeof(SendBuffer));
-		//if (sock.write_some(buffer(SendBuffer)) == SOCKET_ERROR)
-		//{
-		//	cout << "Send Info Error::" << GetLastError() << endl;
-		//	break;
-		//}
-		//bytes = sock.read_some(buffer(ReceiveBuffer), error);
-		bytes = sock.read_some(buffer(ReceiveBuffer), error);
-		if (error == boost::asio::error::eof)
-			return; // Connection closed cleanly by peer.
-		//char IPdotdec[20]; inet_ntop(AF_INET, 0, IPdotdec, 16); //inet_ntoa(clientAddr.sin_addr) is deprecated
-		ppm = reinterpret_cast<paramop_msg*>(ReceiveBuffer);
-		printf("%s\n", ppm->op);
-	}
-}
+boost::asio::io_service ioservice;
 
 void Boost_Sock::msg_loop() {
 	using namespace boost::asio;
@@ -57,7 +18,7 @@ void Boost_Sock::msg_loop() {
 		boost::system::error_code error;
 		sock.connect(ep, error);
 		if (error == boost::asio::error::connection_refused) {
-			cout << "No Remote Server" << endl;
+			cout << "No Remote Server At: " << this->name << endl;
 			return;
 		}
 	}
@@ -65,7 +26,6 @@ void Boost_Sock::msg_loop() {
 
 	}
 	int bytes = 0;
-	char ReceiveBuffer[MAX_BUFFER];
 	while (true)
 	{
 		if ((bytes = sock.receive(buffer(ReceiveBuffer))) == SOCKET_ERROR)
@@ -73,19 +33,22 @@ void Boost_Sock::msg_loop() {
 			printf("recv error!\n");
 			exit(-1);
 		}
-		ReceiveBuffer[bytes] = '\0';
-		printf("%s\n", ReceiveBuffer);
+		if (this->handler == nullptr) {
+			ReceiveBuffer[bytes] = '\0';
+			printf("%s\n", ReceiveBuffer);
+		}
+		else {
+			this->handler(ReceiveBuffer, bytes);
+		}
 		//char IPdotdec[20];inet_ntop(AF_INET, 0, IPdotdec, 16); printf("Message from %s:%s\n", inet_ntoa(clientAddr.sin_addr), ReceiveBuffer); //deprecated
 	}
 }
 
 void Boost_Sock::send_str(const char * str, size_t len) {
 	using namespace boost::asio;
-	char SendBuffer[MAX_BUFFER];
-	memcpy(SendBuffer, str, len);
-	if (sock.send(buffer(SendBuffer)) == SOCKET_ERROR)
+	if (sock.send(buffer(str, len)) == SOCKET_ERROR)
 	{
-		cout << "Send Info Error::" << GetLastError() << endl;
+		cout << "Send Data Error::" << GetLastError() << endl;
 	}
 }
 

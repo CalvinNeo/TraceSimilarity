@@ -17,7 +17,7 @@ using namespace std;
 #define REQUESTPORT 15777
 #define PARAMPORT 15778
 #define IP "127.0.0.1"
-#define MAX_BUFFER 2048
+#define MAX_BUFFER 8192
 
 using namespace boost::asio;
 
@@ -28,9 +28,9 @@ ip::tcp::acceptor acceptor(ioservice, ip::tcp::endpoint(ip::tcp::v4(), PARAMPORT
 ip::tcp::socket sock(ioservice); 
 
 struct paramop_msg {
-	char op[6];
+	char op[256];
 	paramop_msg(){
-		memset(op, '\0', 6);
+		memset(op, '\0', 256);
 	}
 };
 
@@ -41,13 +41,12 @@ void send_param_message(const paramop_msg & msg) {
 	strncpy(SendBuffer, (char*)&msg, sizeof(msg));
 	if (sock.write_some(buffer(SendBuffer)) == SOCKET_ERROR)
 	{
-		cout << "Send Info Error::" << GetLastError() << endl;
+		cout << "Param Optimizer Error: " << GetLastError() << endl;
 	}
 	bytes = sock.read_some(buffer(ReceiveBuffer), error);
 	if (error == boost::asio::error::eof)
 		return; // Connection closed cleanly by peer.
-	//char IPdotdec[20]; inet_ntop(AF_INET, 0, IPdotdec, 16); //inet_ntoa(clientAddr.sin_addr) is deprecated
-	printf("%s\n", ReceiveBuffer);
+	printf("Param Optimizer Finished: %s\n", ReceiveBuffer);
 }
 
 void init_param_server(int port = PARAMPORT) {
@@ -58,7 +57,6 @@ void init_param_server(int port = PARAMPORT) {
 	//sock.write_some(buffer(msg));
 	return ;
 }
-
 
 int wmain(int argc, TCHAR* argv[], TCHAR* env[]) {
 	init_param_server();
