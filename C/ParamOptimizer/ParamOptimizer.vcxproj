@@ -149,10 +149,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\TraceSimilarity\interface.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="main2.cpp" />
     <ClCompile Include="xNES.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\TraceSimilarity\interface.h" />
     <ClInclude Include="xNES.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

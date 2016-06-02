@@ -16,13 +16,15 @@
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/path.hpp>
 #include <boost/filesystem.hpp> 
+#include <boost/algorithm/string.hpp>
 
 using namespace std;
 
 //#define UNICODE
 
 vector<string> csvname;
-Boost_Sock bm(IP, REQUESTPORT, nullptr, "Request Sock");
+void do_req(Boost_Sock * sender, const char * data, size_t len);
+Boost_Sock bm(IP, REQUESTPORT, do_req, "Request Sock");
 Boost_Sock bmpop(IP, PARAMPORT, paramop_coord, "Param Sock");
 
 std::string ws2s(const std::wstring& ws)
@@ -226,7 +228,7 @@ string find_coord(string tracename) {
 	return res1;
 }
 
-TimeSimilarityList find_time(string tracename) {
+string find_time(string tracename) {
 	using namespace std;
 	vector<vector<TPoint>> tofind;
 	vector<TPoint> trace;
@@ -244,7 +246,42 @@ TimeSimilarityList find_time(string tracename) {
 			tofind.push_back(read_csv_time(s2ws(csvname[i])));
 		}
 	}
-	return TimeSort(trace, tofind);
+	TimeSimilarityList time_list = TimeSort(trace, tofind);
+	string res1;
+	for (int i = 0; i < min(5, (int)time_list.similarities.size()); i++) {
+		if (i > 0) res1 += ':';
+		res1 += tracename;
+		int j, k = time_list.similarities[i].first;
+		for (j = 0; j < time_list.trace_sections.size(); j++) {
+			if (time_list.trace_sections[j].index == k) break;
+		}
+		if (j < time_list.trace_sections.size()) {
+			res1 += '&';
+			string tmp;
+			stringstream ss;
+			ss.clear();
+			ss << time_list.trace_sections[j].t1_begin;
+			ss >> tmp;
+			res1 += tmp + '!';
+			ss.clear();
+			ss << time_list.trace_sections[j].t1_end - 1;
+			ss >> tmp;
+			res1 += tmp + '*' + csvname[k] + '&';
+			ss.clear();
+			ss << time_list.trace_sections[j].t2_begin;
+			ss >> tmp;
+			res1 += tmp + '!';
+			ss.clear();
+			ss << time_list.trace_sections[j].t2_end - 1;
+			ss >> tmp;
+			res1 += tmp + '*';
+			ss.clear();
+			ss << time_list.similarities[i].second;
+			ss >> tmp;
+			res1 += tmp;
+		}
+	}
+	return res1;
 }
 
 string cmp_coord(string tracename1, string tracename2) {
@@ -276,22 +313,56 @@ string cmp_coord(string tracename1, string tracename2) {
 	return res1;
 }
 
-TimeSimilarity cmp_time(string tracename1, string tracename2) {
+string cmp_time(string tracename1, string tracename2) {
 	using namespace std;
 	vector<TPoint> trace1, trace2;
 	trace1 = read_csv_time(s2ws(tracename1));
 	trace2 = read_csv_time(s2ws(tracename2));
-	return TimeCompare(trace1, trace2);
+	TimeSimilarity time_simi = TimeCompare(trace1, trace2);
+	string res1 = tracename1;
+	res1 += '&';
+	string tmp;
+	stringstream ss;
+	ss.clear();
+	ss << time_simi.trace_sections[0].t1_begin;
+	ss >> tmp;
+	res1 += tmp + '!';
+	ss.clear();
+	ss << time_simi.trace_sections[0].t1_end - 1;
+	ss >> tmp;
+	res1 += tmp + '*' + tracename2 + '&';
+	ss.clear();
+	ss << time_simi.trace_sections[0].t2_begin;
+	ss >> tmp;
+	res1 += tmp + '!';
+	ss.clear();
+	ss << time_simi.trace_sections[0].t2_end - 1;
+	ss >> tmp;
+	res1 += tmp;
+	return res1;
 }
 
-/*
-	Flow Line
-	* get_all_csv
-	find_coord/find_time
-	result_encode(+4)
-	xxx_return
-*/
-
+void do_req(Boost_Sock * sender, const char * data, size_t len) {
+	//data[len] = '\0';
+	using namespace boost;
+	string req(data);
+	vector<string> SplitVec;
+	string ans;
+	split(SplitVec, req, is_any_of("*"), token_compress_on);
+	if (SplitVec.size() == 1) {
+		// list
+		ans = find_coord(SplitVec[0]);
+	}
+	else if(SplitVec.size() == 2){
+		// cmp 2
+		ans = cmp_coord(SplitVec[0], SplitVec[1]);
+	}
+	else {
+		printf("Invalid Call\n");
+		ans = "";
+	}
+	sender->send_str(const_cast<const char *>(ans.c_str()), ans.size() + 1);
+}
 
 int wmain(int argc, TCHAR* argv[], TCHAR* env[]) {
 	//return_by_socket();
@@ -314,10 +385,6 @@ int wmain(int argc, TCHAR* argv[], TCHAR* env[]) {
 	//	trace_time[i] = read_csv_time(patht);
 	//}
 
-	string s1 = "../../case/origin/1.csv";
-	string s2 = "../../case/origin/2.csv";
-	cout << cmp_coord(s1, s2) << endl;
-	//cout << find_coord("1.csv") << endl;
 
 	//printf("Sort Test");
 	//std::vector< std::vector<Point> > traces;

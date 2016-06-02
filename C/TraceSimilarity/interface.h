@@ -6,7 +6,6 @@
 
 #include <boost/asio.hpp>
 
-//#define RESULTPORT 15777
 #define REQUESTPORT 15777
 #define PARAMPORT 15778
 #define IP "127.0.0.1"
@@ -15,7 +14,7 @@
 struct paramop_msg {
 	char op[256];
 	paramop_msg() {
-		memset(op, '\0', 256);
+		memset(op, '\0', 256); 
 	}
 };
 
@@ -29,7 +28,7 @@ uint64_t elapse_time(_Func && f, _Argv&&... argv) {
 }
 
 //typedef void(*MSGHANDLER)(char * buffer, size_t len);
-typedef std::function<void(char *, size_t)> MSGHANDLER;
+typedef std::function<void(struct Boost_Sock *, char *, size_t)> MSGHANDLER;
 extern boost::asio::io_service ioservice;
 
 struct Boost_Sock {
@@ -45,20 +44,15 @@ struct Boost_Sock {
 	}
 	void send_str(const char * str, size_t len);
 	void msg_loop();
-private:
+protected:
 	char ReceiveBuffer[MAX_BUFFER];
 };
 
-
-void boost_return();
-void file_return();
-void return_by_socket();
-
-
-//char * result_encode(const struct TimeSimilarity & );
-//char * result_encode(const struct TimeSimilarityList &);
-//char * result_encode(const struct CoordSimilarity &);
-//char * result_encode(const struct CoordSimilarityList &);
+struct Boost_Server:public Boost_Sock {
+	Boost_Server(std::string ip, unsigned short port, MSGHANDLER msghandler = nullptr, std::string name = "") :Boost_Sock(ip, port, msghandler, name) {
+	}
+	void init();
+};
 
 struct Boost_Sock;
 

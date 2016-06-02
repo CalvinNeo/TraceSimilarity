@@ -3,8 +3,11 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="xNES.cpp" />
+    <ClCompile Include="main2.cpp" />
+    <ClCompile Include="..\TraceSimilarity\interface.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="xNES.h" />
+    <ClInclude Include="..\TraceSimilarity\interface.h" />
   </ItemGroup>
 </Project>

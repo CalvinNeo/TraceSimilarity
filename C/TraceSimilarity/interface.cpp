@@ -28,17 +28,22 @@ void Boost_Sock::msg_loop() {
 	int bytes = 0;
 	while (true)
 	{
-		if ((bytes = sock.receive(buffer(ReceiveBuffer))) == SOCKET_ERROR)
-		{
-			printf("recv error!\n");
-			exit(-1);
+		//if ((bytes = sock.receive(buffer(ReceiveBuffer))) == SOCKET_ERROR)
+		//{
+		//	printf("recv error!\n"); exit(-1);
+		//}
+		boost::system::error_code error;
+		bytes = sock.read_some(buffer(ReceiveBuffer), error);
+		if (error == boost::asio::error::eof || error == boost::asio::error::shut_down || error == boost::asio::error::connection_aborted || error == boost::asio::error::connection_reset) {
+			sock.close();
+			return; // Connection closed cleanly by peer.
 		}
 		if (this->handler == nullptr) {
 			ReceiveBuffer[bytes] = '\0';
 			printf("%s\n", ReceiveBuffer);
 		}
 		else {
-			this->handler(ReceiveBuffer, bytes);
+			this->handler(this, ReceiveBuffer, bytes);
 		}
 		//char IPdotdec[20];inet_ntop(AF_INET, 0, IPdotdec, 16); printf("Message from %s:%s\n", inet_ntoa(clientAddr.sin_addr), ReceiveBuffer); //deprecated
 	}
@@ -52,28 +57,17 @@ void Boost_Sock::send_str(const char * str, size_t len) {
 	}
 }
 
-
-void file_return() {
-
-};
-
-//char * result_encode(const TimeSimilarity & dat) {
-//	return NULL;
-//}
-//char * result_encode(const TimeSimilarityList & dat) {
-//	return NULL;
-//}
-//char * result_encode(const CoordSimilarity & dat) {
-//	return NULL;
-//}
-//char * result_encode(const CoordSimilarityList & dat) {
-//	return NULL;
-//}
+void Boost_Server::init() {
+	using namespace boost::asio;
+	ip::tcp::acceptor acceptor(ioservice, ip::tcp::endpoint(ip::tcp::v4(), PARAMPORT));
+	acceptor.accept(sock);
+	//int bytes = read(sock, buffer(ReceiveBuffer), boost::bind(send_param_message, ReceiveBuffer, _1, _2));
+	//std::string msg(buff, bytes);
+	//sock.write_some(buffer(msg));
+}
 
 
-
-
-void return_by_socket() {
+//void return_by_socket() {
 	//WSADATA  Ws;
 	//SOCKET clientSoc;
 	//struct sockaddr_in servAddr;
@@ -144,5 +138,5 @@ void return_by_socket() {
 
 	//closesocket(clientSoc);
 	//WSACleanup();
-}
+//}
 
