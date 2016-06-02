@@ -91,15 +91,14 @@ CoordSimilarity CoordCompare(std::vector<Point> & t1, std::vector<Point> & t2, b
 
 CoordSimilarityList CoordSort(std::vector<Point> & t1, std::vector< std::vector<Point> > & tlist, bool timeissue) {
 	CoordSimilarityList coord_list;
-	const double limit_sim = 0.7;
+	const double level1 = 0.7;
 	for (int i = 0;i < tlist.size();i++) {
-		CoordSimilarity coordsim = CoordCompare(t1, tlist[i]);
-		if (coordsim.two_similarity > limit_sim) {
-			coord_list.similarities.push_back(std::make_pair(i, coordsim.two_similarity));
-
-		}
-		for (int j = 0;j < coordsim.trace_sections.size();j++) {
-			coord_list.trace_sections.push_back(TraceSection(i, coordsim.trace_sections[j]));
+		CoordSimilarity coord_sim = CoordCompare(t1, tlist[i]);
+		if (coord_sim.two_similarity > level1) {
+			coord_list.similarities.push_back(std::make_pair(i, coord_sim.two_similarity));
+			for (int j = 0;j < coord_sim.trace_sections.size();j++) {
+				coord_list.trace_sections.push_back(TraceSection(i, coord_sim.trace_sections[j]));
+			}
 		}
 	}
 	sort(coord_list.similarities.begin(), coord_list.similarities.end(), cmpKthSim);

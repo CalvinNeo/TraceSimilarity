@@ -11,6 +11,7 @@
 #include <iostream>
 #include <chrono>
 #include <functional>
+#include <sstream>
 
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/path.hpp>
@@ -172,7 +173,7 @@ void get_all_csv(string fullpath = "../../case/origin") {
 	}
 }
 
-CoordSimilarityList find_coord(string tracename) {
+string find_coord(string tracename) {
 	using namespace std;
 	vector<vector<Point>> tofind;
 	vector<Point> trace;
@@ -190,7 +191,38 @@ CoordSimilarityList find_coord(string tracename) {
 			tofind.push_back(read_csv(s2ws(csvname[i])));
 		}
 	}
-	return CoordSort(trace, tofind);
+	CoordSimilarityList coord_list = CoordSort(trace, tofind);
+	string res1;
+	for (int i = 0;i < min(5, (int)coord_list.similarities.size());i++) {
+		res1 += tracename;
+		int j, k = coord_list.similarities[i].first;
+		for (j = 0;j < coord_list.trace_sections.size();j++) {
+			if (coord_list.trace_sections[j].index == k) break;
+		}
+		if (j < coord_list.trace_sections.size()) {
+			res1 += '&';
+			string tmp;
+			stringstream ss;
+			ss << coord_list.trace_sections[j].t1_begin;
+			ss >> tmp;
+			res1 += tmp;
+			res1 += '!';
+			ss << coord_list.trace_sections[j].t1_end;
+			ss >> tmp;
+			res1 += tmp;
+			res1 += '*';
+			res1 += csvname[k];
+			res1 += '&';
+			ss << coord_list.trace_sections[j].t2_begin;
+			ss >> tmp;
+			res1 += tmp;
+			res1 += '!';
+			ss << coord_list.trace_sections[j].t2_end;
+			ss >> tmp;
+			res1 += tmp;
+		}
+	}
+	return res1;
 }
 
 TimeSimilarityList find_time(string tracename) {
@@ -214,20 +246,41 @@ TimeSimilarityList find_time(string tracename) {
 	return TimeSort(trace, tofind);
 }
 
-CoordSimilarity cmp_coord(string tracename1, string tracename2) {
+string cmp_coord(string tracename1, string tracename2) {
 	using namespace std;
 	vector<Point> trace1, trace2;
 	trace1 = read_csv(s2ws(tracename1));
-	trace2 = read_csv(s2ws(tracename1));
-
-	return CoordCompare(trace1, trace2);
+	trace2 = read_csv(s2ws(tracename2));
+	CoordSimilarity coord_simi = CoordCompare(trace1, trace2);
+	string res1 = tracename1;
+	res1 += '&';
+	string tmp;
+	stringstream ss;
+	ss << coord_simi.trace_sections[0].t1_begin;
+	ss >> tmp;
+	res1 += tmp;
+	res1 += '!';
+	ss << coord_simi.trace_sections[0].t1_end;
+	ss >> tmp;
+	res1 += tmp;
+	res1 += '*';
+	res1 += tracename2;
+	res1 += '&';
+	ss << coord_simi.trace_sections[0].t2_begin;
+	ss >> tmp;
+	res1 += tmp;
+	res1 += '!';
+	ss << coord_simi.trace_sections[0].t2_end;
+	ss >> tmp;
+	res1 += tmp;
+	return res1;
 }
 
 TimeSimilarity cmp_time(string tracename1, string tracename2) {
 	using namespace std;
 	vector<TPoint> trace1, trace2;
 	trace1 = read_csv_time(s2ws(tracename1));
-	trace2 = read_csv_time(s2ws(tracename1));
+	trace2 = read_csv_time(s2ws(tracename2));
 	return TimeCompare(trace1, trace2);
 }
 
@@ -261,25 +314,8 @@ int wmain(int argc, TCHAR* argv[], TCHAR* env[]) {
 	//	trace_time[i] = read_csv_time(patht);
 	//}
 
-	//printf("Two Sim Test\n");
-	//for (int i = 1; i < 4; i++) {
-	//	cout << trace_coord[i][0].x << " " << trace_coord[i][0].y << endl;
-	//	for (int j = 1; j < i; j++) {
-	//		CoordSimilarity coordsim = CoordCompare(trace_coord[i], trace_coord[j]);
-	//		TimeSimilarity timesim = TimeCompare(trace_time[i], trace_time[j]);
-	//		for (unsigned int k = 0; k < coordsim.trace_sections.size(); k++) {
-	//			cout << coordsim.trace_sections[k].t1_begin << " ";
-	//			cout << coordsim.trace_sections[k].t1_end << " ";
-	//			cout << coordsim.trace_sections[k].t2_begin << " ";
-	//			cout << coordsim.trace_sections[k].t2_end << " ";
-	//			cout << coordsim.trace_sections[k].coord_sim << endl;
-	//		}
-	//		cout << i << " and " << j << " ";
-	//		printf("Coord %.2f%%\n", coordsim.two_similarity * 100);
-	//		printf("Time %.2f%%\n", timesim.two_similarity * 100);
-	//	}
-	//}
-	//
+	cout << cmp_coord("../../case/origin/1.csv", "../../case/oringin/2.csv") << endl;
+
 	//printf("Sort Test");
 	//std::vector< std::vector<Point> > traces;
 	//for (int i = 0;i < 3;i++) traces.push_back(trace_coord[i]);
