@@ -13,9 +13,6 @@ inline double simpleDistance(Point a, Point b);
 double frechetSimilar(std::vector<Point> & t1, int l1, int r1, std::vector<Point> & t2, int l2, int r2);
 doubletable frechetDistance(std::vector<Point> & t1, std::vector<Point> & t2, doubletable & dis);
 inline double min3(double f1, double f2, double f3);
-bool cmpKthSim(kth_similarity a, kth_similarity b);
-bool cmpTwoSim(TwoTraceSection a, TwoTraceSection b);
-bool cmpSim(TraceSection a, TraceSection b);
 
 //const int maxn = 101;
 
@@ -85,7 +82,9 @@ CoordSimilarity CoordCompare(std::vector<Point> & t1, std::vector<Point> & t2, b
 			coord_res.trace_sections.push_back(tt);
 		}
 	}
-	sort(coord_res.trace_sections.begin(), coord_res.trace_sections.end(), cmpTwoSim);
+	sort(coord_res.trace_sections.begin(), coord_res.trace_sections.end(), [](TwoTraceSection a, TwoTraceSection b) {
+		return a.coord_sim > b.coord_sim;
+	});
 	return coord_res;
 }
 
@@ -101,21 +100,13 @@ CoordSimilarityList CoordSort(std::vector<Point> & t1, std::vector< std::vector<
 			}
 		}
 	}
-	sort(coord_list.similarities.begin(), coord_list.similarities.end(), cmpKthSim);
-	sort(coord_list.trace_sections.begin(), coord_list.trace_sections.end(), cmpSim);
+	sort(coord_list.similarities.begin(), coord_list.similarities.end(), [](kth_similarity a, kth_similarity b) {
+		return a.second > b.second;
+	});
+	sort(coord_list.trace_sections.begin(), coord_list.trace_sections.end(), [](TraceSection a, TraceSection b) {
+		return a.coord_sim > b.coord_sim;
+	});
 	return coord_list;
-}
-
-bool cmpKthSim(kth_similarity a, kth_similarity b) {
-	return a.second > b.second;
-}
-
-bool cmpTwoSim(TwoTraceSection a, TwoTraceSection b) {
-	return a.coord_sim > b.coord_sim;
-}
-
-bool cmpSim(TraceSection a, TraceSection b) {
-	return a.coord_sim > b.coord_sim;
 }
 
 double frechetSimilar(std::vector<Point> & t1, int l1, int r1, std::vector<Point> & t2, int l2, int r2) {

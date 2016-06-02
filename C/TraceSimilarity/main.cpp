@@ -206,7 +206,7 @@ string find_coord(string tracename) {
 			ss >> tmp;
 			res1 += tmp + '!';
 			ss.clear();
-			ss << coord_list.trace_sections[j].t1_end;
+			ss << coord_list.trace_sections[j].t1_end - 1;
 			ss >> tmp;
 			res1 += tmp + '*' + csvname[k] + '&';
 			ss.clear();
@@ -214,7 +214,7 @@ string find_coord(string tracename) {
 			ss >> tmp;
 			res1 += tmp + '!';
 			ss.clear();
-			ss << coord_list.trace_sections[j].t2_end;
+			ss << coord_list.trace_sections[j].t2_end - 1;
 			ss >> tmp;
 			res1 += tmp + '*';
 			ss.clear();
@@ -262,7 +262,7 @@ string cmp_coord(string tracename1, string tracename2) {
 	ss >> tmp;
 	res1 += tmp + '!';
 	ss.clear();
-	ss << coord_simi.trace_sections[0].t1_end;
+	ss << coord_simi.trace_sections[0].t1_end - 1;
 	ss >> tmp;
 	res1 += tmp + '*' + tracename2 + '&';
 	ss.clear();
@@ -270,7 +270,7 @@ string cmp_coord(string tracename1, string tracename2) {
 	ss >> tmp;
 	res1 += tmp + '!';
 	ss.clear();
-	ss << coord_simi.trace_sections[0].t2_end;
+	ss << coord_simi.trace_sections[0].t2_end - 1;
 	ss >> tmp;
 	res1 += tmp;
 	return res1;
