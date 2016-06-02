@@ -177,14 +177,11 @@ string find_coord(string tracename) {
 	using namespace std;
 	vector<vector<Point>> tofind;
 	vector<Point> trace;
-	if (csvname.empty())
-	{
+	if (csvname.empty()) {
 		get_all_csv();
 	}
-	for (int i = 0; i < csvname.size(); i++)
-	{
-		if (tracename == csvname[i])
-		{
+	for (int i = 0; i < csvname.size(); i++) {
+		if (tracename == csvname[i]) {
 			trace = read_csv(s2ws(csvname[i]));
 		}
 		else {
@@ -194,6 +191,7 @@ string find_coord(string tracename) {
 	CoordSimilarityList coord_list = CoordSort(trace, tofind);
 	string res1;
 	for (int i = 0;i < min(5, (int)coord_list.similarities.size());i++) {
+		if (i > 0) res1 += ':';
 		res1 += tracename;
 		int j, k = coord_list.similarities[i].first;
 		for (j = 0;j < coord_list.trace_sections.size();j++) {
@@ -203,21 +201,24 @@ string find_coord(string tracename) {
 			res1 += '&';
 			string tmp;
 			stringstream ss;
+			ss.clear();
 			ss << coord_list.trace_sections[j].t1_begin;
 			ss >> tmp;
-			res1 += tmp;
-			res1 += '!';
+			res1 += tmp + '!';
+			ss.clear();
 			ss << coord_list.trace_sections[j].t1_end;
 			ss >> tmp;
-			res1 += tmp;
-			res1 += '*';
-			res1 += csvname[k];
-			res1 += '&';
+			res1 += tmp + '*' + csvname[k] + '&';
+			ss.clear();
 			ss << coord_list.trace_sections[j].t2_begin;
 			ss >> tmp;
-			res1 += tmp;
-			res1 += '!';
+			res1 += tmp + '!';
+			ss.clear();
 			ss << coord_list.trace_sections[j].t2_end;
+			ss >> tmp;
+			res1 += tmp + '*';
+			ss.clear();
+			ss << coord_list.similarities[i].second;
 			ss >> tmp;
 			res1 += tmp;
 		}
@@ -256,20 +257,19 @@ string cmp_coord(string tracename1, string tracename2) {
 	res1 += '&';
 	string tmp;
 	stringstream ss;
+	ss.clear();
 	ss << coord_simi.trace_sections[0].t1_begin;
 	ss >> tmp;
-	res1 += tmp;
-	res1 += '!';
+	res1 += tmp + '!';
+	ss.clear();
 	ss << coord_simi.trace_sections[0].t1_end;
 	ss >> tmp;
-	res1 += tmp;
-	res1 += '*';
-	res1 += tracename2;
-	res1 += '&';
+	res1 += tmp + '*' + tracename2 + '&';
+	ss.clear();
 	ss << coord_simi.trace_sections[0].t2_begin;
 	ss >> tmp;
-	res1 += tmp;
-	res1 += '!';
+	res1 += tmp + '!';
+	ss.clear();
 	ss << coord_simi.trace_sections[0].t2_end;
 	ss >> tmp;
 	res1 += tmp;
@@ -299,7 +299,7 @@ int wmain(int argc, TCHAR* argv[], TCHAR* env[]) {
 	//get_all_csv();
 
 
-	//vector<Point> trace_coord[4];
+	vector<Point> trace_coord[4];
 	//vector<TPoint> trace_time[4];
 
 	//for (int i = 0;i < 4;i++) {
@@ -314,7 +314,10 @@ int wmain(int argc, TCHAR* argv[], TCHAR* env[]) {
 	//	trace_time[i] = read_csv_time(patht);
 	//}
 
-	cout << cmp_coord("../../case/origin/1.csv", "../../case/oringin/2.csv") << endl;
+	string s1 = "../../case/origin/1.csv";
+	string s2 = "../../case/origin/2.csv";
+	cout << cmp_coord(s1, s2) << endl;
+	//cout << find_coord("1.csv") << endl;
 
 	//printf("Sort Test");
 	//std::vector< std::vector<Point> > traces;
