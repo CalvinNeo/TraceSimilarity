@@ -24,6 +24,7 @@ using namespace std;
 
 vector<string> csvname;
 void do_req(Boost_Sock * sender, const char * data, size_t len);
+
 Boost_Sock bm(IP, REQUESTPORT, do_req, "Request Sock");
 Boost_Sock bmpop(IP, PARAMPORT, paramop_coord, "Param Sock");
 
@@ -121,6 +122,7 @@ vector<TPoint> read_csv_time(wstring path) {
 		}
 		else if (*abuf == '\n') {
 			if (beheaded) {
+				// read time
 				tm tmtime; tmtime.tm_sec = 0; tmtime.tm_isdst = -1;
 				sscanf(cols, "%04d/%02d/%02d %02d:%02d\r", &tmtime.tm_year, &tmtime.tm_mon, &tmtime.tm_mday, &tmtime.tm_hour, &tmtime.tm_min);
 				tmtime.tm_year -= 1900;
@@ -137,8 +139,73 @@ vector<TPoint> read_csv_time(wstring path) {
 		}
 		else if (beheaded && *abuf == ',') {
 			if (state == 0)
+				// read x
 				x = atof(string(cols, abuf).c_str());
 			else if (state == 1)
+				// read y
+				y = atof(string(cols, abuf).c_str());
+			// renew cols
+			cols = abuf + 1;
+			// renew state
+			state++;
+		}
+		abuf++;
+	}
+	UnmapViewOfFile(buffer_void);
+	CloseHandle(hmapping);
+	CloseHandle(hfile);
+	return vp;
+}
+
+vector<TPoint> read_csv_any(wstring path) {
+	int record_count = 0;
+	HANDLE hfile = CreateFile(path.c_str(), GENERIC_READ, 0, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_READONLY, NULL);
+	DWORD dwFileSize = GetFileSize(hfile, NULL);
+	HANDLE hmapping = CreateFileMapping(hfile, 0, PAGE_READONLY, 0, 0, 0);
+	LPVOID buffer_void = MapViewOfFile(hmapping, FILE_MAP_READ, 0, 0, 0);
+	// Attetion to that not all csv are UNICODE, in our case, they are ANSI
+	PCHAR abuf = (PCHAR)buffer_void;
+
+	vector<TPoint> vp;
+	PCHAR rows = abuf, cols = abuf;
+	bool beheaded = false;
+	double x = 0, y = 0;
+	unsigned long long t = 0;
+	int state = 0;
+	for (DWORD offset = 0; offset < dwFileSize; offset++)
+	{
+		if (*abuf == '\r') {
+
+		}
+		else if (*abuf == '\n') {
+			if (state == 2)
+			{
+				if (beheaded) {
+					// read time
+					tm tmtime; tmtime.tm_sec = 0; tmtime.tm_isdst = -1;
+					sscanf(cols, "%04d/%02d/%02d %02d:%02d\r", &tmtime.tm_year, &tmtime.tm_mon, &tmtime.tm_mday, &tmtime.tm_hour, &tmtime.tm_min);
+					tmtime.tm_year -= 1900;
+					t = mktime(&tmtime);
+					// add point
+					vp.push_back(TPoint(x, y, t));
+				}
+			}
+			else {
+				vp.push_back(TPoint(x, y, 0));
+			}
+			// renew rows and cols
+			rows = abuf + 1;
+			cols = abuf + 1;
+			// renew state
+			state = 0;
+			beheaded = true;
+		}
+		else if (beheaded && *abuf == ',') {
+			if (state == 0)
+				// read x
+				x = atof(string(cols, abuf).c_str());
+			else if (state == 1)
+				// read y
 				y = atof(string(cols, abuf).c_str());
 			// renew cols
 			cols = abuf + 1;
@@ -184,10 +251,10 @@ string find_coord(string tracename) {
 	}
 	for (int i = 0; i < csvname.size(); i++) {
 		if (tracename == csvname[i]) {
-			trace = read_csv(s2ws(csvname[i]));
+			trace = read_csv_any(s2ws(csvname[i]));
 		}
 		else {
-			tofind.push_back(read_csv(s2ws(csvname[i])));
+			tofind.push_back(read_csv_any(s2ws(csvname[i])));
 		}
 	}
 	CoordSimilarityList coord_list = CoordSort(trace, tofind);
@@ -240,10 +307,10 @@ string find_time(string tracename) {
 	{
 		if (tracename == csvname[i])
 		{
-			trace = read_csv_time(s2ws(csvname[i]));
+			trace = read_csv_any(s2ws(csvname[i]));
 		}
 		else {
-			tofind.push_back(read_csv_time(s2ws(csvname[i])));
+			tofind.push_back(read_csv_any(s2ws(csvname[i])));
 		}
 	}
 	TimeSimilarityList time_list = TimeSort(trace, tofind);
@@ -287,8 +354,8 @@ string find_time(string tracename) {
 string cmp_coord(string tracename1, string tracename2) {
 	using namespace std;
 	vector<Point> trace1, trace2;
-	trace1 = read_csv(s2ws(tracename1));
-	trace2 = read_csv(s2ws(tracename2));
+	trace1 = read_csv_any(s2ws(tracename1));
+	trace2 = read_csv_any(s2ws(tracename2));
 	CoordSimilarity coord_simi = CoordCompare(trace1, trace2);
 	string res1 = tracename1;
 	res1 += '&';
@@ -316,8 +383,8 @@ string cmp_coord(string tracename1, string tracename2) {
 string cmp_time(string tracename1, string tracename2) {
 	using namespace std;
 	vector<TPoint> trace1, trace2;
-	trace1 = read_csv_time(s2ws(tracename1));
-	trace2 = read_csv_time(s2ws(tracename2));
+	trace1 = read_csv_any(s2ws(tracename1));
+	trace2 = read_csv_any(s2ws(tracename2));
 	TimeSimilarity time_simi = TimeCompare(trace1, trace2);
 	string res1 = tracename1;
 	res1 += '&';
@@ -371,19 +438,19 @@ int wmain(int argc, TCHAR* argv[], TCHAR* env[]) {
 
 
 	vector<Point> trace_coord[4];
-	//vector<TPoint> trace_time[4];
+	vector<TPoint> trace_time[4];
 
-	//for (int i = 0;i < 4;i++) {
-	//	wstring path = L"../../case/origin/";
-	//	wstring patht = L"../../case/origin/";
-	//	path += (i + '0');
-	//	path += L".csv";
-	//	patht += (i + '0');
-	//	patht += L"t.csv";
-	//	//cout << elapse_time(read_csv, path) << endl;
-	//	trace_coord[i] = read_csv(path);
-	//	trace_time[i] = read_csv_time(patht);
-	//}
+	for (int i = 0;i < 4;i++) {
+		wstring path = L"../../case/origin/";
+		wstring patht = L"../../case/origin/";
+		path += (i + '0');
+		path += L".csv";
+		patht += (i + '0');
+		patht += L"t.csv";
+		//cout << elapse_time(read_csv, path) << endl;
+		trace_coord[i] = read_csv_any(path);
+		trace_time[i] = read_csv_any(patht);
+	}
 
 
 	//printf("Sort Test");

@@ -18,6 +18,10 @@ struct paramop_msg {
 	}
 };
 
+typedef std::function<void(struct Sync_Sock *, char *, size_t)> MSGHANDLER;
+typedef std::function<void(struct Async_Sock *, char *, size_t)> AMSGHANDLER;
+extern boost::asio::io_service ioservice;
+
 template<typename _Func, typename... _Argv>
 uint64_t elapse_time(_Func && f, _Argv&&... argv) {
 	auto s = chrono::steady_clock::now();
@@ -28,10 +32,8 @@ uint64_t elapse_time(_Func && f, _Argv&&... argv) {
 }
 
 //typedef void(*MSGHANDLER)(char * buffer, size_t len);
-typedef std::function<void(struct Boost_Sock *, char *, size_t)> MSGHANDLER;
-extern boost::asio::io_service ioservice;
 
-struct Boost_Sock {
+struct Sync_Sock {
 	boost::asio::ip::tcp::socket sock;
 	boost::asio::ip::tcp::endpoint ep;
 	std::string ip;
@@ -39,7 +41,7 @@ struct Boost_Sock {
 	unsigned short port;
 	size_t max_buffer;
 	MSGHANDLER handler;
-	Boost_Sock(std::string ip, unsigned short port, MSGHANDLER msghandler = nullptr, std::string name = "") :ip(ip), port(port), sock(ioservice)
+	Sync_Sock(std::string ip, unsigned short port, MSGHANDLER msghandler = nullptr, std::string name = "") :ip(ip), port(port), sock(ioservice)
 		, ep(boost::asio::ip::address::from_string(ip), port), handler(msghandler), name(name){
 	}
 	void send_str(const char * str, size_t len);
@@ -48,12 +50,42 @@ protected:
 	char ReceiveBuffer[MAX_BUFFER];
 };
 
-struct Boost_Server:public Boost_Sock {
-	Boost_Server(std::string ip, unsigned short port, MSGHANDLER msghandler = nullptr, std::string name = "") :Boost_Sock(ip, port, msghandler, name) {
+struct Sync_Server:public Sync_Sock {
+	Sync_Server(std::string ip, unsigned short port, MSGHANDLER msghandler = nullptr, std::string name = "") :Sync_Sock(ip, port, msghandler, name) {
 	}
 	void init();
 };
 
-struct Boost_Sock;
+struct Async_Sock {
+	boost::asio::ip::tcp::socket sock;
+	boost::asio::ip::tcp::endpoint ep;
+	std::string ip;
+	std::string name;
+	unsigned short port;
+	size_t max_buffer;
+	AMSGHANDLER handler;
+	Async_Sock(std::string ip, unsigned short port, AMSGHANDLER msghandler = nullptr, std::string name = "") :ip(ip), port(port), sock(ioservice)
+		, ep(boost::asio::ip::address::from_string(ip), port), handler(msghandler), name(name) {
+	}
+	void send_str(const char * str, size_t len);
+	void msg_loop();
+protected:
+	char ReceiveBuffer[MAX_BUFFER];
+};
+
+struct Async_Server :public Async_Sock {
+	Async_Server(std::string ip, unsigned short port, AMSGHANDLER msghandler = nullptr, std::string name = "") :Async_Sock(ip, port, msghandler, name) {
+	}
+	void init();
+};
+
+//#define Boost_Sock Async_Sock
+//#define Boost_Server Async_Server
+
+//typedef Async_Sock Boost_Sock;
+//typedef Async_Server Boost_Server;
+
+typedef Sync_Sock Boost_Sock;
+typedef Sync_Server Boost_Server;
 
 #endif

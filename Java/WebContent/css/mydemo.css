@@ -1,0 +1,141 @@
+.leftbkg{
+	z-index: 2001;
+    position: absolute;
+    width: 260px;
+    background-color:#FFCE43;
+    height:1000px;
+    float:left;
+	opacity:0.8;
+}
+
+.leftop{
+	z-index: 2001;
+    position: absolute;
+    width: 260px;
+    height:760px;
+    float:left;
+    overflow-x:hidden;
+    overflow-y:auto;
+}
+
+.logo-img{
+	margin-top: 20px;
+    margin-left: 30px;
+    float:left
+}
+
+.title{
+	margin-top: 30px;
+    margin-left: 20px;
+    float:left
+}
+
+.title2{
+	margin-top: 00px;
+    margin-left: 20px;
+    float:left
+}
+
+.subtitle{
+	margin-top: 350px;
+    margin-left: 20px;
+    float:left
+}
+
+
+
+.textline{
+	margin-top:-10px;
+    margin-left: 20px;
+    float:left
+}
+
+.textstring{
+	width:140px;
+}
+
+.gobutton{
+	margin-left: 20px;
+}
+
+.setFile{
+    position: absolute;
+    float:left;
+	margin-top: 140px;
+    margin-left: 10px;
+    overflow:auto;
+    width:200px;
+    height:180px;
+}
+
+.setbuttonshow{
+	z-index: 2001;
+    position: absolute;
+    float:left;
+	margin-top: 205px;
+    margin-left: 20px;
+}
+
+.setbuttoncal{
+	z-index: 2001;
+    position: absolute;
+    float:left;
+	margin-top: 460px;
+    margin-left: 40px;
+}
+
+.setbutton2{
+	z-index: 2001;
+    position: absolute;
+    float:left;
+	margin-top: 340px;
+    margin-left: 40px;
+}
+
+.setbutton3{
+	z-index: 2001;
+    position: absolute;
+    float:left;
+	margin-top: 340px;
+    margin-left: 140px;
+}
+
+.tabletitle{
+	z-index: 2001;
+    position: absolute;
+    float:left;
+	margin-top: 600px;
+    margin-left: 20px;
+}
+
+.text1{
+	z-index: 2001;
+    position: absolute;
+    float:left;
+	margin-top: 580px;
+    margin-left: 20px;
+    overflow:auto;
+}
+
+.text2{
+	z-index: 2001;
+    position: absolute;
+    float:left;
+	margin-top: 660px;
+    margin-left: 20px;
+    overflow:auto;
+}
+
+.file1{
+    position: absolute;
+    float:left;
+	margin-top: 555px;
+    margin-left: 20px;
+}
+
+.file2{
+    position: absolute;
+    float:left;
+	margin-top: 635px;
+    margin-left: 20px;
+}
