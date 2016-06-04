@@ -6,6 +6,9 @@ import java.io.IOException;
 import java.io.LineNumberReader;
 import java.util.ArrayList;
 
+import model.CInterfaceExtra;
+import model.ParamInterfaceExtra;
+
 public class NameAndPoints
 {
   //fileName:文件路径    startline：对应csv文件起始2 	 设置startIndex\endIndex=-1为读取所有点

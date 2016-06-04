@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import model.ParamInterface;
+import model.CInterfaceExtra;
 import model.ParamInterfaceExtra;
 import net.sf.json.JSONArray;
 
@@ -25,6 +25,7 @@ public class param extends HttpServlet {
      */
     public param() {
         super();
+        ParamInterfaceExtra.pi.dummy();
         // TODO Auto-generated constructor stub
     }
 

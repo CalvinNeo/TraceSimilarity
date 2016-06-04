@@ -14,6 +14,9 @@ public class ParamInterface
 	public static int MAX_BUFFER = 8196;
 	public Socket socket;
 	public ServerSocket server;
+	public void dummy(){
+		
+	}
 	public ParamInterface(){
 		try {
 			server = new ServerSocket(port);

@@ -219,8 +219,8 @@ vector<TPoint> read_csv_any(wstring path) {
 	CloseHandle(hfile);
 	return vp;
 }
-
-void get_all_csv(string fullpath = "../../case/origin") {
+//"../../case/origin"
+void get_all_csv(string fullpath = "/c/datasets/") {
 	namespace fs = boost::filesystem;
 	fs::path full_path(fullpath, fs::native);
 	if (!fs::exists(fullpath)) {
@@ -440,17 +440,17 @@ int wmain(int argc, TCHAR* argv[], TCHAR* env[]) {
 	vector<Point> trace_coord[4];
 	vector<TPoint> trace_time[4];
 
-	for (int i = 0;i < 4;i++) {
-		wstring path = L"../../case/origin/";
-		wstring patht = L"../../case/origin/";
-		path += (i + '0');
-		path += L".csv";
-		patht += (i + '0');
-		patht += L"t.csv";
-		//cout << elapse_time(read_csv, path) << endl;
-		trace_coord[i] = read_csv_any(path);
-		trace_time[i] = read_csv_any(patht);
-	}
+	//for (int i = 0;i < 4;i++) {
+	//	wstring path = L"../../case/origin/";
+	//	wstring patht = L"../../case/origin/";
+	//	path += (i + '0');
+	//	path += L".csv";
+	//	patht += (i + '0');
+	//	patht += L"t.csv";
+	//	//cout << elapse_time(read_csv, path) << endl;
+	//	trace_coord[i] = read_csv_any(path);
+	//	trace_time[i] = read_csv_any(patht);
+	//}
 
 
 	//printf("Sort Test");

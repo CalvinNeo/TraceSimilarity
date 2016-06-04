@@ -1,6 +1,8 @@
 package model;
 
 import java.io.File;
+import model.CInterfaceExtra;
+import model.ParamInterfaceExtra;
 import java.util.ArrayList;
 
 public class ReadFilesName
