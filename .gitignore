@@ -40,5 +40,6 @@ C/1/
 C/.vs/
 Java/.classpath
 Java/.project
+Java/build
 *.prefs
 *.class

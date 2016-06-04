@@ -416,18 +416,18 @@ void do_req(Boost_Sock * sender, const char * data, size_t len) {
 	vector<string> SplitVec;
 	string ans;
 	split(SplitVec, req, is_any_of("*"), token_compress_on);
-	if (SplitVec.size() == 1) {
+	if (SplitVec[1] == "") {
 		// list
 		ans = find_coord(SplitVec[0]);
 	}
-	else if(SplitVec.size() == 2){
+	else{
 		// cmp 2
 		ans = cmp_coord(SplitVec[0], SplitVec[1]);
 	}
-	else {
-		printf("Invalid Call\n");
-		ans = "";
-	}
+	//else {
+	//	printf("Invalid Call\n");
+	//	ans = "";
+	//}
 	sender->send_str(const_cast<const char *>(ans.c_str()), ans.size() + 1);
 }
 

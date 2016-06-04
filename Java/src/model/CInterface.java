@@ -8,11 +8,12 @@ import java.io.Writer;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class CInterface {
-	public int port = 15777, MAX_BUFFER = 8196;
+ public class CInterface {
+	public int port = 15777;
+	public static int MAX_BUFFER = 8196;
 	public Socket socket;
 	public ServerSocket server;
-	public void CInterface(){
+	public CInterface(){
 		try {
 			server = new ServerSocket(port);
 		} catch (IOException e1) {

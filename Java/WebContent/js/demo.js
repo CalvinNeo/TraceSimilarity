@@ -30,13 +30,7 @@ function doNameCheckAndCal()
 			NameList.push(name);
 		}
 	}
-	var param=document.getElementById("text").value;
-	if(param !== null)
-		{
-		NameList.push(param);//把参数字符串
-		}
-	if (flag == 0) 
-	{
+	if (flag == 0) {
 		alert("没有选择文件！");
 	}else if(flag>2)
 	{
@@ -48,6 +42,7 @@ function doNameCheckAndCal()
 			param += NameList[i] + "*";
 		}
 		$.post('calAndtoC', {name : param },function(data, statu){
+			
 			if("success" == statu)
 			{
 				var aa=data.substring(16);

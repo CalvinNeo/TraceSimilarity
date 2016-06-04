@@ -73,6 +73,11 @@ void Async_Sock::msg_loop() {
 	using namespace boost::asio;
 	try {
 		boost::system::error_code error;
+		//sock.connect(ep, error);
+		//if (error == boost::asio::error::connection_refused) {
+		//	cout << "No Remote Server At: " << this->name << endl;
+		//	return;
+		//}
 		sock.async_connect(ep, [this](const boost::system::error_code &error) {
 			if (error == boost::asio::error::connection_refused) {
 				cout << "No Remote Server At: " << this->name << endl;
@@ -101,7 +106,7 @@ void Async_Sock::msg_loop() {
 void Async_Sock::send_str(const char * str, size_t len) {
 	using namespace boost::asio;
 	boost::system::error_code error;
-	sock.send(buffer(str, len), 0, error);
+	sock.async_send(buffer(str, len), [](const boost::system::error_code &ec, std::size_t bytes_transferred) {});
 	if (error == boost::asio::error::eof || error == boost::asio::error::shut_down || error == boost::asio::error::connection_aborted || error == boost::asio::error::connection_reset) {
 		cout << "Send Data Error::" << GetLastError() << endl;
 		sock.close();

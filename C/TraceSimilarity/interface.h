@@ -66,6 +66,7 @@ struct Async_Sock {
 	AMSGHANDLER handler;
 	Async_Sock(std::string ip, unsigned short port, AMSGHANDLER msghandler = nullptr, std::string name = "") :ip(ip), port(port), sock(ioservice)
 		, ep(boost::asio::ip::address::from_string(ip), port), handler(msghandler), name(name) {
+		ioservice.run();
 	}
 	void send_str(const char * str, size_t len);
 	void msg_loop();
@@ -75,6 +76,7 @@ protected:
 
 struct Async_Server :public Async_Sock {
 	Async_Server(std::string ip, unsigned short port, AMSGHANDLER msghandler = nullptr, std::string name = "") :Async_Sock(ip, port, msghandler, name) {
+		ioservice.run();
 	}
 	void init();
 };
@@ -85,7 +87,10 @@ struct Async_Server :public Async_Sock {
 //typedef Async_Sock Boost_Sock;
 //typedef Async_Server Boost_Server;
 
-typedef Sync_Sock Boost_Sock;
-typedef Sync_Server Boost_Server;
+//typedef Sync_Sock Boost_Sock;
+//typedef Sync_Server Boost_Server;
+
+using Boost_Sock = Sync_Sock;
+using Boost_Server = Sync_Server;
 
 #endif

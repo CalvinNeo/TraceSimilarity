@@ -10,7 +10,8 @@ import java.net.Socket;
 
 public class ParamInterface
 {
-	public int port = 15778, MAX_BUFFER = 8196;
+	public int port = 15778;
+	public static int MAX_BUFFER = 8196;
 	public Socket socket;
 	public ServerSocket server;
 	public ParamInterface(){

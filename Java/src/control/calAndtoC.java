@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import model.CInterface;
+import model.CInterfaceExtra;
 import model.NameAndPoints;
 import net.sf.json.JSONArray;
 
@@ -46,8 +47,8 @@ public class calAndtoC extends HttpServlet {
 		doGet(request, response);
 		String nameListString=request.getParameter("name");
 		char[] nameListChar=nameListString.toCharArray();
-		CInterface ci=new CInterface();
-		String fromC=ci.Request(nameListChar);
+		System.out.println("dddd");
+		String fromC= CInterfaceExtra.ci.Request(nameListChar);
 		String[] strs = fromC.split("\\:");
 		
 		

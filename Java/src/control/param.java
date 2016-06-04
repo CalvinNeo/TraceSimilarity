@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import model.ParamInterface;
+import model.ParamInterfaceExtra;
 import net.sf.json.JSONArray;
 
 /**
@@ -43,8 +44,8 @@ public class param extends HttpServlet {
 		doGet(request, response);
 		String paramString=request.getParameter("name");
 		char[] paramChar=paramString.toCharArray();
-		ParamInterface pi=new ParamInterface();
-		String returnparam=pi.Request(paramChar);
+		
+		String returnparam=ParamInterfaceExtra.pi.Request(paramChar);
 		
 		JSONArray jsonArray2 = JSONArray.fromObject(returnparam);  
 		PrintWriter out= response.getWriter();
