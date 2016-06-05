@@ -26,7 +26,9 @@ vector<string> csvname;
 //Boost_Sock bm(IP, REQUESTPORT, do_req, "Request Sock");
 Boost_Sock bmpop(IP, PARAMPORT, paramop_coord, "Param Sock");
 
-#define DATASET_ROOT "c:\\datasets\\"
+//#define DATASET_ROOT "c:\\datasets\\"
+#define DATASET_ROOT "C:\\datasets\\"
+
 
 std::string ws2s(const std::wstring& ws)
 {
@@ -251,10 +253,10 @@ string find_coord(string tracename) {
 	}
 	for (int i = 0; i < csvname.size(); i++) {
 		if (tracename == csvname[i]) {
-			trace = read_csv_any(s2ws(csvname[i]));
+			trace = read_csv_any(s2ws(DATASET_ROOT + csvname[i]));
 		}
 		else {
-			tofind.push_back(read_csv_any(s2ws(csvname[i])));
+			tofind.push_back(read_csv_any(s2ws(DATASET_ROOT + csvname[i])));
 		}
 	}
 	CoordSimilarityList coord_list = CoordSort(trace, tofind);
@@ -307,10 +309,10 @@ string find_time(string tracename) {
 	{
 		if (tracename == csvname[i])
 		{
-			trace = read_csv_any(s2ws(csvname[i]));
+			trace = read_csv_any(s2ws(DATASET_ROOT + csvname[i]));
 		}
 		else {
-			tofind.push_back(read_csv_any(s2ws(csvname[i])));
+			tofind.push_back(read_csv_any(s2ws(DATASET_ROOT + csvname[i])));
 		}
 	}
 	TimeSimilarityList time_list = TimeSort(trace, tofind);
@@ -354,8 +356,8 @@ string find_time(string tracename) {
 string cmp_coord(string tracename1, string tracename2) {
 	using namespace std;
 	vector<Point> trace1, trace2;
-	trace1 = read_csv_any(s2ws(tracename1));
-	trace2 = read_csv_any(s2ws(tracename2));
+	trace1 = read_csv_any(s2ws(DATASET_ROOT + tracename1));
+	trace2 = read_csv_any(s2ws(DATASET_ROOT + tracename2));
 	CoordSimilarity coord_simi = CoordCompare(trace1, trace2);
 	string res1 = tracename1;
 	res1 += '&';
@@ -387,8 +389,8 @@ string cmp_coord(string tracename1, string tracename2) {
 string cmp_time(string tracename1, string tracename2) {
 	using namespace std;
 	vector<TPoint> trace1, trace2;
-	trace1 = read_csv_any(s2ws(tracename1));
-	trace2 = read_csv_any(s2ws(tracename2));
+	trace1 = read_csv_any(s2ws(DATASET_ROOT + tracename1));
+	trace2 = read_csv_any(s2ws(DATASET_ROOT + tracename2));
 	TimeSimilarity time_simi = TimeCompare(trace1, trace2);
 	string res1 = tracename1;
 	res1 += '&';
@@ -426,11 +428,11 @@ string do_req(const char * data, size_t len) {
 	split(SplitVec, req, is_any_of("*"), token_compress_on);
 	if (SplitVec[1] == "") {
 		// list
-		ans = find_coord(DATASET_ROOT + SplitVec[0]);
+		ans = find_coord(SplitVec[0]);
 	}
 	else{
 		// cmp 2
-		ans = cmp_coord(DATASET_ROOT + SplitVec[0], DATASET_ROOT + SplitVec[1]);
+		ans = cmp_coord(SplitVec[0], SplitVec[1]);
 	}
 	return ans;
 }
@@ -479,9 +481,9 @@ int wmain(int argc, TCHAR* argv[], TCHAR* env[]) {
 
 	cout << "Ready" << endl;
 	bmpop.msg_loop();
-	std::wstring wstr(argv[0]);
-	cout << do_req("2.csv*3.csv", 0) << endl;
+	std::wstring wstr(argv[1]); // ws2s(wstr).c_str()
+	cout << do_req(ws2s(wstr).c_str(), 0) << endl;
 
-	system("pause");
+	//system("pause");
 	return 0;
 }
