@@ -5,6 +5,7 @@
 #pragma comment(lib, "WS2_32")
 
 #include <boost/asio.hpp>
+#include <thread>
 
 #define REQUESTPORT 15777
 #define PARAMPORT 15778
@@ -41,10 +42,18 @@ struct Sync_Sock {
 	unsigned short port;
 	size_t max_buffer;
 	MSGHANDLER handler;
+	std::thread ios_thread;
+	boost::asio::ip::tcp::acceptor acceptor;
 	Sync_Sock(std::string ip, unsigned short port, MSGHANDLER msghandler = nullptr, std::string name = "") :ip(ip), port(port), sock(ioservice)
-		, ep(boost::asio::ip::address::from_string(ip), port), handler(msghandler), name(name){
+		, ep(boost::asio::ip::address::from_string(ip), port), handler(msghandler), name(name), acceptor(ioservice, boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), port)) {
+	}
+	~Sync_Sock() {
+		if(ios_thread.joinable())
+			ios_thread.join();
 	}
 	void send_str(const char * str, size_t len);
+	void init();
+	void async_init();
 	void msg_loop();
 protected:
 	char ReceiveBuffer[MAX_BUFFER];
@@ -54,6 +63,7 @@ struct Sync_Server:public Sync_Sock {
 	Sync_Server(std::string ip, unsigned short port, MSGHANDLER msghandler = nullptr, std::string name = "") :Sync_Sock(ip, port, msghandler, name) {
 	}
 	void init();
+	void async_init(std::function<void(const boost::system::error_code &)>);
 };
 
 struct Async_Sock {
@@ -64,8 +74,9 @@ struct Async_Sock {
 	unsigned short port;
 	size_t max_buffer;
 	AMSGHANDLER handler;
+	boost::asio::ip::tcp::acceptor acceptor;
 	Async_Sock(std::string ip, unsigned short port, AMSGHANDLER msghandler = nullptr, std::string name = "") :ip(ip), port(port), sock(ioservice)
-		, ep(boost::asio::ip::address::from_string(ip), port), handler(msghandler), name(name) {
+		, ep(boost::asio::ip::address::from_string(ip), port), handler(msghandler), name(name), acceptor(ioservice, boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), port)) {
 		ioservice.run();
 	}
 	void send_str(const char * str, size_t len);

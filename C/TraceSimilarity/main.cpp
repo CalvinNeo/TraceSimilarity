@@ -491,16 +491,21 @@ int wmain(int argc, TCHAR* argv[], TCHAR* env[]) {
 	cmptest1();
 
 	cout << "Ready" << endl;
-	bmpop.msg_loop();
 	std::wstring wstr;
-	if (argc > 1) {
+	if (argc == 2) {
 		wstr = std::wstring(argv[1]); // ws2s(wstr).c_str()
+		cout << do_req(ws2s(wstr).c_str(), 0) << endl;
+	}
+	else if(argc == 999){
+		wstr = std::wstring(L"2.csv*3.csv"); // ws2s(wstr).c_str()
+		cout << do_req(ws2s(wstr).c_str(), 0) << endl;
 	}
 	else {
-		wstr = std::wstring(L"2.csv*3.csv"); // ws2s(wstr).c_str()
+		bmpop.async_init();
+		if (bmpop.ios_thread.joinable())
+			bmpop.ios_thread.join();
+		//bmpop.init();
 	}
-	cout << do_req(ws2s(wstr).c_str(), 0) << endl;
-
 	//system("pause");
 	return 0;
 }
