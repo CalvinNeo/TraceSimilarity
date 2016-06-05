@@ -482,7 +482,13 @@ int wmain(int argc, TCHAR* argv[], TCHAR* env[]) {
 
 	cout << "Ready" << endl;
 	bmpop.msg_loop();
-	std::wstring wstr(argv[1]); // ws2s(wstr).c_str()
+	std::wstring wstr;
+	if (argc > 1) {
+		wstr = std::wstring(argv[1]); // ws2s(wstr).c_str()
+	}
+	else {
+		wstr = std::wstring(L"2.csv*3.csv"); // ws2s(wstr).c_str()
+	}
 	cout << do_req(ws2s(wstr).c_str(), 0) << endl;
 
 	//system("pause");
