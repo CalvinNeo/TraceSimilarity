@@ -245,6 +245,10 @@ void get_all_csv(string fullpath = DATASET_ROOT) {
 	}
 }
 
+void clean(vector<Point> &trace) {
+	trace.erase(trace.begin());
+}
+
 string find_coord(string tracename) {
 	using namespace std;
 	vector<vector<Point>> tofind;
@@ -259,6 +263,10 @@ string find_coord(string tracename) {
 		else {
 			tofind.push_back(read_csv_any(s2ws(DATASET_ROOT + csvname[i])));
 		}
+	}
+	clean(trace);
+	for (int i = 0;i < tofind.size();i++) {
+		clean(tofind[i]);
 	}
 	CoordSimilarityList coord_list = CoordSort(trace, tofind);
 	string res1;
@@ -316,6 +324,10 @@ string find_time(string tracename) {
 			tofind.push_back(read_csv_any(s2ws(DATASET_ROOT + csvname[i])));
 		}
 	}
+	clean(trace);
+	for (int i = 0;i < tofind.size();i++) {
+		clean(tofind[i]);
+	}
 	TimeSimilarityList time_list = TimeSort(trace, tofind);
 	string res1;
 	for (int i = 0; i < min(5, (int)time_list.similarities.size()); i++) {
@@ -359,6 +371,8 @@ string cmp_coord(string tracename1, string tracename2) {
 	vector<Point> trace1, trace2;
 	trace1 = read_csv_any(s2ws(DATASET_ROOT + tracename1));
 	trace2 = read_csv_any(s2ws(DATASET_ROOT + tracename2));
+	clean(trace1);
+	clean(trace2);
 	CoordSimilarity coord_simi = CoordCompare(trace1, trace2);
 	string res1 = tracename1;
 	res1 += '&';
@@ -392,6 +406,8 @@ string cmp_time(string tracename1, string tracename2) {
 	vector<TPoint> trace1, trace2;
 	trace1 = read_csv_any(s2ws(DATASET_ROOT + tracename1));
 	trace2 = read_csv_any(s2ws(DATASET_ROOT + tracename2));
+	clean(trace1);
+	clean(trace2);
 	TimeSimilarity time_simi = TimeCompare(trace1, trace2);
 	string res1 = tracename1;
 	res1 += '&';
@@ -438,28 +454,7 @@ string do_req(const char * data, size_t len) {
 	return ans;
 }
 
-int wmain(int argc, TCHAR* argv[], TCHAR* env[]) {
-	//return_by_socket();
-	//paramop_return();
-	//get_all_csv();
-
-
-	vector<Point> trace_coord[4];
-	vector<TPoint> trace_time[4];
-
-	//for (int i = 0;i < 4;i++) {
-	//	wstring path = L"../../case/origin/";
-	//	wstring patht = L"../../case/origin/";
-	//	path += (i + '0');
-	//	path += L".csv";
-	//	patht += (i + '0');
-	//	patht += L"t.csv";
-	//	//cout << elapse_time(read_csv, path) << endl;
-	//	trace_coord[i] = read_csv_any(path);
-	//	trace_time[i] = read_csv_any(patht);
-	//}
-
-
+void sorttest1() {
 	//printf("Sort Test");
 	//std::vector< std::vector<Point> > traces;
 	//for (int i = 0;i < 3;i++) traces.push_back(trace_coord[i]);
@@ -479,6 +474,21 @@ int wmain(int argc, TCHAR* argv[], TCHAR* env[]) {
 	//	printf("%.2f%%\n", coordlist.trace_sections[i].coord_sim * 100);
 	//}
 	//puts("");
+}
+
+void cmptest1() {
+	//vector<Point> trace_coord[4];
+	//vector<TPoint> trace_time[4];
+
+	//cout << cmp_coord("1.csv", "2.csv") << endl;
+}
+
+int wmain(int argc, TCHAR* argv[], TCHAR* env[]) {
+	//return_by_socket();
+	//paramop_return();
+	//get_all_csv();
+
+	cmptest1();
 
 	cout << "Ready" << endl;
 	bmpop.msg_loop();
