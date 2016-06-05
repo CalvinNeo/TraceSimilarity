@@ -23,10 +23,10 @@ using namespace std;
 //#define UNICODE
 
 vector<string> csvname;
-void do_req(Boost_Sock * sender, const char * data, size_t len);
-
-Boost_Sock bm(IP, REQUESTPORT, do_req, "Request Sock");
+//Boost_Sock bm(IP, REQUESTPORT, do_req, "Request Sock");
 Boost_Sock bmpop(IP, PARAMPORT, paramop_coord, "Param Sock");
+
+#define DATASET_ROOT "c:\\datasets\\"
 
 std::string ws2s(const std::wstring& ws)
 {
@@ -220,7 +220,7 @@ vector<TPoint> read_csv_any(wstring path) {
 	return vp;
 }
 //"../../case/origin"
-void get_all_csv(string fullpath = "/c/datasets/") {
+void get_all_csv(string fullpath = DATASET_ROOT) {
 	namespace fs = boost::filesystem;
 	fs::path full_path(fullpath, fs::native);
 	if (!fs::exists(fullpath)) {
@@ -409,7 +409,7 @@ string cmp_time(string tracename1, string tracename2) {
 	return res1;
 }
 
-void do_req(Boost_Sock * sender, const char * data, size_t len) {
+string do_req(const char * data, size_t len) {
 	//data[len] = '\0';
 	using namespace boost;
 	string req(data);
@@ -418,17 +418,13 @@ void do_req(Boost_Sock * sender, const char * data, size_t len) {
 	split(SplitVec, req, is_any_of("*"), token_compress_on);
 	if (SplitVec[1] == "") {
 		// list
-		ans = find_coord(SplitVec[0]);
+		ans = find_coord(DATASET_ROOT + SplitVec[0]);
 	}
 	else{
 		// cmp 2
-		ans = cmp_coord(SplitVec[0], SplitVec[1]);
+		ans = cmp_coord(DATASET_ROOT + SplitVec[0], DATASET_ROOT + SplitVec[1]);
 	}
-	//else {
-	//	printf("Invalid Call\n");
-	//	ans = "";
-	//}
-	sender->send_str(const_cast<const char *>(ans.c_str()), ans.size() + 1);
+	return ans;
 }
 
 int wmain(int argc, TCHAR* argv[], TCHAR* env[]) {
@@ -473,9 +469,10 @@ int wmain(int argc, TCHAR* argv[], TCHAR* env[]) {
 	//}
 	//puts("");
 
-	cout << "×¼±¸¾ÍÐ÷" << endl;
+	cout << "Ready" << endl;
 	bmpop.msg_loop();
-	bm.msg_loop();
+	std::wstring wstr(argv[0]);
+	cout << do_req("2.csv*3.csv", 0) << endl;
 
 	system("pause");
 	return 0;
