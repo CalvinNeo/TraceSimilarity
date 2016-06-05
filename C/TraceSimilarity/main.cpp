@@ -376,6 +376,10 @@ string cmp_coord(string tracename1, string tracename2) {
 	ss.clear();
 	ss << coord_simi.trace_sections[0].t2_end - 1;
 	ss >> tmp;
+	res1 += tmp + '*';
+	ss.clear();
+	ss << coord_simi.two_similarity;
+	ss >> tmp;
 	res1 += tmp;
 	return res1;
 }
@@ -404,6 +408,10 @@ string cmp_time(string tracename1, string tracename2) {
 	res1 += tmp + '!';
 	ss.clear();
 	ss << time_simi.trace_sections[0].t2_end - 1;
+	ss >> tmp;
+	res1 += tmp + '*';
+	ss.clear();
+	ss << time_simi.two_similarity;
 	ss >> tmp;
 	res1 += tmp;
 	return res1;
