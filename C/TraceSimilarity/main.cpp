@@ -193,6 +193,7 @@ vector<TPoint> read_csv_any(wstring path) {
 				}
 			}
 			else {
+				y = atof(string(cols, abuf - 1).c_str());
 				vp.push_back(TPoint(x, y, 0));
 			}
 			// renew rows and cols
