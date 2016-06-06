@@ -30,7 +30,8 @@ function doNameCheckAndCal()
 			NameList.push(name);
 		}
 	}
-	if (flag == 0) {
+	if (flag == 0) 
+	{
 		alert("没有选择文件！");
 	}else if(flag>2)
 	{
@@ -42,12 +43,12 @@ function doNameCheckAndCal()
 			param += NameList[i] + "*";
 		}
 		$.post('calAndtoC', {name : param },function(data, statu){
-			
 			if("success" == statu)
 			{
 				var aa=data.substring(16);
 				var bb=eval(aa);//string转成数组 和servlet定义一致
-				drawlineAndSetHTML(bb);
+				console.log(bb);
+				drawlineAndSetTable(bb);
 			}else
 			{
 				alert("Cal error");
@@ -66,7 +67,10 @@ function param(){
 	{
 		$.post('param', {name :  paramString },function(data, statu){
 			if("success" == statu){
-				alert(data+"！")
+				var bb=Array();
+				var bb=eval(data);
+				showParamResult(bb);				
+				
 			}else{
 				alert("param error");
 			}
@@ -74,7 +78,28 @@ function param(){
 	}
 
 }
-//获取点选的文件名并提交到sevlet param处理 画线
+//获取点选的文件名并提交到sevlet param处理
+
+function showParamResult(stringArr){
+	var stringarr = Array();
+	stringarr=stringArr;
+	var paraTitle=document.createElement("h4");	//创建表格标题	
+	paraTitle.innerText="参数优化结果：";//将h4标题设为相似度
+    container.appendChild(paraTitle);
+	var container=document.getElementById("table");//获取容器div的引用
+	var _table=document.createElement("table");
+	for(var i=0;i<stringarr.length;i++)
+    {
+		var line=stringarr[i];
+		var tr_1 = document.createElement("tr");
+		var td_1 = document.createElement("td");
+		td_1.innerText=line;
+		tr_1.appendChild(td_1);
+		_table.appendChild(tr_1);//将文件名写表格第一行
+		
+    }
+	container.appendChild(_table);
+}
 
 function getCheckName() {
 	// document.getElementsByName("checkbox");
@@ -135,6 +160,7 @@ function getCheckName() {
 }
 // 获取点选的文件名并提交到sevlet handle处理 画线
 
+
 //function changeHTML(StringID,Stringcontent)
 //{
 //	var obj;
@@ -172,7 +198,9 @@ function drawlineAndSetTable(arr)
 		 var StringalSim=alSim[0];
 		 var StringSim=StringalSim[0];//取出Sim数值
 	     var _h4Sim=document.createElement("h4");	//创建表格标题：相似度	
-	     _h4Sim.innerHTML=StringSim;//将h4标题设为相似度
+	     _h4Sim.innerText="该组相似度P:"+StringSim;//将h4标题设为相似度
+	     container.appendChild(_h4Sim);
+	     //console.log(_h4Sim.innerHTML);
 	     var _table=document.createElement("table");//创建表格对象
 	
 		for(var i=0;i<alFilePal.length-1;i++)//取出csv文件 遍历(除了最后一个 里面是相似度)
@@ -180,18 +208,27 @@ function drawlineAndSetTable(arr)
 			var alNameandPoints=Array();
 			alNameandPoints=alFilePal[i];//取出一个csv文件
 			var pointList=Array();
-			
-			var tr_1 = document.createElement("tr");
-			var td_1 = document.createElement("td");
-			var td_2 = document.createElement("td");
 			var stringAlFilePath=alNameandPoints[0];
 			var stringName=stringAlFilePath[0].substring(12);//干掉路径 保留文件名
-			td_1.innerHtml=stringName;
-			td_2.innerHtml="文件名：";
-			tr_1.appendChild(td_2);
+			//console.log(stringName);
+			
+			var trline = document.createElement("tr");
+			var tdline = document.createElement("td");
+			tdline.innerText="----------------";
+			trline.appendChild(tdline);
+			_table.appendChild(trline);
+			container.appendChild(_table);
+			
+			var tr_1 = document.createElement("tr");
+			//var td_2 = document.createElement("td");
+			//td_2.innerHtml="文件名：";
+			//tr_1.appendChild(td_2);
+			
+			var td_1 = document.createElement("td");
+			td_1.innerText="文件名："+stringName;
 			tr_1.appendChild(td_1);
 			_table.appendChild(tr_1);//将文件名写表格第一行
-			
+			container.appendChild(_table);
 			for(var j=1;j<alNameandPoints.length;j++)
 			{
 			   var arrpoint=alNameandPoints[j];
@@ -202,16 +239,18 @@ function drawlineAndSetTable(arr)
 			   
 			   var  X_Y="("+x+","+y+")";
 			   var tr = document.createElement("tr");
-			   var td2 = document.createElement("td")
+			   //var td2 = document.createElement("td")
 			   var td1 = document.createElement("td")
-			   td2.innerHtml="轨迹点"+j+":";
-			   td1.innerHtml=X_Y;
-			   tr.appendChild(td2);
+			   //td2.innerText=;
+			   td1.innerText="轨迹点"+j+":"+X_Y;
+			   console.log(X_Y);
+			   //tr.appendChild(td2);
 			   tr.appendChild(td1);//生成轨迹点表格
+			   _table.appendChild(tr);
 			}
 			var lineColor=color(colorFlag);
 			
-			_table.appendChild(tr);	//tr加入表格	
+			//_table.appendChild(tr);	//tr加入表格	
 			
 			var polyline = new BMap.Polyline(pointList, {strokeColor:lineColor, strokeWeight:4, strokeOpacity:2});   //创建折线
 			map.addOverlay(polyline);   //增加折线

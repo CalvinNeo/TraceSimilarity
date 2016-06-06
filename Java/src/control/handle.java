@@ -11,8 +11,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import model.CInterfaceExtra;
-import model.ParamInterfaceExtra;
 
 import model.NameAndPoints;
 import net.sf.json.JSONArray;

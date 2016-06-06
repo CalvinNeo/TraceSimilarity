@@ -1,8 +1,6 @@
 package model;
 
 import java.io.File;
-import model.CInterfaceExtra;
-import model.ParamInterfaceExtra;
 import java.util.ArrayList;
 
 public class ReadFilesName
@@ -12,8 +10,13 @@ public class ReadFilesName
 		  try { 
 		   File file = new File(path); 
 		   String[] filelist = file.list(); 
-		   for (int i = 0; i < filelist.length; i++) { 
-		    list.add(filelist[i]); 
+		   for (int i = 0; i < filelist.length; i++) {
+			if(filelist[i].contains(".exe"))
+			{}else 
+			{
+				list.add(filelist[i]); 
+			}
+		    
 		   } 
 		  } catch (Exception e) { 
 		   e.printStackTrace(); 

@@ -8,13 +8,12 @@ import java.io.Writer;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class ParamInterface
-{
-	public int port = 15778;
+ public class CInterface {
+	public int port = 15777;
 	public  int MAX_BUFFER = 8196;
 	public  Socket socket;
 	public ServerSocket server;
-	public ParamInterface(){
+	public CInterface(){
 		try {
 			server = new ServerSocket(port);
 		} catch (IOException e1) {

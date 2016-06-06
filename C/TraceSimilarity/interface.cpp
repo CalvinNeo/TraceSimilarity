@@ -13,7 +13,6 @@ using namespace std;
 
 boost::asio::io_service ioservice;
 
-
 void Sync_Sock::init() {
 	using namespace boost::asio;
 	try {
@@ -46,7 +45,7 @@ void Sync_Sock::msg_loop() {
 		boost::system::error_code error;
 		int bytes = sock.read_some(buffer(ReceiveBuffer), error);
 		if (error == boost::asio::error::eof || error == boost::asio::error::shut_down || error == boost::asio::error::connection_aborted || error == boost::asio::error::connection_reset) {
-			sock.close();
+			sock.close(); // close do not send fin
 			return; // Connection closed cleanly by peer.
 		}
 		if (this->handler == nullptr) {
@@ -54,7 +53,8 @@ void Sync_Sock::msg_loop() {
 			printf("%s\n", ReceiveBuffer);
 		}
 		else {
-			this->handler(this, ReceiveBuffer, bytes);
+			if (this->handler(this, ReceiveBuffer, bytes) == true)
+				return;
 		}
 		//char IPdotdec[20];inet_ntop(AF_INET, 0, IPdotdec, 16); printf("Message from %s:%s\n", inet_ntoa(clientAddr.sin_addr), ReceiveBuffer); //deprecated
 	}

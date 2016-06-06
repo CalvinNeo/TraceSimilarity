@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
-import model.CInterfaceExtra;
-import model.ParamInterfaceExtra;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -13,8 +11,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-
 import model.CInterfaceExtra;
+import model.Cinteractive;
 import model.NameAndPoints;
 import net.sf.json.JSONArray;
 
@@ -48,10 +46,21 @@ public class calAndtoC extends HttpServlet {
 		// TODO Auto-generated method stub
 		doGet(request, response);
 		String nameListString=request.getParameter("name");
-		char[] nameListChar=nameListString.toCharArray();
-		System.out.println("dddd");
-		String fromC= CInterfaceExtra.ci.Request(nameListChar);
-		String[] strs = fromC.split("\\:");
+		//char[] nameListChar=nameListString.toCharArray();
+
+		Cinteractive cia=new Cinteractive();
+		String returnparam="";
+		try
+		{
+			returnparam = cia.interactiveC(nameListString);
+			System.out.println(returnparam);
+		} catch (Exception e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		String[] strs = returnparam.split("\\:");
 		
 		
 		List<ArrayList<ArrayList<String[]>>> all=new ArrayList<ArrayList<ArrayList<String[]>>>();

@@ -246,7 +246,8 @@ void get_all_csv(string fullpath = DATASET_ROOT) {
 }
 
 void clean(vector<Point> &trace) {
-	trace.erase(trace.begin());
+	if(trace.size() > 0)
+		trace.erase(trace.begin());
 }
 
 string find_coord(string tracename) {
@@ -443,7 +444,7 @@ string do_req(const char * data, size_t len) {
 	vector<string> SplitVec;
 	string ans;
 	split(SplitVec, req, is_any_of("*"), token_compress_on);
-	if (SplitVec[1] == "") {
+	if (SplitVec.size() <= 1 || SplitVec[1] == "") {
 		// list
 		ans = find_coord(SplitVec[0]);
 	}
@@ -496,8 +497,8 @@ int wmain(int argc, TCHAR* argv[], TCHAR* env[]) {
 		wstr = std::wstring(argv[1]); // ws2s(wstr).c_str()
 		cout << do_req(ws2s(wstr).c_str(), 0) << endl;
 	}
-	else if(argc == 999){
-		wstr = std::wstring(L"2.csv*3.csv"); // ws2s(wstr).c_str()
+	else if(argc == 1){
+		wstr = std::wstring(L"2.csv"); // ws2s(wstr).c_str()
 		cout << do_req(ws2s(wstr).c_str(), 0) << endl;
 	}
 	else {

@@ -15,11 +15,11 @@ using namespace std;
 //#define UNICODE
 
 using namespace boost::asio;
-void msgloop(Boost_Sock * , const char * , size_t );
+bool msgloop(Boost_Sock * , const char * , size_t );
 
 Boost_Server bs(IP, PARAMPORT, msgloop, "Param Server ");
 
-void msgloop(Boost_Sock * sender, const char * data, size_t len) {
+bool msgloop(Boost_Sock * sender, const char * data, size_t len) {
 	double arg = 1.0;
 	for (int i = 0; i < 7; i++) {
 		arg -= rand() / double(RAND_MAX) / 10.0;
@@ -27,7 +27,7 @@ void msgloop(Boost_Sock * sender, const char * data, size_t len) {
 		// Wait until message from TraceSim received
 		Sleep(350 * rand() / double(RAND_MAX));
 	}
-	for (int i = 0; i < 3; i++) {
+	for (int i = 7; i < 10; i++) {
 		cout << "iter " << i << ": arg=" << arg << endl;
 		// Wait until message from TraceSim received
 		Sleep(100 * rand() / double(RAND_MAX));
@@ -37,6 +37,7 @@ void msgloop(Boost_Sock * sender, const char * data, size_t len) {
 		paramop_msg pm;
 		strcpy(pm.op, "end"); 
 		bs.send_str(reinterpret_cast<const char *> (&pm), sizeof(pm) + 1);
+		return true;
 	}
 }
 //std::function<void(const boost::system::error_code &)>
@@ -63,11 +64,11 @@ int wmain(int argc, TCHAR* argv[], TCHAR* env[]) {
 	TCHAR cmdline[] = TEXT("TraceSimilarity.exe a 1.0 1.0");
 	cout << "Listening" << endl;
 	bs.async_init(accept_handler);
-	//bs.init();
-	//BOOL bRet = CreateProcess(NULL, cmdline, NULL, NULL, FALSE, CREATE_NEW_CONSOLE, NULL, NULL, &si, &pi);
-	//if (bRet) {
-	//	WaitForSingleObject(pi.hProcess, INFINITE);
-	//}
+	
+	BOOL bRet = CreateProcess(NULL, cmdline, NULL, NULL, FALSE, CREATE_NEW_CONSOLE, NULL, NULL, &si, &pi);
+	if (bRet) {
+		WaitForSingleObject(pi.hProcess, INFINITE);
+	}
 	cout << "Connection Closed" << endl;
 	//system("pause");
 	if (bs.ios_thread.joinable())

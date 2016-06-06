@@ -14,7 +14,7 @@
     width: 260px;
     height:760px;
     float:left;
-    overflow-x:hidden;
+    overflow-x:auto;
     overflow-y:auto;
 }
 
@@ -126,16 +126,12 @@
     overflow:auto;
 }
 
-.file1{
-    position: absolute;
-    float:left;
-	margin-top: 555px;
-    margin-left: 20px;
-}
 
-.file2{
+.tableshowresults{
+	z-index: 2001;
     position: absolute;
     float:left;
-	margin-top: 635px;
+	margin-top: 640px;
     margin-left: 20px;
+	
 }

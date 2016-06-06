@@ -9,7 +9,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import model.CInterfaceExtra;
+import model.Cinteractive;
+import model.ParamInteractive;
 import model.ParamInterfaceExtra;
 import net.sf.json.JSONArray;
 
@@ -25,7 +26,6 @@ public class param extends HttpServlet {
      */
     public param() {
         super();
-        ParamInterfaceExtra.pi.dummy();
         // TODO Auto-generated constructor stub
     }
 
@@ -44,11 +44,20 @@ public class param extends HttpServlet {
 		// TODO Auto-generated method stub
 		doGet(request, response);
 		String paramString=request.getParameter("name");
-		char[] paramChar=paramString.toCharArray();
+		//char[] paramChar=paramString.toCharArray();
 		
-		String returnparam=ParamInterfaceExtra.pi.Request(paramChar);
-		
-		JSONArray jsonArray2 = JSONArray.fromObject(returnparam);  
+		ParamInteractive pic=new ParamInteractive();
+		String returnparam="";
+		try
+		{
+			returnparam = pic.interactiveC(paramString);
+		} catch (Exception e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		String[] strs = returnparam.split("\\?");
+		JSONArray jsonArray2 = JSONArray.fromObject(strs);  
 		PrintWriter out= response.getWriter();
 		System.out.println(jsonArray2.toString());
         //把java数组转化成转化成json对象   

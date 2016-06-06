@@ -19,7 +19,7 @@ struct paramop_msg {
 	}
 };
 
-typedef std::function<void(struct Sync_Sock *, char *, size_t)> MSGHANDLER;
+typedef std::function<bool(struct Sync_Sock *, char *, size_t)> MSGHANDLER;
 typedef std::function<void(struct Async_Sock *, char *, size_t)> AMSGHANDLER;
 extern boost::asio::io_service ioservice;
 

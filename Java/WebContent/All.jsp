@@ -80,7 +80,7 @@ body, html,#allmap {width: 100%;height: 100%;overflow: hidden;margin:0;font-fami
 <div class="tabletitle" >
   <h3>计算结果显示：</h3>
 </div>
-<div id="table">  
+<div id="table"  class="tableshowresults">  
 </div>
 
 

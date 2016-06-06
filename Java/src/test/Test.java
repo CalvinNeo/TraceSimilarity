@@ -2,6 +2,7 @@ package test;
 
 import java.util.ArrayList;
 
+import model.Cinteractive;
 import model.NameAndPoints;
 import model.ReadFilesName;
 
@@ -29,12 +30,24 @@ public class Test
 //			}
 //		}
 		
-		String s="jiejfeh.csv&3!7*yuriwe.csv&8!12*相似度值";
-		String[] strs = s.split("\\:");
-		for(int i=0;i<strs.length;i++)
+//		String s="jiejfeh.csv&3!7*yuriwe.csv&8!12*相似度值";
+//		String[] strs = s.split("\\:");
+//		for(int i=0;i<strs.length;i++)
+//		{
+//			System.out.println(strs[i]);
+//			System.out.println(strs.length);
+//		}
+		
+		Cinteractive ci=new Cinteractive();
+		String param="2.csv*3.csv";
+		try
 		{
-			System.out.println(strs[i]);
-			System.out.println(strs.length);
+			String ss=ci.interactiveC(param);
+			System.out.println(ss);
+		} catch (Exception e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 
