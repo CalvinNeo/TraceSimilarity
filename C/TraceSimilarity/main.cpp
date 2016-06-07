@@ -498,7 +498,7 @@ int wmain(int argc, TCHAR* argv[], TCHAR* env[]) {
 		cout << do_req(ws2s(wstr).c_str(), 0) << endl;
 	}
 	else if(argc == 1){
-		wstr = std::wstring(L"2.csv"); // ws2s(wstr).c_str()
+		wstr = std::wstring(L"2t.csv*3t.csv"); // ws2s(wstr).c_str()
 		cout << do_req(ws2s(wstr).c_str(), 0) << endl;
 	}
 	else {
