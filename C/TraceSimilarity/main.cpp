@@ -446,15 +446,35 @@ string do_req(const char * data, size_t len) {
 	string req(data);
 	vector<string> SplitVec;
 	string ans;
+	if (req[req.size() - 1] == '*')
+		req = req.substr(0, req.size() - 1);
 	split(SplitVec, req, is_any_of("*"), token_compress_on);
-	if (SplitVec.size() <= 1 || SplitVec[1] == "") {
+	// old style
+
+	//if (SplitVec.size() <= 1 || SplitVec[1] == "") {
+	//	// list
+	//	ans = find_coord(SplitVec[0]);
+	//}
+	//else{
+	//	// cmp 2
+	//	ans = cmp_coord(SplitVec[0], SplitVec[1]);
+	//}	
+	
+	if (SplitVec.size() == 2 || SplitVec[1] == "") {
 		// list
-		ans = find_coord(SplitVec[0]);
+		if (SplitVec[0] == "c")
+			ans = find_coord(SplitVec[1]);
+		else
+			ans = find_time(SplitVec[1]);
 	}
-	else{
+	else{//==4
 		// cmp 2
-		ans = cmp_coord(SplitVec[0], SplitVec[1]);
+		if(SplitVec[0] == "c")
+			ans = cmp_coord(SplitVec[1], SplitVec[3]);
+		else
+			ans = cmp_time(SplitVec[1], SplitVec[3]);
 	}
+
 	return ans;
 }
 
@@ -501,7 +521,8 @@ int wmain(int argc, TCHAR* argv[], TCHAR* env[]) {
 		cout << do_req(ws2s(wstr).c_str(), 0) << endl;
 	}
 	else if(argc == 1){
-		wstr = std::wstring(L"2t.csv*3t.csv"); // ws2s(wstr).c_str()
+		wstr = std::wstring(L"t*2t.csv*c*3t.csv"); // ws2s(wstr).c_str()
+		wstr = std::wstring(L"t*2t.csv"); // ws2s(wstr).c_str()
 		cout << do_req(ws2s(wstr).c_str(), 0) << endl;
 	}
 	else {
