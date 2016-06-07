@@ -257,9 +257,11 @@ string find_coord(string tracename) {
 	if (csvname.empty()) {
 		get_all_csv();
 	}
+	int tpos = 0;
 	for (int i = 0; i < csvname.size(); i++) {
 		if (tracename == csvname[i]) {
 			trace = read_csv_any(s2ws(DATASET_ROOT + csvname[i]));
+			tpos = i;
 		}
 		else {
 			tofind.push_back(read_csv_any(s2ws(DATASET_ROOT + csvname[i])));
@@ -289,7 +291,8 @@ string find_coord(string tracename) {
 			ss.clear();
 			ss << coord_list.trace_sections[j].t1_end - 1;
 			ss >> tmp;
-			res1 += tmp + '*' + csvname[k] + '&';
+			if (k < tpos) res1 += tmp + '*' + csvname[k] + '&';
+			else res1 += tmp + '*' + csvname[k + 1] + '&';
 			ss.clear();
 			ss << coord_list.trace_sections[j].t2_begin;
 			ss >> tmp;
@@ -311,15 +314,14 @@ string find_time(string tracename) {
 	using namespace std;
 	vector<vector<TPoint>> tofind;
 	vector<TPoint> trace;
-	if (csvname.empty())
-	{
+	if (csvname.empty()) {
 		get_all_csv();
 	}
-	for (int i = 0; i < csvname.size(); i++)
-	{
-		if (tracename == csvname[i])
-		{
+	int tpos = 0;
+	for (int i = 0; i < csvname.size(); i++) {
+		if (tracename == csvname[i]) {
 			trace = read_csv_any(s2ws(DATASET_ROOT + csvname[i]));
+			tpos = i;
 		}
 		else {
 			tofind.push_back(read_csv_any(s2ws(DATASET_ROOT + csvname[i])));
@@ -349,7 +351,8 @@ string find_time(string tracename) {
 			ss.clear();
 			ss << time_list.trace_sections[j].t1_end - 1;
 			ss >> tmp;
-			res1 += tmp + '*' + csvname[k] + '&';
+			if (k < tpos) res1 += tmp + '*' + csvname[k] + '&';
+			else res1 += tmp + '*' + csvname[k + 1] + '&';
 			ss.clear();
 			ss << time_list.trace_sections[j].t2_begin;
 			ss >> tmp;
@@ -481,7 +484,7 @@ void cmptest1() {
 	//vector<Point> trace_coord[4];
 	//vector<TPoint> trace_time[4];
 
-	//cout << cmp_coord("1.csv", "2.csv") << endl;
+	cout << cmp_coord("1.csv", "2.csv") << endl;
 }
 
 int wmain(int argc, TCHAR* argv[], TCHAR* env[]) {
@@ -489,7 +492,7 @@ int wmain(int argc, TCHAR* argv[], TCHAR* env[]) {
 	//paramop_return();
 	//get_all_csv();
 
-	cmptest1();
+	//cmptest1();
 
 	cout << "Ready" << endl;
 	std::wstring wstr;
