@@ -64,7 +64,7 @@ int wmain(int argc, TCHAR* argv[], TCHAR* env[]) {
 	TCHAR cmdline[] = TEXT("TraceSimilarity.exe a 1.0 1.0");
 	cout << "Listening" << endl;
 	bs.async_init(accept_handler);
-	
+	//printf("fuckfuckfuckfuck\n");
 	BOOL bRet = CreateProcess(NULL, cmdline, NULL, NULL, FALSE, CREATE_NEW_CONSOLE, NULL, NULL, &si, &pi);
 	if (bRet) {
 		WaitForSingleObject(pi.hProcess, INFINITE);
