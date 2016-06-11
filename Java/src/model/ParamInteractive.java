@@ -12,13 +12,18 @@ public class ParamInteractive
 	
 		Process process;
 		process = Runtime.getRuntime().exec("C:\\datasets\\ParamOptimizer.exe "+param+"");
-		BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+		
+		InputStreamReader isr=new InputStreamReader(process.getInputStream());
+		BufferedReader bufferedReader = new BufferedReader(isr);
+		
 		while((s=bufferedReader.readLine()) != null)
 		{
+			//System.out.println(".........");
 		   iwant=iwant+"?"+s;//?来分割每一行
 		}
 		//process.waitFor();
-
+		bufferedReader.close();
+		isr.close();
 		return iwant;
 	 }
 }

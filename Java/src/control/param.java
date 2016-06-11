@@ -45,21 +45,23 @@ public class param extends HttpServlet {
 		doGet(request, response);
 		String paramString=request.getParameter("name");
 		//char[] paramChar=paramString.toCharArray();
-		
+		System.out.println(paramString);
 		ParamInteractive pic=new ParamInteractive();
 		String returnparam="";
 		try
 		{
 			returnparam = pic.interactiveC(paramString);
+			//System.out.println("+++++"+returnparam);
 		} catch (Exception e)
 		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 		String[] strs = returnparam.split("\\?");
 		JSONArray jsonArray2 = JSONArray.fromObject(strs);  
 		PrintWriter out= response.getWriter();
-		System.out.println(jsonArray2.toString());
+		//System.out.println(jsonArray2.toString());
         //把java数组转化成转化成json对象   
 		out.print(jsonArray2.toString());
 		out.flush();

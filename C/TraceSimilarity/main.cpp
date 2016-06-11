@@ -176,6 +176,7 @@ vector<TPoint> read_csv_any(wstring path) {
 	int state = 0;
 	for (DWORD offset = 0; offset < dwFileSize; offset++)
 	{
+		bool hitted = false;
 		if (*abuf == '\r') {
 
 		}
@@ -184,17 +185,21 @@ vector<TPoint> read_csv_any(wstring path) {
 			{
 				if (beheaded) {
 					// read time
-					tm tmtime; tmtime.tm_sec = 0; tmtime.tm_isdst = -1;
-					sscanf(cols, "%04d/%02d/%02d %02d:%02d\r", &tmtime.tm_year, &tmtime.tm_mon, &tmtime.tm_mday, &tmtime.tm_hour, &tmtime.tm_min);
-					tmtime.tm_year -= 1900;
-					t = mktime(&tmtime);
-					// add point
-					vp.push_back(TPoint(x, y, t));
+					if (hitted) {
+						tm tmtime; tmtime.tm_sec = 0; tmtime.tm_isdst = -1;
+						sscanf(cols, "%04d/%02d/%02d %02d:%02d\r", &tmtime.tm_year, &tmtime.tm_mon, &tmtime.tm_mday, &tmtime.tm_hour, &tmtime.tm_min);
+						tmtime.tm_year -= 1900;
+						t = mktime(&tmtime);
+						// add point
+						vp.push_back(TPoint(x, y, t));
+					}
 				}
 			}
 			else {
-				y = atof(string(cols, abuf - 1).c_str());
-				vp.push_back(TPoint(x, y, 0));
+				if (hitted) {
+					y = atof(string(cols, abuf - 1).c_str());
+					vp.push_back(TPoint(x, y, 0));
+				}
 			}
 			// renew rows and cols
 			rows = abuf + 1;
@@ -205,11 +210,17 @@ vector<TPoint> read_csv_any(wstring path) {
 		}
 		else if (beheaded && *abuf == ',') {
 			if (state == 0)
+			{
+				hitted = true;
 				// read x
 				x = atof(string(cols, abuf).c_str());
+			}
 			else if (state == 1)
+			{
+				hitted = true;
 				// read y
 				y = atof(string(cols, abuf).c_str());
+			}
 			// renew cols
 			cols = abuf + 1;
 			// renew state
@@ -522,7 +533,7 @@ int wmain(int argc, TCHAR* argv[], TCHAR* env[]) {
 	}
 	else if(argc == 1){
 		wstr = std::wstring(L"t*2t.csv*c*3t.csv"); // ws2s(wstr).c_str()
-		wstr = std::wstring(L"t*2t.csv"); // ws2s(wstr).c_str()
+		wstr = std::wstring(L"c*0.csv"); // ws2s(wstr).c_str()
 		cout << do_req(ws2s(wstr).c_str(), 0) << endl;
 	}
 	else {

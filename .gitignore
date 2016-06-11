@@ -41,5 +41,6 @@ C/.vs/
 Java/.classpath
 Java/.project
 Java/build
+Python/
 *.prefs
 *.class

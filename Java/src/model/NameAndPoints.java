@@ -27,7 +27,8 @@ public class NameAndPoints
 		    String[] fileNametoAl = new String[1];
 		    fileNametoAl[0]=fileName;
 		    altwoORthree.add(fileNametoAl);//将文件路径写入进string数组 放在al第一个位置
-            BufferedReader reader = new BufferedReader(new FileReader(fileName));
+		    FileReader fr=new FileReader(fileName);
+            BufferedReader reader = new BufferedReader(fr);
             //reader.readLine();//第一行信息，为标题信息，不用，如果需要，注释掉
             if (startLine <= 1 || endLine > getTotalLines(fileName) || endLine<startLine) {  
                 System.out.println("文件开始和结束行数有问题");  
@@ -42,7 +43,9 @@ public class NameAndPoints
                 altwoORthree.add(item);
             	}
             	lineFlag++;
-            } 
+            }
+            reader.close();
+            fr.close();
         } catch (Exception e) { 
             e.printStackTrace(); 
         }

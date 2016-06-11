@@ -78,7 +78,7 @@ TimeSimilarityList TimeSort(std::vector<TPoint> & t1, std::vector< std::vector<T
 		tl.similarities.push_back(make_pair(i, ts.two_similarity));
 		tl.trace_sections.push_back(TraceSection(i, ts.trace_sections[i]));
 	}
-	sort(tl.similarities.begin(), tl.similarities.end(), [](const pair<int, double> & x, const pair<int, double> & y) -> bool {return x.second < y.second; });
-	sort(tl.trace_sections.begin(), tl.trace_sections.end(), [](const TraceSection & x, const TraceSection & y) -> bool {return x.time_sim < y.time_sim; });
+	sort(tl.similarities.begin(), tl.similarities.end(), [](const pair<int, double> & x, const pair<int, double> & y) -> bool {return x.second > y.second; });
+	sort(tl.trace_sections.begin(), tl.trace_sections.end(), [](const TraceSection & x, const TraceSection & y) -> bool {return x.time_sim > y.time_sim; });
 	return tl;
 }

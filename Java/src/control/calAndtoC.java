@@ -45,6 +45,7 @@ public class calAndtoC extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		doGet(request, response);
+		//response.setContentType("text/xml;charset=utf-8");
 		String nameListString=request.getParameter("name");
 		//char[] nameListChar=nameListString.toCharArray();
 
@@ -72,6 +73,7 @@ public class calAndtoC extends HttpServlet {
 			{
 				String nameAndNum[]=strSingleFileAndSim[j].split("\\&");
 				String filePath="C:/datasets/"+nameAndNum[0];
+				//System.out.println(filePath);
 				String file2Num=nameAndNum[1];
 				String Num2[]=file2Num.split("\\!");
 				int startLine=Integer.parseInt(Num2[0])+2;
@@ -92,13 +94,14 @@ public class calAndtoC extends HttpServlet {
 		}
 		
 		JSONArray jsonArray2 = JSONArray.fromObject(all);  
+		//response.setContentType("text/html;charset=utf-8");  
 		PrintWriter out= response.getWriter();
-		System.out.println(jsonArray2.toString());
+		//System.out.println(jsonArray2.toString());
         //把java数组转化成转化成json对象   
 		out.print(jsonArray2.toString());
 		out.flush();
 		out.close();
-        System.out.println("finish");
+        System.out.println("CaltoC servlet  finish");
 	}
 
 }

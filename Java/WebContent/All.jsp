@@ -72,7 +72,7 @@ body, html,#allmap {width: 100%;height: 100%;overflow: hidden;margin:0;font-fami
 </div>
 
 <div class="textline">
-    <input type="text" name="textString" class="textstring"/>
+    <input type="text" name="textString" class="textstring" value="a,1.0 1.0"/>
     <button onclick="param()" class="button button-primary button-box button-small gobutton">GO</button>
 </div>
 

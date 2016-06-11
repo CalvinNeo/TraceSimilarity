@@ -1,23 +1,3 @@
-function readCSV(name) {
-	var csv = d3.dsv(',', 'text/csv;charset=gb2312');
-	csv(name, function(error, csvdata) {
-		if (error) {
-			console.log(error);
-		} else {
-			console.log(csvdata);
-			var data = '';
-			$.each(csvdata, function(index, ele) {
-				data += '(';
-				$.each(ele, function(key, val) {
-					data += key + ':' + val + ' ';
-				})
-				data += ")<br>";
-			});
-			$("#box").html(data);
-		}
-	});
-}
-//没有使用
 
 function doNameCheckAndCal()
 {
@@ -40,11 +20,19 @@ function doNameCheckAndCal()
 	{
 		var param = "";
 		for (var i = 0; i < NameList.length; i++) {
-			param += NameList[i] + "*";
+			if(NameList[i].indexOf("-no")==-1)
+				{
+				param += "t*"+NameList[i] + "*";
+				}
+			else
+				{
+				param += "c*"+NameList[i] + "*";
+				}
 		}
 		$.post('calAndtoC', {name : param },function(data, statu){
 			if("success" == statu)
 			{
+				console.log(data);
 				var aa=data.substring(16);
 				var bb=eval(aa);//string转成数组 和servlet定义一致
 				console.log(bb);
@@ -59,16 +47,19 @@ function doNameCheckAndCal()
 // 获取点选的文件名并提交到sevlet calAndtoC处理
 
 function param(){
-	var paramString=document.getElementsByName("textString").value;
+	var paramString=document.getElementsByName("textString")[0].value;
+	//alert(paramString);
 	if(paramString==null)
 	{
 		alert("内容为空！请输入！")
 	}else
 	{
-		$.post('param', {name :  paramString },function(data, statu){
+		//alert(paramString);
+		$.post('param', {name : paramString },function(data, statu){
 			if("success" == statu){
 				var bb=Array();
-				var bb=eval(data);
+				//var bb=eval(data);
+				//console.log(bb);
 				showParamResult(bb);				
 				
 			}else{
@@ -83,10 +74,11 @@ function param(){
 function showParamResult(stringArr){
 	var stringarr = Array();
 	stringarr=stringArr;
+	var container=document.getElementById("table");//获取容器div的引用
 	var paraTitle=document.createElement("h4");	//创建表格标题	
 	paraTitle.innerText="参数优化结果：";//将h4标题设为相似度
     container.appendChild(paraTitle);
-	var container=document.getElementById("table");//获取容器div的引用
+	
 	var _table=document.createElement("table");
 	for(var i=0;i<stringarr.length;i++)
     {
@@ -161,13 +153,6 @@ function getCheckName() {
 // 获取点选的文件名并提交到sevlet handle处理 画线
 
 
-//function changeHTML(StringID,Stringcontent)
-//{
-//	var obj;
-//	obj=document.getElementById(StringID);
-//	obj.innerHTML=Stringcontent;
-//}
-
 function drawlineAndSetTable(arr)
 {
 	var map=initializeMap();
@@ -185,20 +170,20 @@ function drawlineAndSetTable(arr)
 	map.centerAndZoom(new BMap.Point(centreX, centreY), 12);
 	
 	var container=document.getElementById("table");//获取容器div的引用
-	
-	
+	container.innerHTML="";
+	var colorFlag=0;
 	for(k=0;k<all.length;k++)
 	{
 		 var alFilePal=Array();
 		 alFilePal=all[k];
-		 var colorFlag=0;
+		 
 		
 		 var alFilePalSim=Array();
 		 alSim=alFilePal[alFilePal.length-1];
 		 var StringalSim=alSim[0];
 		 var StringSim=StringalSim[0];//取出Sim数值
 	     var _h4Sim=document.createElement("h4");	//创建表格标题：相似度	
-	     _h4Sim.innerText="该组相似度P:"+StringSim;//将h4标题设为相似度
+	     _h4Sim.innerText="该组相似度:"+StringSim;//将h4标题设为相似度
 	     container.appendChild(_h4Sim);
 	     //console.log(_h4Sim.innerHTML);
 	     var _table=document.createElement("table");//创建表格对象
@@ -240,20 +225,22 @@ function drawlineAndSetTable(arr)
 			   var  X_Y="("+x+","+y+")";
 			   var tr = document.createElement("tr");
 			   //var td2 = document.createElement("td")
-			   var td1 = document.createElement("td")
+			   var td1 = document.createElement("td");
 			   //td2.innerText=;
 			   td1.innerText="轨迹点"+j+":"+X_Y;
-			   console.log(X_Y);
+			   //console.log(X_Y);
 			   //tr.appendChild(td2);
 			   tr.appendChild(td1);//生成轨迹点表格
 			   _table.appendChild(tr);
 			}
 			var lineColor=color(colorFlag);
-			
+			//alert(lineColor);
 			//_table.appendChild(tr);	//tr加入表格	
 			
 			var polyline = new BMap.Polyline(pointList, {strokeColor:lineColor, strokeWeight:4, strokeOpacity:2});   //创建折线
-			map.addOverlay(polyline);   //增加折线
+			map.addOverlay(polyline);   //增加折线\
+			
+			
 		}
 		colorFlag++;//一对文件路径 使用相同颜色
 		
