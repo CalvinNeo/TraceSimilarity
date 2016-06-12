@@ -11,8 +11,7 @@ public class ReadFilesName
 		   File file = new File(path); 
 		   String[] filelist = file.list(); 
 		   for (int i = 0; i < filelist.length; i++) {
-			if(filelist[i].contains(".exe"))
-			{}else 
+			if(filelist[i].contains(".csv"))
 			{
 				list.add(filelist[i]); 
 			}

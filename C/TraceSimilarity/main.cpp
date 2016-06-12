@@ -176,7 +176,7 @@ vector<TPoint> read_csv_any(wstring path) {
 	int state = 0;
 	for (DWORD offset = 0; offset < dwFileSize; offset++)
 	{
-		bool hitted = false;
+		bool hitted = true;
 		if (*abuf == '\r') {
 
 		}
@@ -383,7 +383,8 @@ string find_time(string tracename) {
 
 string cmp_coord(string tracename1, string tracename2) {
 	using namespace std;
-	vector<Point> trace1, trace2;
+	vector<Point> trace1;
+	vector<Point> trace2;
 	trace1 = read_csv_any(s2ws(DATASET_ROOT + tracename1));
 	trace2 = read_csv_any(s2ws(DATASET_ROOT + tracename2));
 	clean(trace1);
@@ -533,7 +534,7 @@ int wmain(int argc, TCHAR* argv[], TCHAR* env[]) {
 	}
 	else if(argc == 1){
 		wstr = std::wstring(L"t*2t.csv*c*3t.csv"); // ws2s(wstr).c_str()
-		wstr = std::wstring(L"c*0.csv"); // ws2s(wstr).c_str()
+		wstr = std::wstring(L"c*0.csv*c*1.csv"); // ws2s(wstr).c_str()
 		cout << do_req(ws2s(wstr).c_str(), 0) << endl;
 	}
 	else {
