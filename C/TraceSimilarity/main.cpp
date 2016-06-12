@@ -390,6 +390,9 @@ string cmp_coord(string tracename1, string tracename2) {
 	clean(trace1);
 	clean(trace2);
 	CoordSimilarity coord_simi = CoordCompare(trace1, trace2);
+	if (coord_simi.trace_sections.size() == 0) {
+		return tracename1 + "&0!0*" + tracename2 + "&0!0*NoSuchSection";
+	}
 	string res1 = tracename1;
 	res1 += '&';
 	string tmp;
@@ -425,6 +428,9 @@ string cmp_time(string tracename1, string tracename2) {
 	clean(trace1);
 	clean(trace2);
 	TimeSimilarity time_simi = TimeCompare(trace1, trace2);
+	if (time_simi.trace_sections.size() == 0) {
+		return tracename1 + "&0!0*" + tracename2 + "&0!0*NoSuchSection";
+	}
 	string res1 = tracename1;
 	res1 += '&';
 	string tmp;

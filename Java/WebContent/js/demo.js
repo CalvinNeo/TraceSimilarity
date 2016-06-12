@@ -10,35 +10,28 @@ function doNameCheckAndCal()
 			NameList.push(name);
 		}
 	}
-	if (flag == 0) 
-	{
+	if (flag == 0) {
 		alert("没有选择文件！");
-	}else if(flag>2)
-	{
+	} else if (flag > 2) {
 		alert("文件数超过2！不符合题意！");
-	}else
-	{
+	} else {
 		var param = "";
 		for (var i = 0; i < NameList.length; i++) {
-			if(NameList[i].indexOf("-no")==-1)
-				{
-				param += "t*"+NameList[i] + "*";
-				}
-			else
-				{
-				param += "c*"+NameList[i] + "*";
-				}
+			if (NameList[i].indexOf("-no") == -1) {
+				param += "t*" + NameList[i] + "*";
+			} else {
+				param += "c*" + NameList[i] + "*";
+			}
 		}
 		$.post('calAndtoC', {name : param },function(data, statu){
-			if("success" == statu)
-			{
+			if ("success" == statu) {
 				console.log(data);
-				var aa=data.substring(16);
-				var bb=eval(aa);//string转成数组 和servlet定义一致
+				var aa = data.substring(16);
+				console.log(aa);
+				var bb = eval(aa);// string转成数组 和servlet定义一致
 				console.log(bb);
 				drawlineAndSetTable(bb);
-			}else
-			{
+			} else {
 				alert("Cal error");
 			}
 		});
@@ -49,20 +42,18 @@ function doNameCheckAndCal()
 function param(){
 	var paramString=document.getElementsByName("textString")[0].value;
 	//alert(paramString);
-	if(paramString==null)
-	{
+	if (paramString == null) {
 		alert("内容为空！请输入！")
-	}else
-	{
+	} else {
 		//alert(paramString);
 		$.post('param', {name : paramString },function(data, statu){
-			if("success" == statu){
-				var bb=Array();
-				//var bb=eval(data);
-				//console.log(bb);
-				showParamResult(bb);				
-				
-			}else{
+			if ("success" == statu) {
+				var bb = Array();
+				// var bb=eval(data);
+				// console.log(bb);
+				showParamResult(bb);
+
+			} else {
 				alert("param error");
 			}
 		});
@@ -172,19 +163,17 @@ function drawlineAndSetTable(arr)
 	var container=document.getElementById("table");//获取容器div的引用
 	container.innerHTML="";
 	var colorFlag=0;
-	for(k=0;k<all.length;k++)
-	{
-		 var alFilePal=Array();
-		 alFilePal=all[k];
-		 
-		
-		 var alFilePalSim=Array();
-		 alSim=alFilePal[alFilePal.length-1];
-		 var StringalSim=alSim[0];
-		 var StringSim=StringalSim[0];//取出Sim数值
-	     var _h4Sim=document.createElement("h4");	//创建表格标题：相似度	
-	     _h4Sim.innerText="该组相似度:"+StringSim;//将h4标题设为相似度
-	     container.appendChild(_h4Sim);
+	for (k = 0; k < all.length; k++) {
+		var alFilePal = Array();
+		alFilePal = all[k];
+
+		var alFilePalSim = Array();
+		alSim = alFilePal[alFilePal.length - 1];
+		var StringalSim = alSim[0];
+		var StringSim = StringalSim[0];// 取出Sim数值
+		var _h4Sim = document.createElement("h4"); // 创建表格标题：相似度
+		_h4Sim.innerText = "该组相似度:" + StringSim;// 将h4标题设为相似度
+		container.appendChild(_h4Sim);
 	     //console.log(_h4Sim.innerHTML);
 	     var _table=document.createElement("table");//创建表格对象
 	
@@ -214,6 +203,7 @@ function drawlineAndSetTable(arr)
 			tr_1.appendChild(td_1);
 			_table.appendChild(tr_1);//将文件名写表格第一行
 			container.appendChild(_table);
+			if (StringSim=="NoSuchSection") continue;
 			for(var j=1;j<alNameandPoints.length;j++)
 			{
 			   var arrpoint=alNameandPoints[j];
@@ -338,16 +328,18 @@ function initialize() {
 }
 //创建南京为中心的map
 
-function selectAll(){
+function selectAll() {
 	var a = document.getElementsByName("checkbox");
-	for(var i = 0;i<a.length;i++){
-	if(a[i].type == "checkbox") a[i].checked = true;
+	for (var i = 0; i < a.length; i++) {
+		if (a[i].type == "checkbox")
+			a[i].checked = true;
 	}
-	}
+}
 
-function unselectAll(){
+function unselectAll() {
 	var a = document.getElementsByName("checkbox");
-	for(var i = 0;i<a.length;i++){
-	if(a[i].type == "checkbox") a[i].checked = false;
+	for (var i = 0; i < a.length; i++) {
+		if (a[i].type == "checkbox")
+			a[i].checked = false;
 	}
-	}
+}
