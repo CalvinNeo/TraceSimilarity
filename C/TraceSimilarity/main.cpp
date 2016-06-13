@@ -536,11 +536,12 @@ int wmain(int argc, TCHAR* argv[], TCHAR* env[]) {
 	std::wstring wstr;
 	if (argc == 2) {
 		wstr = std::wstring(argv[1]); // ws2s(wstr).c_str()
+		//MessageBox(NULL, const_cast<const LPCTSTR>(argv[1]), NULL, MB_OK);
 		cout << do_req(ws2s(wstr).c_str(), 0) << endl;
 	}
 	else if(argc == 1){
 		wstr = std::wstring(L"t*2t.csv*c*3t.csv"); // ws2s(wstr).c_str()
-		wstr = std::wstring(L"c*0.csv*c*1.csv"); // ws2s(wstr).c_str()
+		wstr = std::wstring(L"c*0-no.csv"); // ws2s(wstr).c_str()
 		cout << do_req(ws2s(wstr).c_str(), 0) << endl;
 	}
 	else {
