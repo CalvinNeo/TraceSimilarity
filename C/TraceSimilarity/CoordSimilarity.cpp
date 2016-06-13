@@ -46,6 +46,7 @@ CoordSimilarity CoordCompare(std::vector<Point> & t1, std::vector<Point> & t2, b
 	double lim_dis = length * 2 / (p + q);
 
 	inttable level(p, q);
+	std::vector<int> mark;
 
 	for (int i = 0;i < p;i++) {
 		for (int j = 0;j < q;j++) {
@@ -53,33 +54,35 @@ CoordSimilarity CoordCompare(std::vector<Point> & t1, std::vector<Point> & t2, b
 				if (i > 0 && j > 0) level(i, j) = level(i - 1, j - 1) + 1;
 				else level(i, j) = 1;
 			}
-			else level(i, j) = 0;
+			else {
+				level(i, j) = 0;
+				if (i > 0 && j > 0 && level(i - 1, j - 1) > 3) mark.push_back((i - 1) * 1000 + (j - 1));
+			}
 		}
+	}
+	for (int i = p - 1, j = 0;j < q;j++) {
+		if (i < 0) break;
+		if (level(i, j) > 3) mark.push_back(i * 1000 + j);
+	}
+	for (int i = 0, j = q - 1;i < p;i++) {
+		if (j < 0) break;
+		if (level(i, j) > 3) mark.push_back(i * 1000 + j);
 	}
 
 	//int b1[maxn], b2[maxn];
 	//for (int i = 0;i < p;i++) b1[i] = 0;
 	//for (int i = 0;i < q;i++) b2[i] = 0;
 
-	for (int t = 1;t <= 100;t++) {
-		int x = -1, y = -1;
-		for (int i = 0;i < p;i++) {
-			for (int j = 0;j < q;j++) {
-				if (x == -1 || level(i, j)>level(x, y)) {
-					x = i;
-					y = j;
-				}
-			}
-		}
-		if (level(x, y) < 3) break;
-		int l1, l2, k;
-		for (k = 0;x > k && y > k && level(x - k, y - k) > 0;k++) {
-			level(x - k, y - k) = 0;
-		}
+	int mark_size = mark.size();
+	for (int t = 0, cnt = 0;t < mark_size;t++) {
+		int x = mark[t] / 1000;
+		int y = mark[t] - x * 1000;
+		int k = level(x, y) - 1;
 		double c_sim = frechetSimilar(t1, x - k, x + 1, t2, y - k, y + 1);
 		if (c_sim > 0.5 - eps) {
 			TwoTraceSection tt(x - k, x + 1, y - k, y + 1, c_sim);
 			coord_res.trace_sections.push_back(tt);
+			if (++cnt >= 30) break;
 		}
 	}
 	sort(coord_res.trace_sections.begin(), coord_res.trace_sections.end(), [](TwoTraceSection a, TwoTraceSection b) {
